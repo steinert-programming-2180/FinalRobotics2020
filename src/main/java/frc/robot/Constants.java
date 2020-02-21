@@ -7,6 +7,12 @@
 
 package frc.robot;
 
+import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.SPI;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants.  This class should not be used for any other purpose.  All constants should be
@@ -16,4 +22,13 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    CANSparkMax left1 = new CANSparkMax(1, MotorType.kBrushless);
+    CANSparkMax left2 = new CANSparkMax(2, MotorType.kBrushless);
+    CANSparkMax left3 = new CANSparkMax(3, MotorType.kBrushless);
+
+    CANSparkMax right1 = new CANSparkMax(4, MotorType.kBrushless);
+    CANSparkMax right2 = new CANSparkMax(5, MotorType.kBrushless);
+    CANSparkMax right3 = new CANSparkMax(6, MotorType.kBrushless);
+
+    AHRS ahrs = new AHRS(SPI.Port.kMXP);
 }
