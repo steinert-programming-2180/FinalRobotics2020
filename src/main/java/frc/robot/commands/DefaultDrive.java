@@ -7,12 +7,14 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.DriveTrainSubsystem;
 
 /**
  * An example command that uses an example subsystem.
  */
-public class DriveTrain extends CommandBase {
+public class DefaultDrive extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
   /**
@@ -20,19 +22,31 @@ public class DriveTrain extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public DriveTrain() {
+  DriveTrainSubsystem sub;
+  XboxController controller = new XboxController(0);
+  public DefaultDrive(DriveTrainSubsystem driveSub) {
     // Use addRequirements() here to declare subsystem dependencies.
-    //addRequirements(subsystem);
+    sub = driveSub;
+    addRequirements(driveSub);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    double speed = controller.getRawAxis(1);
+    double rotation = controller.getRawAxis(4);
+    
+    if(rotation != 0){
+        sub.turnToAngle(rotation*180);
+    } else{
+        sub.setDrive(speed, speed);
+    }
   }
 
   // Called once the command ends or is interrupted.

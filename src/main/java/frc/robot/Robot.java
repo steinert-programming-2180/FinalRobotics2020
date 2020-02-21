@@ -13,6 +13,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.DefaultDrive;
+import frc.robot.subsystems.DriveTrainSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -22,6 +24,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  private DriveTrainSubsystem driveSub = new DriveTrainSubsystem();
+  private DefaultDrive driveCommand = new DefaultDrive(driveSub);
 
   private RobotContainer m_robotContainer;
   Constants c = new Constants();
@@ -36,13 +40,6 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-
-    c.left2.follow(c.left1);
-    c.left3.follow(c.left1);
-
-    c.right1.follow(c.left1, true);
-    c.right2.follow(c.right1);
-    c.right3.follow(c.right1);
   }
 
   /**
@@ -101,6 +98,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    
   }
 
   /**
@@ -108,6 +106,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    driveCommand.execute();
   }
 
   @Override

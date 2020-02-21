@@ -22,13 +22,10 @@ import edu.wpi.first.wpilibj.SPI;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    CANSparkMax left1 = new CANSparkMax(1, MotorType.kBrushless);
-    CANSparkMax left2 = new CANSparkMax(2, MotorType.kBrushless);
-    CANSparkMax left3 = new CANSparkMax(3, MotorType.kBrushless);
+    public int[] leftMotorPorts = {1, 2, 3};
+    public int[] rightMotorPorts = {4, 5, 6};
+    
+    public double motorFactor = 1.0/3.0;
 
-    CANSparkMax right1 = new CANSparkMax(4, MotorType.kBrushless);
-    CANSparkMax right2 = new CANSparkMax(5, MotorType.kBrushless);
-    CANSparkMax right3 = new CANSparkMax(6, MotorType.kBrushless);
-
-    AHRS ahrs = new AHRS(SPI.Port.kMXP);
+    public AHRS ahrs = new AHRS(SPI.Port.kMXP);
 }
