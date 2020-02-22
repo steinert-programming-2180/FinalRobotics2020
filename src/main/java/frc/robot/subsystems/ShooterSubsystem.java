@@ -24,19 +24,18 @@ public class ShooterSubsystem extends SubsystemBase {
   public ShooterSubsystem() {
       mainShooterLeft = new CANSparkMax(ShooterConstants.shooterMotorPorts[0], MotorType.kBrushless);
       mainShooterRight = new CANSparkMax(ShooterConstants.shooterMotorPorts[1], MotorType.kBrushless);
-
-      for(int i = 0; i < ShooterConstants.shooterBallUpPorts.length; i++){
-          ballUpMotors[i] = new CANSparkMax(ShooterConstants.shooterBallUpPorts[i], MotorType.kBrushless);
-      }
-  }
-
-  public void pullBallsUp(){
-
   }
 
   public void shootBall(){
       mainShooterLeft.set(-1);
       mainShooterRight.set(1);
+  }
+
+  public void shootBall(double speed) {}
+
+  public void stopShooting() {
+    mainShooterLeft.set(0);
+    mainShooterRight.set(0);
   }
 
   @Override

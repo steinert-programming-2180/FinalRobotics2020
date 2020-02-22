@@ -26,8 +26,6 @@ public class Drivetrain extends SubsystemBase {
                                             DrivetrainConstants.Ki, 
                                             DrivetrainConstants.Kd);
   
-  
-    
   public Drivetrain() {
     for(int i = 0; i < DrivetrainConstants.leftMotorPorts.length; i++){
         leftMotors[i] = new CANSparkMax(DrivetrainConstants.leftMotorPorts[i], MotorType.kBrushless);
@@ -37,18 +35,6 @@ public class Drivetrain extends SubsystemBase {
         rightMotors[i] = new CANSparkMax(DrivetrainConstants.rightMotorPorts[i], MotorType.kBrushless);
     }
     setSparkFollows();
-  }
-
- void setSparkFollows(){
-    leftMotors[0].setInverted(true);
-    for(int i = 1; i < leftMotors.length; i++){
-        leftMotors[i].follow(leftMotors[0], false);
-    }
-
-    rightMotors[0].setInverted(false);
-    for(int i = 1; i < rightMotors.length; i++){
-        rightMotors[i].follow(rightMotors[0], false);
-    }
   }
 
   public void setDrive(double leftSpeed, double rightSpeed){
@@ -79,5 +65,17 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  void setSparkFollows(){
+    leftMotors[0].setInverted(true);
+    for(int i = 1; i < leftMotors.length; i++){
+        leftMotors[i].follow(leftMotors[0], false);
+    }
+
+    rightMotors[0].setInverted(false);
+    for(int i = 1; i < rightMotors.length; i++){
+        rightMotors[i].follow(rightMotors[0], false);
+    }
   }
 }
