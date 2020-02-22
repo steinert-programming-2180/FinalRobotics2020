@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
+import frc.robot.RobotUtilities;
+
 import static frc.robot.Constants.DrivetrainConstants;
 import static frc.robot.RobotUtilities.*;
 
@@ -23,14 +25,14 @@ public class Drivetrain extends SubsystemBase {
   /**
    * Creates a new ExampleSubsystem.
    */
-  CANSparkMax[] leftMotors;
-  CANSparkMax[] rightMotors;
+  private CANSparkMax[] leftMotors;
+  private CANSparkMax[] rightMotors;
 
-  CANEncoder leftEncoder, rightEncoder;
+  private CANEncoder leftEncoder, rightEncoder;
 
-  AHRS navX;
+  private AHRS navX;
 
-  PIDController gyroPid = new PIDController(DrivetrainConstants.Kp,
+  private PIDController gyroPid = new PIDController(DrivetrainConstants.Kp,
                                             DrivetrainConstants.Ki, 
                                             DrivetrainConstants.Kd);
 
@@ -92,14 +94,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   void setSparkFollows(){
-    leftMotors[0].setInverted(true);
-    for(int i = 1; i < leftMotors.length; i++){
-        leftMotors[i].follow(leftMotors[0], false);
-    }
-
-    rightMotors[0].setInverted(false);
-    for(int i = 1; i < rightMotors.length; i++){
-        rightMotors[i].follow(rightMotors[0], false);
-    }
+    RobotUtilities.setSparkFollows(leftMotors, true);
+    RobotUtilities.setSparkFollows(rightMotors, false);
   }
 }
