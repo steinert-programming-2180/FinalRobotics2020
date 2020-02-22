@@ -7,34 +7,45 @@
 
 package frc.robot.subsystems;
 
+import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
 import static frc.robot.Constants.DrivetrainConstants;
+import static frc.robot.RobotUtilities.*;
 
 public class Drivetrain extends SubsystemBase {
   /**
    * Creates a new ExampleSubsystem.
    */
-  CANSparkMax[] leftMotors = new CANSparkMax[DrivetrainConstants.leftMotorPorts.length];
-  CANSparkMax[] rightMotors = new CANSparkMax[DrivetrainConstants.leftMotorPorts.length];
+  CANSparkMax[] leftMotors;
+  CANSparkMax[] rightMotors;
 
-  PIDController gyroPid = new PIDController(DrivetrainConstants.Kp, 
+  CANEncoder leftEncoder, rightEncoder;
+
+  AHRS navX;
+
+  PIDController gyroPid = new PIDController(DrivetrainConstants.Kp,
                                             DrivetrainConstants.Ki, 
                                             DrivetrainConstants.Kd);
+
+  private double leftPosition, leftVelocity, rightPosition, rightVelocity, //Grab from encoders, linear
+          chassisVelocity, chassisPosition, chassisAccelleration, chassisAngle, rotVelocity; //Grab from NavX
   
   public Drivetrain() {
-    for(int i = 0; i < DrivetrainConstants.leftMotorPorts.length; i++){
-        leftMotors[i] = new CANSparkMax(DrivetrainConstants.leftMotorPorts[i], MotorType.kBrushless);
-    }
-
-    for(int i = 0; i < DrivetrainConstants.rightMotorPorts.length; i++){
-        rightMotors[i] = new CANSparkMax(DrivetrainConstants.rightMotorPorts[i], MotorType.kBrushless);
-    }
+    leftMotors = SetUpMotors(DrivetrainConstants.leftMotorPorts); //All motor stuff
+    rightMotors = SetUpMotors(DrivetrainConstants.rightMotorPorts);
     setSparkFollows();
+
+    navX = new AHRS(SPI.Port.kMXP);
+
+    leftEncoder = leftMotors[0].getEncoder();
+    rightEncoder = rightMotors[0].getEncoder();
   }
 
   public void setDrive(double leftSpeed, double rightSpeed){
@@ -43,28 +54,41 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double getAngularVelocity(){
-    return 0;
+    return this.rotVelocity;
   }
 
   public double getAngle(){
-    return 0;
+    return this.chassisAngle;
   }
 
   public double getAcceleration(){
-    return 0;
+    return this.chassisAccelleration;
   }
 
   public double getLeftSpeed() {
-    return 0;
+    return this.leftVelocity;
   }
 
   public double getRightSpeed() {
-    return 0;
+    return this.rightVelocity;
+  }
+
+  public void grabSensors() {
+    this.leftPosition = this.leftEncoder.getPosition();
+    this.leftVelocity = this.leftEncoder.getVelocity();
+    this.rightPosition = this.rightEncoder.getPosition();
+    this.rightVelocity = this.rightEncoder.getVelocity();
+    
+    this.chassisAngle = this.navX.getAngle();
+    this.chassisPosition = this.navX.getDisplacementX();
+    this.chassisVelocity = this.navX.getVelocityX();
+    this.chassisAccelleration = this.navX.getRawAccelX();
+    this.rotVelocity = this.navX.getRawGyroZ();
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    grabSensors();
   }
 
   void setSparkFollows(){

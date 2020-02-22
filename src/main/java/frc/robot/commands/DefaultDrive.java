@@ -23,11 +23,11 @@ public class DefaultDrive extends CommandBase {
    * @param subsystem The subsystem used by this command.
    */
   Drivetrain sub;
-  XboxController controller = new XboxController(0);
+  XboxController controller;
   public DefaultDrive(Drivetrain driveSub) {
     // Use addRequirements() here to declare subsystem dependencies.
     sub = driveSub;
-    addRequirements(driveSub);
+    controller = new XboxController(0);
   }
 
   // Called when the command is initially scheduled.
@@ -41,6 +41,8 @@ public class DefaultDrive extends CommandBase {
   public void execute() {
     double speed = controller.getRawAxis(1);
     double rotation = controller.getRawAxis(4);
+
+
   }
 
   // Called once the command ends or is interrupted.
