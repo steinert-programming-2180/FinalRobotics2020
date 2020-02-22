@@ -34,4 +34,8 @@ public final class Constants {
         public static int[] shooterMotorPorts = {7, 8};
         public static int[] shooterBallUpPorts = {9, 10, 11};
     }
+    public static class ClimberConstants{
+        public static int[] leftClimberMotorPorts = {12, 13 , 14};
+        public static int[] rightClimberMotorPorts = {15 , 16, 17};    
+    }
 }

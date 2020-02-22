@@ -6,12 +6,11 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 public class RobotUtilities {
     public static CANSparkMax[] SetUpMotors(int[] ports) {
         CANSparkMax[] output = new CANSparkMax[ports.length];
-        CANSparkMax dummyMotor;
-        int counter = 0;
-        for (int i : ports) {
-            dummyMotor = new CANSparkMax(i, MotorType.kBrushless);
-            output[counter] = dummyMotor;
-            counter++;
-        } return output;
+
+        for(int i = 0; i < ports.length; i++){
+            output[i] = new CANSparkMax(ports[i], MotorType.kBrushless);
+        }
+
+        return output;
     }
 }
