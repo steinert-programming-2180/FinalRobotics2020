@@ -57,18 +57,23 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double getAngularVelocity(){
+    return 0;
   }
 
   public double getAngle(){
+    return 0;
   }
 
   public double getAcceleration(){
+    return 0;
   }
 
   public double getLeftSpeed() {
+    return 0;
   }
 
   public double getRightSpeed() {
+    return 0;
   }
 
   @Override

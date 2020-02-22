@@ -9,7 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveTrainSubsystem;
+import frc.robot.subsystems.Drivetrain;
 
 /**
  * An example command that uses an example subsystem.
@@ -22,9 +22,9 @@ public class DefaultDrive extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  DriveTrainSubsystem sub;
+  Drivetrain sub;
   XboxController controller = new XboxController(0);
-  public DefaultDrive(DriveTrainSubsystem driveSub) {
+  public DefaultDrive(Drivetrain driveSub) {
     // Use addRequirements() here to declare subsystem dependencies.
     sub = driveSub;
     addRequirements(driveSub);
@@ -41,12 +41,6 @@ public class DefaultDrive extends CommandBase {
   public void execute() {
     double speed = controller.getRawAxis(1);
     double rotation = controller.getRawAxis(4);
-    
-    if(rotation != 0){
-        sub.turnToAngle(rotation*180);
-    } else{
-        sub.setDrive(speed, speed);
-    }
   }
 
   // Called once the command ends or is interrupted.

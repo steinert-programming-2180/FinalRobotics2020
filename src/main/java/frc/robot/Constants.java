@@ -19,9 +19,19 @@ public final class Constants {
     public static class DrivetrainConstants{
         public static int[] leftMotorPorts = {1, 2, 3};
         public static int[] rightMotorPorts = {4, 5, 6};
+   
 
         public static double Kp = 0.0;
         public static double Ki = 0.0;
         public static double Kd = 0.0;
+
+        public static double defaultMotorFactor = 0.4;
+    }
+    public static class PaddyConstants{
+        public static int pattyMotor = 12;
+    }
+    public static class ShooterConstants {
+        public static int[] shooterMotorPorts = {7, 8};
+        public static int[] shooterBallUpPorts = {9, 10, 11};
     }
 }
