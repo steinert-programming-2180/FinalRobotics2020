@@ -22,11 +22,13 @@ public class Climber extends SubsystemBase {
   CANSparkMax[] leftMotors = new CANSparkMax[ClimberConstants.leftClimberMotorPorts.length];
   CANSparkMax[] rightMotors = new CANSparkMax[ClimberConstants.rightClimberMotorPorts.length];
   CANEncoder encoder;
+  private double velocity, position;
   
   public Climber() {
     leftMotors = RobotUtilities.SetUpMotors(ClimberConstants.leftClimberMotorPorts);
     rightMotors = RobotUtilities.SetUpMotors(ClimberConstants.rightClimberMotorPorts);
-    encoder = new CANEncoder(leftMotors[0]);
+     encoder = new CANEncoder(rightMotors[0]);
+     
 
     leftMotors[0].setInverted(true);
     for(int i = 1; i < leftMotors.length; i++){
@@ -36,7 +38,6 @@ public class Climber extends SubsystemBase {
     for(int i = 1; i < rightMotors.length; i++){
       rightMotors[i].follow(rightMotors[0], false);
     }
-
   }
    public void startClimb(){
 
@@ -46,13 +47,15 @@ public class Climber extends SubsystemBase {
    }
    public double getPosition(){
      
-     return 0;
+     return this.getPosition();
    }
    public double getVelocity(){
-     return 0; 
+     
+    return this.getVelocity(); 
    }
    public void grabSensors(){
-     
+     this.velocity = this.encoder.getVelocity();
+     this.position = this.encoder.getPosition();
    }
 
   @Override
