@@ -7,12 +7,6 @@
 
 package frc.robot;
 
-import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-import edu.wpi.first.wpilibj.SPI;
-
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants.  This class should not be used for any other purpose.  All constants should be
@@ -22,10 +16,12 @@ import edu.wpi.first.wpilibj.SPI;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public int[] leftMotorPorts = {1, 2, 3};
-    public int[] rightMotorPorts = {4, 5, 6};
-    
-    public double motorFactor = 1.0/3.0;
+    public static class DrivetrainConstants{
+        public static int[] leftMotorPorts = {1, 2, 3};
+        public static int[] rightMotorPorts = {4, 5, 6};
 
-    public AHRS ahrs = new AHRS(SPI.Port.kMXP);
+        public static double Kp = 0.0;
+        public static double Ki = 0.0;
+        public static double Kd = 0.0;
+    }
 }

@@ -13,30 +13,28 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
-import frc.robot.Constants;
+import static frc.robot.Constants.DrivetrainConstants;
 
-public class DriveTrainSubsystem extends SubsystemBase {
+public class Drivetrain extends SubsystemBase {
   /**
    * Creates a new ExampleSubsystem.
    */
+  CANSparkMax[] leftMotors = new CANSparkMax[DrivetrainConstants.leftMotorPorts.length];
+  CANSparkMax[] rightMotors = new CANSparkMax[DrivetrainConstants.leftMotorPorts.length];
 
-    Constants c = new Constants();
-
-    CANSparkMax[] leftMotors = new CANSparkMax[c.leftMotorPorts.length];
-    CANSparkMax[] rightMotors = new CANSparkMax[c.rightMotorPorts.length];
-
-    double Kp = 0.0;
-    double Ki = 0.0;
-    double Kd = 0.0;
-    PIDController gyroPid = new PIDController(Kp, Ki, Kd);
+  PIDController gyroPid = new PIDController(DrivetrainConstants.Kp, 
+                                            DrivetrainConstants.Ki, 
+                                            DrivetrainConstants.Kd);
+  
+  
     
-  public DriveTrainSubsystem() {
-    for(int i = 0; i < c.leftMotorPorts.length; i++){
-        leftMotors[i] = new CANSparkMax(c.leftMotorPorts[i], MotorType.kBrushless);
+  public Drivetrain() {
+    for(int i = 0; i < DrivetrainConstants.leftMotorPorts.length; i++){
+        leftMotors[i] = new CANSparkMax(DrivetrainConstants.leftMotorPorts[i], MotorType.kBrushless);
     }
 
-    for(int i = 0; i < c.rightMotorPorts.length; i++){
-        rightMotors[i] = new CANSparkMax(c.rightMotorPorts[i], MotorType.kBrushless);
+    for(int i = 0; i < DrivetrainConstants.rightMotorPorts.length; i++){
+        rightMotors[i] = new CANSparkMax(DrivetrainConstants.rightMotorPorts[i], MotorType.kBrushless);
     }
     setSparkFollows();
   }
@@ -54,30 +52,23 @@ public class DriveTrainSubsystem extends SubsystemBase {
   }
 
   public void setDrive(double leftSpeed, double rightSpeed){
-      leftMotors[0].set(leftSpeed*c.motorFactor);
-      rightMotors[0].set(rightSpeed*c.motorFactor);
+      leftMotors[0].set(leftSpeed * DrivetrainConstants.defaultMotorFactor);
+      rightMotors[0].set(rightSpeed * DrivetrainConstants.defaultMotorFactor);
   }
 
-  public double getVelocity(){
-      return c.ahrs.getRawAccelX();
+  public double getAngularVelocity(){
   }
 
   public double getAngle(){
-      return c.ahrs.getAngle();
   }
 
   public double getAcceleration(){
-      return c.ahrs.getRawAccelX();
   }
 
-  public void turnToAngle(double angle){
-      if(angle < 0){
-        gyroPid.setSetpoint(360+angle);
-      } else{
-        gyroPid.setSetpoint(angle);
-      }
-      double value = MathUtil.clamp(gyroPid.calculate(c.ahrs.getAngle()), -1, 1);
-      setDrive(value, value);
+  public double getLeftSpeed() {
+  }
+
+  public double getRightSpeed() {
   }
 
   @Override
