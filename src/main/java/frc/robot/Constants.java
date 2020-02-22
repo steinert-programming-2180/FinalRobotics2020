@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.util.Color;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -24,6 +25,11 @@ import edu.wpi.first.wpilibj.SPI;
 public final class Constants {
     public int[] leftMotorPorts = {1, 2, 3};
     public int[] rightMotorPorts = {4, 5, 6};
+
+    public int[] shooterMotorPorts = {7, 8};
+    public int[] shooterBallUpPorts = {9, 10, 11};
+
+    public int pattyMotor = 12;
     
     public double motorFactor = 1.0/3.0;
 
