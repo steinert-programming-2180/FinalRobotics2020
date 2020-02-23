@@ -7,14 +7,31 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-public class ExampleSubsystem extends SubsystemBase {
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import static frc.robot.Constants.ShooterConstants;
+import static frc.robot.RobotUtilities.*;
+
+public class Shooter extends SubsystemBase {
   /**
    * Creates a new ExampleSubsystem.
    */
-  public ExampleSubsystem() {
-    
+  CANSparkMax[] shooterMotors;
+
+  public Shooter() {
+     shooterMotors = SetUpMotors(ShooterConstants.shooterMotorPorts, ShooterConstants.inversionsShooter);
+  }
+
+  public void shootBall(){
+      shooterMotors[0].set(1.0);
+  }
+
+  public void shootBall(double speed) {}
+
+  public void stopShooting() {
+    shooterMotors[0].set(0.0);
   }
 
   @Override

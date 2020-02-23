@@ -8,34 +8,60 @@
 package frc.robot;
 
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants.  This class should not be used for any other purpose.  All constants should be
- * declared globally (i.e. public static).  Do not put anything functional in this class.
- *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
- * constants are needed, to reduce verbosity.
+ * Conventions of constants:
+ * -All constants should be named specifically, even in a single subsystem, to allow for new features to be added.
+ * -Generally, objects should be declared where they will be used.  Even if there is a 1:1 mapping of constants to 
+ *   objects (ie. motor ports to motors), keeping the objects elsewhere makes Constants.java more extensible.
+ * -In the same vein, it's better to declare too many constants than too few, but redundancy is the enemy.  Nothing 
+ *   should EVER be declared twice.
+ * -Even if only a single motor is expected, declare its port and inversion in an array.
+ * -The first port in a motor port array will be made the leader.
+ * -All the motors created from a single motor port array will follow their leader.  If motors need to be controlled
+ *   independently from each other, they should be placed in seperate arrays.
+ * -Inversion arrays should be located directly below the port array they will be used on.  They are applied in order
+ *   to the ports.  The first value is the inversion of the leader, and the rest will dictate inversion RELATIVE TO 
+ *   THE LEADER.  
  */
 public final class Constants {
     public static class DrivetrainConstants{
         public static int[] leftMotorPorts = {1, 2, 3};
+        public static boolean[] inversionsLeft = {false, false, false};
         public static int[] rightMotorPorts = {4, 5, 6};
+        public static boolean[] inversionsRight = {true, false, false};
    
+        public static double AngleKp = 0.0;
+        public static double AngleKi = 0.0;
+        public static double AngleKd = 0.0;
 
-        public static double Kp = 0.0;
-        public static double Ki = 0.0;
-        public static double Kd = 0.0;
+        public static double LeftKp = 0.0;
+        public static double LeftKi = 0.0;
+        public static double LeftKd = 0.0;
+
+        public static double RightKp = 0.0;
+        public static double RightKi = 0.0;
+        public static double RightKd = 0.0;
 
         public static double defaultMotorFactor = 0.4;
     }
     public static class PaddyConstants{
-        public static int pattyMotor = 12;
+        public static int[] turnerMotors = {12};
+        public static boolean[] inversionsTurner = {false};
+
+        public static double[] blueVals = {0.232154, 0.427, 0.429};
+        public static double[] greenVals = {0.197, 0.561, 0.240};
+        public static double[] redVals = {0.291504, 0.322754, 0.110107};
+        public static double[] yellowVals = {0.322266, 0.571777, 0.105957};
     }
     public static class ShooterConstants {
         public static int[] shooterMotorPorts = {7, 8};
-        public static int[] shooterBallUpPorts = {9, 10, 11};
+        public static boolean[] inversionsShooter = {true, true};
+
+        public static double ShooterKp = 0.0;
+        public static double ShooterKi = 0.0;
+        public static double ShooterKd = 0.0;
     }
     public static class ClimberConstants{
-        public static int[] leftClimberMotorPorts = {12, 13 , 14};
-        public static int[] rightClimberMotorPorts = {15 , 16, 17};    
+        public static int[] elevatorMotorPorts = {12, 13};
+        public static boolean[] inversionsElevator = {false, true};
     }
 }

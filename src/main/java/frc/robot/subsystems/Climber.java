@@ -11,7 +11,7 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotUtilities;
+import static frc.robot.RobotUtilities.*;
 
 import static frc.robot.Constants.ClimberConstants;
 
@@ -19,25 +19,13 @@ public class Climber extends SubsystemBase {
   /**
    * Creates a new Climber.
    */
-  CANSparkMax[] leftMotors = new CANSparkMax[ClimberConstants.leftClimberMotorPorts.length];
-  CANSparkMax[] rightMotors = new CANSparkMax[ClimberConstants.rightClimberMotorPorts.length];
+  CANSparkMax[] elevatorMotors;
   CANEncoder encoder;
   private double velocity, position;
   
   public Climber() {
-    leftMotors = RobotUtilities.SetUpMotors(ClimberConstants.leftClimberMotorPorts);
-    rightMotors = RobotUtilities.SetUpMotors(ClimberConstants.rightClimberMotorPorts);
-     encoder = new CANEncoder(rightMotors[0]);
-     
-
-    leftMotors[0].setInverted(true);
-    for(int i = 1; i < leftMotors.length; i++){
-      leftMotors[i].follow(leftMotors[0], false);
-      rightMotors[0].setInverted(false);
-    }
-    for(int i = 1; i < rightMotors.length; i++){
-      rightMotors[i].follow(rightMotors[0], false);
-    }
+    elevatorMotors = SetUpMotors(ClimberConstants.elevatorMotorPorts, ClimberConstants.inversionsElevator);
+    encoder = elevatorMotors[0].getEncoder();
   }
    public void startClimb(){
 
@@ -46,12 +34,10 @@ public class Climber extends SubsystemBase {
 
    }
    public double getPosition(){
-     
-     return this.getPosition();
+     return this.position;
    }
    public double getVelocity(){
-     
-    return this.getVelocity(); 
+     return this.velocity;
    }
    public void grabSensors(){
      this.velocity = this.encoder.getVelocity();
@@ -60,7 +46,6 @@ public class Climber extends SubsystemBase {
 
   @Override
   public void periodic() {
-
-    // This method will be called once per scheduler run
+    grabSensors();
   }
 }

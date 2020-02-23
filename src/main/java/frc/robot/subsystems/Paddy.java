@@ -14,39 +14,39 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.PaddyConstants;
+import static frc.robot.RobotUtilities.*;
 
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorMatch;
 
-public class PattySubsystem extends SubsystemBase {
+public class Paddy extends SubsystemBase {
   /**
    * Creates a new ExampleSubsystem.
    * */
-
-  CANSparkMax turner;
+  CANSparkMax[] turner;
   ColorSensorV3 colorSensor;
   ColorMatch colorMatcher;
+  Color[] colors = new Color[4];
+  Color currentColor;
+  double motorPosition, motorSpeed;
 
-  private final Color kBlueTarget = ColorMatch.makeColor(0.232154, 0.427, 0.429);
-  private final Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
-  private final Color kRedTarget = ColorMatch.makeColor(0.291504, 0.322754, 0.110107);
-  private final Color kYellowTarget = ColorMatch.makeColor(0.322266, 0.571777, 0.105957);
-  private final Color target = new Color(0, 0, 0);
-  Color[] colors = {kBlueTarget, kGreenTarget, kRedTarget, kYellowTarget};
-
-  public PattySubsystem() {
-    turner = new CANSparkMax(PaddyConstants.pattyMotor, MotorType.kBrushless);
+  public Paddy() {
+    turner = SetUpMotors(PaddyConstants.turnerMotors, PaddyConstants.inversionsTurner);
+    
     colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
     colorMatcher = new ColorMatch();
-    
+    colors[0] = ColorMatch.makeColor(PaddyConstants.blueVals[0], PaddyConstants.blueVals[1], PaddyConstants.blueVals[2]); //Blue
+    colors[1] = ColorMatch.makeColor(PaddyConstants.greenVals[0], PaddyConstants.greenVals[1], PaddyConstants.greenVals[2]); //Green
+    colors[2] = ColorMatch.makeColor(PaddyConstants.redVals[0], PaddyConstants.redVals[1], PaddyConstants.redVals[2]); //Red
+    colors[3] = ColorMatch.makeColor(PaddyConstants.yellowVals[0], PaddyConstants.yellowVals[1], PaddyConstants.yellowVals[2]); //Yellow
     for(Color i : colors){
         colorMatcher.addColorMatch(i);
     }
   }
 
   public void rotateWheel(){
-      turner.set(1);
+      turner[0].set(1);
   }
 
   public Color getColor(){
@@ -59,16 +59,7 @@ public class PattySubsystem extends SubsystemBase {
     return Color.kWhite;
   }
 
-  public void setColor(){
-      
-  }
-
-  public void checkColor(){
-
-  }
-
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
   }
 }

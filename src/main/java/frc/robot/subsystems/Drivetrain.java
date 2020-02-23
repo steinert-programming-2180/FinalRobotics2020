@@ -15,8 +15,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpiutil.math.MathUtil;
-import frc.robot.RobotUtilities;
 
 import static frc.robot.Constants.DrivetrainConstants;
 import static frc.robot.RobotUtilities.*;
@@ -32,17 +30,16 @@ public class Drivetrain extends SubsystemBase {
 
   private AHRS navX;
 
-  private PIDController gyroPid = new PIDController(DrivetrainConstants.Kp,
-                                            DrivetrainConstants.Ki, 
-                                            DrivetrainConstants.Kd);
+  private PIDController anglePid = new PIDController(DrivetrainConstants.AngleKp,
+                                                    DrivetrainConstants.AngleKi, 
+                                                    DrivetrainConstants.AngleKd);
 
   private double leftPosition, leftVelocity, rightPosition, rightVelocity, //Grab from encoders, linear
           chassisVelocity, chassisPosition, chassisAccelleration, chassisAngle, rotVelocity; //Grab from NavX
   
   public Drivetrain() {
-    leftMotors = SetUpMotors(DrivetrainConstants.leftMotorPorts); //All motor stuff
-    rightMotors = SetUpMotors(DrivetrainConstants.rightMotorPorts);
-    setSparkFollows();
+    leftMotors = SetUpMotors(DrivetrainConstants.leftMotorPorts, DrivetrainConstants.inversionsLeft); //All motor stuff
+    rightMotors = SetUpMotors(DrivetrainConstants.rightMotorPorts, DrivetrainConstants.inversionsRight);
 
     navX = new AHRS(SPI.Port.kMXP);
 
@@ -50,7 +47,7 @@ public class Drivetrain extends SubsystemBase {
     rightEncoder = rightMotors[0].getEncoder();
   }
 
-  public void setDrive(double leftSpeed, double rightSpeed){
+   void setDrive(double leftSpeed, double rightSpeed){
       leftMotors[0].set(leftSpeed * DrivetrainConstants.defaultMotorFactor);
       rightMotors[0].set(rightSpeed * DrivetrainConstants.defaultMotorFactor);
   }
@@ -91,10 +88,5 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     grabSensors();
-  }
-
-  void setSparkFollows(){
-    RobotUtilities.setSparkFollows(leftMotors, true);
-    RobotUtilities.setSparkFollows(rightMotors, false);
   }
 }
