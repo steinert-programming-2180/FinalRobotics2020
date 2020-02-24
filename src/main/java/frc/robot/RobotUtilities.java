@@ -7,7 +7,7 @@ public class RobotUtilities {
     public static CANSparkMax[] SetUpMotors(int[] ports, boolean[] inverts) {
         CANSparkMax[] output = new CANSparkMax[ports.length];
         output[0] = new CANSparkMax(ports[0], MotorType.kBrushless);
-
+        output[0].setInverted(inverts[0]);
         for (int i = 1; i < ports.length; i++) {
             output[i] = new CANSparkMax(ports[i], MotorType.kBrushless);
             output[i].follow(output[0], inverts[i]);

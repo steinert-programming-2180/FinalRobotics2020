@@ -20,11 +20,10 @@ import edu.wpi.first.wpilibj2.command.Command;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-
+  private final Drivetrain drivetrain = new Drivetrain();
   public RobotContainer() {
     // Configure the button bindings
-    Drivetrain drivetrain = new Drivetrain();
-    drivetrain.setDefaultCommand(new DefaultDrive(drivetrain));
+    this.drivetrain.setDefaultCommand(new DefaultDrive(drivetrain));
     configureButtonBindings();
   }
 

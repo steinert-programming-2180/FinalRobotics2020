@@ -41,7 +41,9 @@ public final class Constants {
         public static double LeftMax = 1;
         public static double LeftAccel = 0.0;
         public static double LeftMaxVel = 0.0;
-        public static double LeftKf = 0.0;
+        public static double LeftKs = 0.106;
+        public static double LeftKv = 0.0679;
+        public static double LeftKa = 0.00675;
 
         public static double RightKp = 0.0;
         public static double RightKi = 0.0;
@@ -51,7 +53,9 @@ public final class Constants {
         public static double RightMax = 1;
         public static double RightAccel = 0.0;
         public static double RightMaxVel = 0.0;
-        public static double RightKf = 0.0;
+        public static double RightKs = 0.137;
+        public static double RightKv = 0.0712;
+        public static double RightKa = 0.0141;
 
         public static double defaultMotorFactor = 0.4;
 
