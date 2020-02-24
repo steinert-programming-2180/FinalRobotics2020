@@ -15,4 +15,8 @@ public class RobotUtilities {
 
         return output;
     }
+
+    public static double inchesToMeters (double inches) {
+        return 0.0254 * inches;
+    }
 }

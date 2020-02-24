@@ -36,12 +36,28 @@ public final class Constants {
         public static double LeftKp = 0.0;
         public static double LeftKi = 0.0;
         public static double LeftKd = 0.0;
+        public static double LeftIzone = 0.0;
+        public static double LeftMin = -1;
+        public static double LeftMax = 1;
+        public static double LeftAccel = 0.0;
+        public static double LeftMaxVel = 0.0;
+        public static double LeftKf = 0.0;
 
         public static double RightKp = 0.0;
         public static double RightKi = 0.0;
         public static double RightKd = 0.0;
+        public static double RightIzone = 0.0;
+        public static double RightMin = -1;
+        public static double RightMax = 1;
+        public static double RightAccel = 0.0;
+        public static double RightMaxVel = 0.0;
+        public static double RightKf = 0.0;
 
         public static double defaultMotorFactor = 0.4;
+
+        public static double effectiveDrivebaseWidth = 0; //Should be in inches
+        public static double rotationRatio = 1; //Number of rotations of final wheel:Number of rotations of motor
+        public static double wheelDiameter = 3; //Should be in inches
     }
     public static class PaddyConstants{
         public static int[] turnerMotors = {12};

@@ -9,7 +9,9 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.SPI;
@@ -25,11 +27,9 @@ public class Drivetrain extends SubsystemBase {
    */
   private CANSparkMax[] leftMotors;
   private CANSparkMax[] rightMotors;
-
   private CANEncoder leftEncoder, rightEncoder;
-
+  private CANPIDController leftLinearPid, rightLinearPid;
   private AHRS navX;
-
   private PIDController anglePid = new PIDController(DrivetrainConstants.AngleKp,
                                                     DrivetrainConstants.AngleKi, 
                                                     DrivetrainConstants.AngleKd);
@@ -42,14 +42,32 @@ public class Drivetrain extends SubsystemBase {
     rightMotors = SetUpMotors(DrivetrainConstants.rightMotorPorts, DrivetrainConstants.inversionsRight);
 
     navX = new AHRS(SPI.Port.kMXP);
+    anglePid = new PIDController(DrivetrainConstants.AngleKp,
+                                  DrivetrainConstants.AngleKi, 
+                                  DrivetrainConstants.AngleKd);
+    
+    leftLinearPid = new CANPIDController(leftMotors[0]);
+    leftLinearPid.setP(DrivetrainConstants.LeftKp);
+    leftLinearPid.setI(DrivetrainConstants.LeftKi);
+    leftLinearPid.setD(DrivetrainConstants.LeftKd);
+    leftLinearPid.setIZone(DrivetrainConstants.LeftIzone);
+    leftLinearPid.setFF(DrivetrainConstants.LeftKf);
+    leftLinearPid.setOutputRange(DrivetrainConstants.LeftMin, DrivetrainConstants.LeftMax);
+    rightLinearPid = new CANPIDController(rightMotors[0]);
+    rightLinearPid.setP(DrivetrainConstants.RightKp);
+    rightLinearPid.setI(DrivetrainConstants.RightKi);
+    rightLinearPid.setD(DrivetrainConstants.RightKd);
+    rightLinearPid.setIZone(DrivetrainConstants.RightIzone);
+    rightLinearPid.setFF(DrivetrainConstants.RightKf);
+    rightLinearPid.setOutputRange(DrivetrainConstants.RightMin, DrivetrainConstants.RightMax);
 
     leftEncoder = leftMotors[0].getEncoder();
     rightEncoder = rightMotors[0].getEncoder();
   }
 
    void setDrive(double leftSpeed, double rightSpeed){
-      leftMotors[0].set(leftSpeed * DrivetrainConstants.defaultMotorFactor);
-      rightMotors[0].set(rightSpeed * DrivetrainConstants.defaultMotorFactor);
+      leftLinearPid.setReference(leftSpeed, ControlType.kVelocity);
+      rightLinearPid.setReference(rightSpeed, ControlType.kVelocity);
   }
 
   public double getAngularVelocity(){
