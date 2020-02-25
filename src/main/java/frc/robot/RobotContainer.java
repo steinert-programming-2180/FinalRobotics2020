@@ -34,6 +34,8 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    XboxController exampleController = new XboxController(2);
+    exampleButton.whenPressed(new ER());
   }
 
   /**
