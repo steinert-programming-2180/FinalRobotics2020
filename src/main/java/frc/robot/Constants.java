@@ -33,29 +33,18 @@ public final class Constants {
         public static double AngleKi = 0.0;
         public static double AngleKd = 0.0;
 
-        public static double LeftKp = 0.0;
-        public static double LeftKi = 0.0;
-        public static double LeftKd = 0.0;
-        public static double LeftIzone = 0.0;
-        public static double LeftMin = -1;
-        public static double LeftMax = 1;
-        public static double LeftAccel = 0.0;
-        public static double LeftMaxVel = 0.0;
-        public static double LeftKs = 0.106;
-        public static double LeftKv = 0.0679;
-        public static double LeftKa = 0.00675;
-
-        public static double RightKp = 0.0;
-        public static double RightKi = 0.0;
-        public static double RightKd = 0.0;
-        public static double RightIzone = 0.0;
-        public static double RightMin = -1;
-        public static double RightMax = 1;
-        public static double RightAccel = 0.0;
-        public static double RightMaxVel = 0.0;
-        public static double RightKs = 0.137;
-        public static double RightKv = 0.0712;
-        public static double RightKa = 0.0141;
+        //Variable = {LeftValue, RightValue}
+        public static double[] Kp = {0.0, 0.0};
+        public static double[] Ki = {0.0, 0.0};
+        public static double[] Kd = {0.0, 0.0};
+        public static double[] Izone = {0.0, 0.0};
+        public static double[] Min = {-1.0, -1.0};
+        public static double[] Max = {1.0, 1.0};
+        public static double[] Accel = {0.0, 0.0};
+        public static double[] MaxVel = {0.0, 0.0};
+        public static double[] Ks = {0.106, 0.137};
+        public static double[] Kv = {0.0679, 0.0712};
+        public static double[] Ka = {0.00675, 0.0141};
 
         public static double defaultMotorFactor = 0.4;
 

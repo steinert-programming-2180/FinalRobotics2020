@@ -57,36 +57,22 @@ public class Drivetrain extends SubsystemBase {
     leftLinearPid = new CANPIDController(leftMotors[0]);
     rightLinearPid = new CANPIDController(rightMotors[0]);
 
-    leftFeedForward = new SimpleMotorFeedforward(DrivetrainConstants.LeftKs, DrivetrainConstants.LeftKv);
-    rightFeedForward = new SimpleMotorFeedforward(DrivetrainConstants.RightKs, DrivetrainConstants.RightKv);
+    leftFeedForward = new SimpleMotorFeedforward(DrivetrainConstants.Ks[0], DrivetrainConstants.Kv[0]);
+    rightFeedForward = new SimpleMotorFeedforward(DrivetrainConstants.Ks[1], DrivetrainConstants.Kv[1]);
 
     leftLinearPid = setupPID(leftLinearPid, leftFFVoltage, true);
     rightLinearPid = setupPID(rightLinearPid, rightFFVoltage, false);
   }
 
   CANPIDController setupPID(CANPIDController linearPID, double FF, boolean isLeft){
-    double p = DrivetrainConstants.LeftKp;
-    double i = DrivetrainConstants.LeftKi;
-    double d = DrivetrainConstants.LeftKd;
-    double Izone = DrivetrainConstants.LeftIzone;
-    double min = DrivetrainConstants.LeftMin;
-    double max = DrivetrainConstants.LeftMax;
+    int index = isLeft ? 0:1;
 
-    if(!isLeft){
-      p = DrivetrainConstants.RightKp;
-      i = DrivetrainConstants.RightKi;
-      d = DrivetrainConstants.RightKd;
-      Izone = DrivetrainConstants.RightIzone;
-      min = DrivetrainConstants.RightMin;
-      max = DrivetrainConstants.RightMax;
-    }
-
-    linearPID.setP(p);
-    linearPID.setI(i);
-    linearPID.setD(d);
-    linearPID.setIZone(Izone);
+    linearPID.setP(DrivetrainConstants.Kp[index]);
+    linearPID.setI(DrivetrainConstants.Ki[index]);
+    linearPID.setD(DrivetrainConstants.Kd[index]);
+    linearPID.setIZone(DrivetrainConstants.Izone[index]);
     linearPID.setFF(FF);
-    linearPID.setOutputRange(min, max);
+    linearPID.setOutputRange(DrivetrainConstants.Min[index], DrivetrainConstants.Max[index]);
     return linearPID;
   }
 
