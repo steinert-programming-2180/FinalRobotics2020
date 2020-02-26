@@ -56,7 +56,7 @@ public class Paddy extends SubsystemBase {
             return i;
         }
     }
-    return Color.kWhite;
+    return null;
   }
 
   @Override
