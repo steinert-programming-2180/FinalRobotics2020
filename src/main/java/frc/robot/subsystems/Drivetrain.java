@@ -41,6 +41,9 @@ public class Drivetrain extends SubsystemBase {
   private double leftFFVoltage = 0;
   private double rightFFVoltage = 0;
 
+  private long previousTime = 0;
+  private double previousDesireVel = 0;
+  
   private double leftPosition, leftVelocity, rightPosition, rightVelocity, //Grab from encoders, linear
           chassisVelocity, chassisPosition, chassisAccelleration, chassisAngle, rotVelocity; //Grab from NavX
   
@@ -60,11 +63,11 @@ public class Drivetrain extends SubsystemBase {
     leftFeedForward = new SimpleMotorFeedforward(DrivetrainConstants.Ks[0], DrivetrainConstants.Kv[0]);
     rightFeedForward = new SimpleMotorFeedforward(DrivetrainConstants.Ks[1], DrivetrainConstants.Kv[1]);
 
-    leftLinearPid = setupPID(leftLinearPid, leftFFVoltage, true);
-    rightLinearPid = setupPID(rightLinearPid, rightFFVoltage, false);
+    setupPID(leftLinearPid, leftFFVoltage, true);
+    setupPID(rightLinearPid, rightFFVoltage, false);
   }
 
-  CANPIDController setupPID(CANPIDController linearPID, double FF, boolean isLeft){
+  void setupPID(CANPIDController linearPID, double FF, boolean isLeft){
     int index = isLeft ? 0:1;
 
     linearPID.setP(DrivetrainConstants.Kp[index]);
@@ -73,7 +76,15 @@ public class Drivetrain extends SubsystemBase {
     linearPID.setIZone(DrivetrainConstants.Izone[index]);
     linearPID.setFF(FF);
     linearPID.setOutputRange(DrivetrainConstants.Min[index], DrivetrainConstants.Max[index]);
-    return linearPID;
+  }
+
+  double getPIDAcceleration(double currentDesireVel){
+    double changeInVelocity = currentDesireVel-previousDesireVel;
+    previousDesireVel = currentDesireVel;
+    double changeInTime = System.currentTimeMillis() - previousTime;
+    previousTime = System.currentTimeMillis(); 
+
+    return changeInVelocity/changeInTime;
   }
 
   public void setDrive(double leftSpeed, double rightSpeed){
