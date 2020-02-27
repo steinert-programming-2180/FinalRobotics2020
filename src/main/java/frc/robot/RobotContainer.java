@@ -7,11 +7,14 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.Constants.IOPorts;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -21,8 +24,25 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   private final Drivetrain drivetrain = new Drivetrain();
+
+  private final Paddy padSub = new Paddy();
+  private final RotateToColor colorRot = new RotateToColor(padSub);
+
+  DigitalInput beamTrip;
+
+  BeamTripTrig beamTripTrigger;
+
+  XboxController controller;
+  
+
   public RobotContainer() {
     // Configure the button bindings
+    beamTrip = new DigitalInput(IOPorts.beamSensors[0]);
+
+    controller = new XboxController(IOPorts.controllerPort);
+
+    beamTripTrigger = new BeamTripTrig(beamTrip);
+
     this.drivetrain.setDefaultCommand(new DefaultDrive(drivetrain));
     configureButtonBindings();
   }
@@ -34,8 +54,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    XboxController exampleController = new XboxController(2);
-    exampleButton.whenPressed(new ER());
+    beamTripTrigger.whenActive(colorRot); //change command
   }
 
   /**

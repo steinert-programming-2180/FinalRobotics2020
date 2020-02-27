@@ -23,6 +23,11 @@ package frc.robot;
  *   THE LEADER.  
  */
 public final class Constants {
+    public static class IOPorts{
+        public static int[] beamSensors = {0};
+
+        public static int controllerPort = 0;
+    }
     public static class DrivetrainConstants{
         public static int[] leftMotorPorts = {1, 2, 3};
         public static boolean[] inversionsLeft = {false, false, false};
