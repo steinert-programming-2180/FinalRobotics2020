@@ -17,10 +17,14 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.robot.Constants.DrivetrainConstants;
+import static frc.robot.Constants.units;
 import static frc.robot.RobotUtilities.*;
 
 public class Drivetrain extends SubsystemBase {
@@ -31,12 +35,14 @@ public class Drivetrain extends SubsystemBase {
   private CANSparkMax[] rightMotors;
   private CANEncoder leftEncoder, rightEncoder;
   private CANPIDController leftLinearPid, rightLinearPid;
+  
   private SimpleMotorFeedforward leftFeedForward, rightFeedForward;
+  private DifferentialDriveKinematics kinematicsCalc;
+  private DifferentialDriveWheelSpeeds internalWheelSpeeds;
+  private ChassisSpeeds internalChassis;
+  
   private AHRS navX;
-  private PIDController anglePid = new PIDController(
-    DrivetrainConstants.AngleKp,
-    DrivetrainConstants.AngleKi, 
-    DrivetrainConstants.AngleKd);
+  private PIDController anglePid;
 
   private double leftFFVoltage = 0;
   private double rightFFVoltage = 0;
@@ -50,9 +56,14 @@ public class Drivetrain extends SubsystemBase {
   public Drivetrain() {
     leftMotors = SetUpMotors(DrivetrainConstants.leftMotorPorts, DrivetrainConstants.inversionsLeft); //All motor stuff
     rightMotors = SetUpMotors(DrivetrainConstants.rightMotorPorts, DrivetrainConstants.inversionsRight);
+    kinematicsCalc = new DifferentialDriveKinematics(DrivetrainConstants.effectiveDrivebaseWidth);
 
     leftEncoder = leftMotors[0].getEncoder();
+    leftEncoder.setPositionConversionFactor(DrivetrainConstants.positionConversionFactor); //Converts to meters and meters/sec
+    leftEncoder.setVelocityConversionFactor(DrivetrainConstants.velocityConversionFactor);
     rightEncoder = rightMotors[0].getEncoder();
+    rightEncoder.setVelocityConversionFactor(DrivetrainConstants.velocityConversionFactor);
+    rightEncoder.setPositionConversionFactor(DrivetrainConstants.positionConversionFactor);
 
     navX = new AHRS(SPI.Port.kMXP);
     anglePid = new PIDController(DrivetrainConstants.AngleKp, DrivetrainConstants.AngleKi,DrivetrainConstants.AngleKd);
@@ -78,23 +89,42 @@ public class Drivetrain extends SubsystemBase {
     linearPID.setOutputRange(DrivetrainConstants.Min[index], DrivetrainConstants.Max[index]);
   }
 
-  double getPIDAcceleration(double currentDesireVel){
-    double changeInVelocity = currentDesireVel-previousDesireVel;
-    previousDesireVel = currentDesireVel;
-    double changeInTime = System.currentTimeMillis() - previousTime;
-    previousTime = System.currentTimeMillis(); 
+  public void setDrive(double leftSpeed, double rightSpeed, units lengthUnit){ //Pure differential drive
+    switch (lengthUnit) { //Permits the use of all kinds of units.  Internally still working with m/s though
+      case INCHES: 
+        leftSpeed = leftSpeed / 39.3701; 
+        rightSpeed = rightSpeed / 39.3701;
+        break;
+      case ROTATIONS: 
+        leftSpeed = leftSpeed * DrivetrainConstants.gearRatio * DrivetrainConstants.wheelDiameter * Math.PI;
+        rightSpeed = rightSpeed * DrivetrainConstants.gearRatio * DrivetrainConstants.wheelDiameter * Math.PI;
+        break;
+    }
 
-    return changeInVelocity/changeInTime;
-  }
-
-  public void setDrive(double leftSpeed, double rightSpeed){
-      //These recalculate the feedforward whenever called.  The constants are in units of (Volt * Rotations) / S
-      leftFFVoltage = leftFeedForward.calculate(leftSpeed / 60);
-      rightFFVoltage = rightFeedForward.calculate(rightSpeed / 60);
-      leftLinearPid.setFF(leftFFVoltage / leftMotors[0].getBusVoltage());
-      rightLinearPid.setFF(rightFFVoltage / rightMotors[0].getBusVoltage());
-      leftLinearPid.setReference(leftSpeed, ControlType.kVelocity);
-      rightLinearPid.setReference(rightSpeed, ControlType.kVelocity);
+    leftLinearPid.setReference(leftSpeed, ControlType.kVelocity);
+    rightLinearPid.setReference(rightSpeed, ControlType.kVelocity);
+  } 
+  
+  //This version just uses Chassis classes to convert from velocity and rotational terms to two velocity terms, and passes them to the 
+  //OG setDrive.
+  public void setDrive (double speed, double rotationalVelocity, units lengthUnit, units rotationUnit) { 
+    switch (lengthUnit) { //Allows for multiple units, saddly poorly compressable
+      case INCHES:
+        speed = speed / 39.3701;
+        break;
+      case ROTATIONS:
+        speed = speed * DrivetrainConstants.gearRatio * DrivetrainConstants.wheelDiameter * Math.PI;
+        break;
+    } switch (rotationUnit) {
+      case ROTATIONS:
+        rotationalVelocity = rotationalVelocity / (Math.PI * 2);
+        break;
+      case DEGREES:
+        rotationalVelocity = rotationalVelocity * (Math.PI / 180);
+    }
+    internalChassis = new ChassisSpeeds(speed, 0, rotationalVelocity);
+    internalWheelSpeeds = kinematicsCalc.toWheelSpeeds(internalChassis);
+    this.setDrive(internalWheelSpeeds.leftMetersPerSecond, internalWheelSpeeds.rightMetersPerSecond, units.METERS);
   }
 
   public double getAngularVelocity(){
@@ -133,10 +163,17 @@ public class Drivetrain extends SubsystemBase {
     rightLinearPid.setFF(rightFFVoltage / rightMotors[0].getBusVoltage());
   }
 
+  double getPIDAcceleration(double currentDesireVel){
+    double changeInVelocity = currentDesireVel-previousDesireVel;
+    previousDesireVel = currentDesireVel;
+    double changeInTime = System.currentTimeMillis() - previousTime;
+    previousTime = System.currentTimeMillis(); 
+
+    return changeInVelocity/changeInTime;
+  }
+
   @Override
   public void periodic() {
     grabSensors();
-    SmartDashboard.putNumber("Actual Left" ,this.leftVelocity);
-    SmartDashboard.putNumber("Actual Right" ,this.rightVelocity);
   }
 }

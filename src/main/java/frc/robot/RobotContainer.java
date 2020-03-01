@@ -15,6 +15,7 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.BeamTripTrig;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -39,7 +40,7 @@ public class RobotContainer {
     // Configure the button bindings
     beamTrip = new DigitalInput(IOPorts.beamSensors[0]);
 
-    controller = new XboxController(IOPorts.controllerPort);
+    controller = new XboxController(IOPorts.driverPorts[0]);
 
     beamTripTrigger = new BeamTripTrig(beamTrip);
 
