@@ -16,6 +16,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.ShooterConstants;
 import static frc.robot.RobotUtilities.*;
+import com.kauailabs.navx.frc.AHRS;
 
 public class Shooter extends SubsystemBase {
   /**
@@ -24,6 +25,10 @@ public class Shooter extends SubsystemBase {
   CANSparkMax[] shooterMotors;
   CANEncoder shooterEncoder;
   CANPIDController shooterPID;
+  private double leftPosition, leftVelocity, rightPosition, rightVelocity, //Grab from encoders, linear
+  chassisVelocity, chassisPosition, chassisAccelleration, chassisAngle, rotVelocity; //Grab from NavX
+  private CANEncoder leftEncoder, rightEncoder;
+  private AHRS navX;
 
   double speed;
 
@@ -41,7 +46,7 @@ public class Shooter extends SubsystemBase {
   public void setUpPID (CANPIDController pid) {
     pid.setP(ShooterConstants.ShooterKp);
     pid.setI(ShooterConstants.ShooterKi);
-    pid.setD(ShooterConstants.ShooterKd);
+    pid.setD(ShooterConstants.ShooterKd); 
     pid.setOutputRange(ShooterConstants.ShooterMin, ShooterConstants.ShooterMax);
   }
 
@@ -58,8 +63,20 @@ public class Shooter extends SubsystemBase {
   }
 
   public void grabSensors() {
-    this.speed = shooterEncoder.getVelocity();
-  }
+    
+      this.leftPosition = this.leftEncoder.getPosition();
+      this.leftVelocity = this.leftEncoder.getVelocity();
+      this.rightPosition = this.rightEncoder.getPosition();
+      this.rightVelocity = this.rightEncoder.getVelocity();
+      
+      this.chassisAngle = this.navX.getAngle();
+      this.chassisPosition = this.navX.getDisplacementX();
+      this.chassisVelocity = this.navX.getVelocityX();
+      this.chassisAccelleration = this.navX.getRawAccelX();
+      this.rotVelocity = this.navX.getRawGyroZ();
+    }
+  
+  
 
   @Override
   public void periodic() {
