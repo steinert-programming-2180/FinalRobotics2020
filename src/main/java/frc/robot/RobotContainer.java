@@ -27,9 +27,13 @@ public class RobotContainer {
   private Drivetrain drivetrain;
   private Paddy paddy;
 
+<<<<<<< HEAD
+  BeamTripTrig beamTripTrigger;
+=======
   DigitalInput beamTrip;
 
   BeamTripTrig funnelBeam, bottomBeam, topBeam;
+>>>>>>> b646c5d3b95fec6b62277ece184bfec30dcf4cc7
 
   XboxController controller;
   
@@ -37,9 +41,13 @@ public class RobotContainer {
   public RobotContainer() {
     
     // Configure the button bindings
+<<<<<<< HEAD
+    controller = new XboxController(IOPorts.controllerPort);
+=======
     beamTrip = new DigitalInput(IOPorts.beamSensors[0]);
 
     controller = new XboxController(IOPorts.driverPorts[0]);
+>>>>>>> b646c5d3b95fec6b62277ece184bfec30dcf4cc7
 
     this.drivetrain.setDefaultCommand(new DefaultDrive(drivetrain));
     configureButtonBindings();
@@ -52,12 +60,15 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+<<<<<<< HEAD
+=======
 
   }
 
   private void setUpSubsystems() {
     drivetrain = new Drivetrain();
     paddy = new Paddy();
+>>>>>>> b646c5d3b95fec6b62277ece184bfec30dcf4cc7
   }
 
   /**

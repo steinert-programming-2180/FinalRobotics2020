@@ -52,7 +52,7 @@ public class Paddy extends SubsystemBase {
   }
 
   public void rotateWheel(){
-      turner[0].set(1);
+    turner[0].set(1);
   }
 
   public Color getColor(){

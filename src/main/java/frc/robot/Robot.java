@@ -101,12 +101,18 @@ public class Robot extends TimedRobot {
     
   }
 
+  boolean test = true;
+
   /**
    * This function is called periodically during operator control.
    */
   @Override
   public void teleopPeriodic() {
     driveCommand.execute();
+    if(test){
+      driveSub.turnToAngle(90);
+      test = false;
+    }
   }
 
   @Override

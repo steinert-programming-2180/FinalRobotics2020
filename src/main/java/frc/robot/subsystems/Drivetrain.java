@@ -22,9 +22,10 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpiutil.math.MathUtil;
 
 import static frc.robot.Constants.DrivetrainConstants;
-import static frc.robot.Constants.units;
+import static frc.robot.Constants.Units;
 import static frc.robot.RobotUtilities.*;
 
 public class Drivetrain extends SubsystemBase {
@@ -88,11 +89,11 @@ public class Drivetrain extends SubsystemBase {
     linearPID.setOutputRange(DrivetrainConstants.Min[index], DrivetrainConstants.Max[index]);
   }
 
-  public void setDrive(double leftSpeed, double rightSpeed, units lengthUnit){ //Pure differential drive
+  public void setDrive(double leftSpeed, double rightSpeed, Units lengthUnit){ //Pure differential drive
     switch (lengthUnit) { //Permits the use of all kinds of units.  Internally still working with m/s though
       case INCHES: 
-        leftSpeed = leftSpeed / 39.3701; 
-        rightSpeed = rightSpeed / 39.3701;
+        leftSpeed = leftSpeed / DrivetrainConstants.conversionFactor; 
+        rightSpeed = rightSpeed / DrivetrainConstants.conversionFactor;
         break;
       case ROTATIONS: 
         leftSpeed = leftSpeed * DrivetrainConstants.gearRatio * DrivetrainConstants.wheelDiameter * Math.PI;
@@ -106,24 +107,43 @@ public class Drivetrain extends SubsystemBase {
   
   //This version just uses Chassis classes to convert from velocity and rotational terms to two velocity terms, and passes them to the 
   //OG setDrive.
-  public void setDrive (double speed, double rotationalVelocity, units lengthUnit, units rotationUnit) { 
+  public void setDrive (double speed, double rotationalVelocity, Units lengthUnit, Units rotationUnit) { 
     switch (lengthUnit) { //Allows for multiple units, saddly poorly compressable
       case INCHES:
-        speed = speed / 39.3701;
+        speed = speed / DrivetrainConstants.conversionFactor;
         break;
       case ROTATIONS:
         speed = speed * DrivetrainConstants.gearRatio * DrivetrainConstants.wheelDiameter * Math.PI;
         break;
-    } switch (rotationUnit) {
+    }
+
+    switch (rotationUnit) {
       case ROTATIONS:
         rotationalVelocity = rotationalVelocity / (Math.PI * 2);
         break;
       case DEGREES:
         rotationalVelocity = rotationalVelocity * (Math.PI / 180);
+        break;
     }
+
     internalChassis = new ChassisSpeeds(speed, 0, rotationalVelocity);
     internalWheelSpeeds = kinematicsCalc.toWheelSpeeds(internalChassis);
     this.setDrive(internalWheelSpeeds.leftMetersPerSecond, internalWheelSpeeds.rightMetersPerSecond, units.METERS);
+  }
+
+  public boolean turnToAngle(double angleInDegrees){
+    anglePid.setSetpoint(navX.getAngle() + angleInDegrees);
+    double pidVal = MathUtil.clamp(anglePid.calculate(navX.getAngle()), -1, 1);
+    while(pidVal > 0.05){
+      setDrive(pidVal, pidVal, Units.METERS);
+      return false;
+    }
+    return true;
+  }
+
+  public void actualTurnToAngle(){
+    double pidVal = MathUtil.clamp(anglePid.calculate(navX.getAngle()), -1, 1);
+    setDrive(pidVal, pidVal, Units.METERS);
   }
 
   public double getAngularVelocity(){

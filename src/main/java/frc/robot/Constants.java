@@ -27,7 +27,7 @@ package frc.robot;
  *   expect it.
  */
 public final class Constants {
-    public static enum units {
+    public static enum Units {
         METERS,
         INCHES,
         DEGREES,
@@ -40,11 +40,15 @@ public final class Constants {
         public static int[] driverPorts = {0}; //Controls go from left to right
         public static int[] operatorPorts = {1}; 
     }
+
     public static class DrivetrainConstants{
         public static int[] leftMotorPorts = {1, 2, 3};
         public static boolean[] inversionsLeft = {false, false, false};
         public static int[] rightMotorPorts = {4, 5, 6};
         public static boolean[] inversionsRight = {true, false, false};
+
+        public static double conversionFactor = 39.3701;
+        //2371 on motor for shooter
    
         public static double AngleKp = 0.0;
         public static double AngleKi = 0.0;
@@ -71,6 +75,7 @@ public final class Constants {
         public static double positionConversionFactor = gearRatio * wheelDiameter;
         public static double velocityConversionFactor = positionConversionFactor / 60.0;
     }
+    
     public static class PaddyConstants{
         public static int[] turnerMotors = {12};
         public static boolean[] inversionsTurner = {false};
@@ -80,7 +85,8 @@ public final class Constants {
         public static double[] redVals = {0.291504, 0.322754, 0.110107};
         public static double[] yellowVals = {0.322266, 0.571777, 0.105957};
     }
-    public static class ShooterConstants {
+    
+    public static class ShooterConstants {        
         public static int[] shooterMotorPorts = {7, 8};
         public static boolean[] inversionsShooter = {true, true};
 
