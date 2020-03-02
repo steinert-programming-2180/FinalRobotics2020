@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.Constants.units;
+import frc.robot.Constants.Units;
 import frc.robot.subsystems.Drivetrain;
 
 /**
@@ -44,7 +44,7 @@ public class DefaultDrive extends CommandBase {
   public void execute() {
     leftSpeed = DrivetrainConstants.defaultMotorFactor * ((5000/60) * DrivetrainConstants.gearRatio * DrivetrainConstants.wheelDiameter) * leftStick.getRawAxis(1);
     rightSpeed = DrivetrainConstants.defaultMotorFactor * ((5000/60) * DrivetrainConstants.gearRatio * DrivetrainConstants.wheelDiameter) * rightStick.getRawAxis(1);
-    this.drivetrain.setDrive(leftSpeed, rightSpeed, units.METERS);
+    this.drivetrain.setDrive(leftSpeed, rightSpeed, Units.METERS);
   }
 
   // Called once the command ends or is interrupted.

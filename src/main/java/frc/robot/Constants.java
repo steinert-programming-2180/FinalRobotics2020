@@ -21,17 +21,13 @@ package frc.robot;
  * -Inversion arrays should be located directly below the port array they will be used on.  They are applied in order
  *   to the ports.  The first value is the inversion of the leader, and the rest will dictate inversion RELATIVE TO 
  *   THE LEADER.  
-<<<<<<< HEAD
- * -In all cases where it isn't obvious, go top-to-down and left-to-right, one area at a time.  Remember to comment.
-=======
  * -Distance units can be anything, so long as you note it in a comment, and add it to the enum so it is self documenting.  
  *   Derivatives thereof, however, MUST be with respect to SECONDS (ie. with inches velocity would by in/sec and with meters
  *   acceleration would be m/sec^2).  Yes sparks run rpm, yes I only want it in seconds because good ol Letson trained me to
  *   expect it.
->>>>>>> b646c5d3b95fec6b62277ece184bfec30dcf4cc7
  */
 public final class Constants {
-    public static enum units {
+    public static enum Units {
         METERS,
         INCHES,
         DEGREES,
@@ -44,6 +40,7 @@ public final class Constants {
         public static int[] driverPorts = {0}; //Controls go from left to right
         public static int[] operatorPorts = {1}; 
     }
+
     public static class DrivetrainConstants{
         public static int[] leftMotorPorts = {1, 2, 3};
         public static boolean[] inversionsLeft = {false, false, false};
@@ -78,6 +75,7 @@ public final class Constants {
         public static double positionConversionFactor = gearRatio * wheelDiameter;
         public static double velocityConversionFactor = positionConversionFactor / 60.0;
     }
+    
     public static class PaddyConstants{
         public static int[] turnerMotors = {12};
         public static boolean[] inversionsTurner = {false};
@@ -87,7 +85,8 @@ public final class Constants {
         public static double[] redVals = {0.291504, 0.322754, 0.110107};
         public static double[] yellowVals = {0.322266, 0.571777, 0.105957};
     }
-    public static class ShooterConstants {
+    
+    public static class ShooterConstants {        
         public static int[] shooterMotorPorts = {7, 8};
         public static boolean[] inversionsShooter = {true, true};
 

@@ -14,6 +14,8 @@ import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.Units;
+
 import static frc.robot.Constants.ShooterConstants;
 import static frc.robot.RobotUtilities.*;
 
@@ -45,12 +47,20 @@ public class Shooter extends SubsystemBase {
     pid.setOutputRange(ShooterConstants.ShooterMin, ShooterConstants.ShooterMax);
   }
 
-  public void shootBall(double speed) {
+  public void shootBall(double speed, Units rotationUnit) {
+    switch (rotationUnit) { //Allows for multiple units, saddly poorly compressable
+      case DEGREES:
+        speed = speed / 360.0;
+        break;
+      case RADIANS:
+        speed = speed / (2 * Math.PI);
+        break;
+    }
     shooterPID.setReference(speed, ControlType.kVelocity);
   }
 
   public void shootBall(){ //Conveinence wrapper for shooting slam-aligned
-    shootBall(ShooterConstants.slamAlignedShotSpeed);
+    shootBall(ShooterConstants.slamAlignedShotSpeed, Units.DEGREES);
   }
 
   public void stopShooting() {
