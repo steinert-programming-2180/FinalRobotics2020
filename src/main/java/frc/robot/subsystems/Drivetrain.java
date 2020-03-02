@@ -85,7 +85,6 @@ public class Drivetrain extends SubsystemBase {
     linearPID.setI(DrivetrainConstants.Ki[index]);
     linearPID.setD(DrivetrainConstants.Kd[index]);
     linearPID.setIZone(DrivetrainConstants.Izone[index]);
-    linearPID.setFF(FF);
     linearPID.setOutputRange(DrivetrainConstants.Min[index], DrivetrainConstants.Max[index]);
   }
 

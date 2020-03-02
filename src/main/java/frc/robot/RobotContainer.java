@@ -24,25 +24,22 @@ import frc.robot.BeamTripTrig;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  private final Drivetrain drivetrain = new Drivetrain();
-
-  private final Paddy padSub = new Paddy();
-  private final RotateToColor colorRot = new RotateToColor(padSub);
+  private Drivetrain drivetrain;
+  private Paddy paddy;
 
   DigitalInput beamTrip;
 
-  BeamTripTrig beamTripTrigger;
+  BeamTripTrig funnelBeam, bottomBeam, topBeam;
 
   XboxController controller;
   
 
   public RobotContainer() {
+    
     // Configure the button bindings
     beamTrip = new DigitalInput(IOPorts.beamSensors[0]);
 
     controller = new XboxController(IOPorts.driverPorts[0]);
-
-    beamTripTrigger = new BeamTripTrig(beamTrip);
 
     this.drivetrain.setDefaultCommand(new DefaultDrive(drivetrain));
     configureButtonBindings();
@@ -55,7 +52,12 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    beamTripTrigger.whenActive(colorRot); //change command
+
+  }
+
+  private void setUpSubsystems() {
+    drivetrain = new Drivetrain();
+    paddy = new Paddy();
   }
 
   /**

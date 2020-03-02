@@ -69,7 +69,7 @@ public final class Constants {
         public static double gearRatio = 1; //Number of rotations of final wheel:Number of rotations of motor
         public static double wheelDiameter = 3; //Should be in meters
         public static double positionConversionFactor = gearRatio * wheelDiameter;
-        public static double velocityConversionFactor = positionConversionFactor / 60;
+        public static double velocityConversionFactor = positionConversionFactor / 60.0;
     }
     public static class PaddyConstants{
         public static int[] turnerMotors = {12};
@@ -87,6 +87,13 @@ public final class Constants {
         public static double ShooterKp = 0.0;
         public static double ShooterKi = 0.0;
         public static double ShooterKd = 0.0;
+        public static double ShooterMin = -1;
+        public static double ShooterMax = 1;
+
+        public static double positionConversionFactor = 1;
+        public static double velocityConversionFactor = 1.0 / 60.0;
+
+        public static double slamAlignedShotSpeed = 35;
     }
     public static class ClimberConstants{
         public static int[] elevatorMotorPorts = {12, 13};
