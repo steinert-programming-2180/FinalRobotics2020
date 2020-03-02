@@ -28,8 +28,6 @@ public class RobotContainer {
   private final Paddy padSub = new Paddy();
   private final RotateToColor colorRot = new RotateToColor(padSub);
 
-  DigitalInput beamTrip;
-
   BeamTripTrig beamTripTrigger;
 
   XboxController controller;
@@ -37,11 +35,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     // Configure the button bindings
-    beamTrip = new DigitalInput(IOPorts.beamSensors[0]);
-
     controller = new XboxController(IOPorts.controllerPort);
-
-    beamTripTrigger = new BeamTripTrig(beamTrip);
 
     this.drivetrain.setDefaultCommand(new DefaultDrive(drivetrain));
     configureButtonBindings();
@@ -54,7 +48,6 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    beamTripTrigger.whenActive(colorRot); //change command
   }
 
   /**

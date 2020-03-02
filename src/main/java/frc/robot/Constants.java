@@ -21,6 +21,7 @@ package frc.robot;
  * -Inversion arrays should be located directly below the port array they will be used on.  They are applied in order
  *   to the ports.  The first value is the inversion of the leader, and the rest will dictate inversion RELATIVE TO 
  *   THE LEADER.  
+ * -In all cases where it isn't obvious, go top-to-down and left-to-right, one area at a time.  Remember to comment.
  */
 public final class Constants {
     public static class IOPorts{
