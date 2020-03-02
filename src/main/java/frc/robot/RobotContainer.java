@@ -15,6 +15,7 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.BeamTripTrig;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -23,19 +24,30 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  private final Drivetrain drivetrain = new Drivetrain();
+  private Drivetrain drivetrain;
+  private Paddy paddy;
 
-  private final Paddy padSub = new Paddy();
-  private final RotateToColor colorRot = new RotateToColor(padSub);
-
+<<<<<<< HEAD
   BeamTripTrig beamTripTrigger;
+=======
+  DigitalInput beamTrip;
+
+  BeamTripTrig funnelBeam, bottomBeam, topBeam;
+>>>>>>> b646c5d3b95fec6b62277ece184bfec30dcf4cc7
 
   XboxController controller;
   
 
   public RobotContainer() {
+    
     // Configure the button bindings
+<<<<<<< HEAD
     controller = new XboxController(IOPorts.controllerPort);
+=======
+    beamTrip = new DigitalInput(IOPorts.beamSensors[0]);
+
+    controller = new XboxController(IOPorts.driverPorts[0]);
+>>>>>>> b646c5d3b95fec6b62277ece184bfec30dcf4cc7
 
     this.drivetrain.setDefaultCommand(new DefaultDrive(drivetrain));
     configureButtonBindings();
@@ -48,6 +60,15 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+<<<<<<< HEAD
+=======
+
+  }
+
+  private void setUpSubsystems() {
+    drivetrain = new Drivetrain();
+    paddy = new Paddy();
+>>>>>>> b646c5d3b95fec6b62277ece184bfec30dcf4cc7
   }
 
   /**

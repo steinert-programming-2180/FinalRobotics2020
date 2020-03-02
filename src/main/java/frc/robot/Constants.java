@@ -21,13 +21,28 @@ package frc.robot;
  * -Inversion arrays should be located directly below the port array they will be used on.  They are applied in order
  *   to the ports.  The first value is the inversion of the leader, and the rest will dictate inversion RELATIVE TO 
  *   THE LEADER.  
+<<<<<<< HEAD
  * -In all cases where it isn't obvious, go top-to-down and left-to-right, one area at a time.  Remember to comment.
+=======
+ * -Distance units can be anything, so long as you note it in a comment, and add it to the enum so it is self documenting.  
+ *   Derivatives thereof, however, MUST be with respect to SECONDS (ie. with inches velocity would by in/sec and with meters
+ *   acceleration would be m/sec^2).  Yes sparks run rpm, yes I only want it in seconds because good ol Letson trained me to
+ *   expect it.
+>>>>>>> b646c5d3b95fec6b62277ece184bfec30dcf4cc7
  */
 public final class Constants {
+    public static enum units {
+        METERS,
+        INCHES,
+        DEGREES,
+        RADIANS,
+        ROTATIONS
+    }
     public static class IOPorts{
-        public static int[] beamSensors = {0};
+        public static int[] beamSensors = {0,1,2,3,4,5};
 
-        public static int controllerPort = 0;
+        public static int[] driverPorts = {0}; //Controls go from left to right
+        public static int[] operatorPorts = {1}; 
     }
     public static class DrivetrainConstants{
         public static int[] leftMotorPorts = {1, 2, 3};
@@ -54,9 +69,11 @@ public final class Constants {
 
         public static double defaultMotorFactor = 0.4;
 
-        public static double effectiveDrivebaseWidth = 0; //Should be in inches
-        public static double rotationRatio = 1; //Number of rotations of final wheel:Number of rotations of motor
-        public static double wheelDiameter = 3; //Should be in inches
+        public static double effectiveDrivebaseWidth = 0; //Should be in meters
+        public static double gearRatio = 1; //Number of rotations of final wheel:Number of rotations of motor
+        public static double wheelDiameter = 3; //Should be in meters
+        public static double positionConversionFactor = gearRatio * wheelDiameter;
+        public static double velocityConversionFactor = positionConversionFactor / 60.0;
     }
     public static class PaddyConstants{
         public static int[] turnerMotors = {12};
@@ -74,6 +91,13 @@ public final class Constants {
         public static double ShooterKp = 0.0;
         public static double ShooterKi = 0.0;
         public static double ShooterKd = 0.0;
+        public static double ShooterMin = -1;
+        public static double ShooterMax = 1;
+
+        public static double positionConversionFactor = 1;
+        public static double velocityConversionFactor = 1.0 / 60.0;
+
+        public static double slamAlignedShotSpeed = 35;
     }
     public static class ClimberConstants{
         public static int[] elevatorMotorPorts = {12, 13};
