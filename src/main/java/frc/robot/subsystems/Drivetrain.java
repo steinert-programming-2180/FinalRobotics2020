@@ -91,8 +91,8 @@ public class Drivetrain extends SubsystemBase {
   public void setDrive(double leftSpeed, double rightSpeed, units lengthUnit){ //Pure differential drive
     switch (lengthUnit) { //Permits the use of all kinds of units.  Internally still working with m/s though
       case INCHES: 
-        leftSpeed = leftSpeed / 39.3701; 
-        rightSpeed = rightSpeed / 39.3701;
+        leftSpeed = leftSpeed / DrivetrainConstants.conversionFactor; 
+        rightSpeed = rightSpeed / DrivetrainConstants.conversionFactor;
         break;
       case ROTATIONS: 
         leftSpeed = leftSpeed * DrivetrainConstants.gearRatio * DrivetrainConstants.wheelDiameter * Math.PI;
@@ -109,18 +109,22 @@ public class Drivetrain extends SubsystemBase {
   public void setDrive (double speed, double rotationalVelocity, units lengthUnit, units rotationUnit) { 
     switch (lengthUnit) { //Allows for multiple units, saddly poorly compressable
       case INCHES:
-        speed = speed / 39.3701;
+        speed = speed / DrivetrainConstants.conversionFactor;
         break;
       case ROTATIONS:
         speed = speed * DrivetrainConstants.gearRatio * DrivetrainConstants.wheelDiameter * Math.PI;
         break;
-    } switch (rotationUnit) {
+    }
+
+    switch (rotationUnit) {
       case ROTATIONS:
         rotationalVelocity = rotationalVelocity / (Math.PI * 2);
         break;
       case DEGREES:
         rotationalVelocity = rotationalVelocity * (Math.PI / 180);
+        break;
     }
+
     internalChassis = new ChassisSpeeds(speed, 0, rotationalVelocity);
     internalWheelSpeeds = kinematicsCalc.toWheelSpeeds(internalChassis);
     this.setDrive(internalWheelSpeeds.leftMetersPerSecond, internalWheelSpeeds.rightMetersPerSecond, units.METERS);

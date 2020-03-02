@@ -45,6 +45,9 @@ public final class Constants {
         public static boolean[] inversionsLeft = {false, false, false};
         public static int[] rightMotorPorts = {4, 5, 6};
         public static boolean[] inversionsRight = {true, false, false};
+
+        public static double conversionFactor = 39.3701;
+        //2371 on motor for shooter
    
         public static double AngleKp = 0.0;
         public static double AngleKi = 0.0;
