@@ -101,8 +101,16 @@ public final class Constants {
 
         public static double slamAlignedShotSpeed = 35;
     }
+
     public static class ClimberConstants{
         public static int[] elevatorMotorPorts = {12, 13};
         public static boolean[] inversionsElevator = {false, true};
+    }
+
+    public static class IntakeConstants{
+        public static int[] beamTripPorts = {0, 1, 2};
+
+        public static int conveyorMotorPort = 0;
+        public static boolean[] motorInversion = {false};
     }
 }
