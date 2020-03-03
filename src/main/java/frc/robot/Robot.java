@@ -108,11 +108,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    driveCommand.execute();
-    if(test){
-      driveSub.turnToAngle(90);
-      test = false;
-    }
   }
 
   @Override

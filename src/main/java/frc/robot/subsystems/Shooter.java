@@ -18,6 +18,8 @@ import frc.robot.Constants.Units;
 
 import static frc.robot.Constants.ShooterConstants;
 import static frc.robot.RobotUtilities.*;
+import frc.robot.DriveWrapper;
+
 import com.kauailabs.navx.frc.AHRS;
 
 public class Shooter extends SubsystemBase {
@@ -27,8 +29,12 @@ public class Shooter extends SubsystemBase {
   CANSparkMax[] shooterMotors;
   CANEncoder shooterEncoder;
   CANPIDController shooterPID;
+  DriveWrapper shooterWrapper;
+
   private double leftPosition, leftVelocity, rightPosition, rightVelocity, //Grab from encoders, linear
   chassisVelocity, chassisPosition, chassisAccelleration, chassisAngle, rotVelocity; //Grab from NavX
+  private double currentTime, shooterFFVoltage;
+
   private CANEncoder leftEncoder, rightEncoder;
   private AHRS navX;
 
@@ -40,36 +46,46 @@ public class Shooter extends SubsystemBase {
      shooterEncoder = shooterMotors[0].getEncoder();
      shooterEncoder.setPositionConversionFactor(ShooterConstants.positionConversionFactor); //Rotations can stay, value is 1
      shooterEncoder.setPositionConversionFactor(ShooterConstants.velocityConversionFactor); //Turns rpm to rps, value is 1/60
-
+    
      shooterPID = new CANPIDController(shooterMotors[0]);
      setUpPID(shooterPID);
+     shooterWrapper = new DriveWrapper(ShooterConstants.ShooterKs, 
+      ShooterConstants.ShooterKv,
+      ShooterConstants.ShooterKa);
   }
 
   public void setUpPID (CANPIDController pid) {
-    pid.setP(ShooterConstants.ShooterKp);
-    pid.setI(ShooterConstants.ShooterKi);
-    pid.setD(ShooterConstants.ShooterKd); 
-    pid.setOutputRange(ShooterConstants.ShooterMin, ShooterConstants.ShooterMax);
+    pid.setP(ShooterConstants.ShooterKp, 0);
+    pid.setI(ShooterConstants.ShooterKi, 0);
+    pid.setD(ShooterConstants.ShooterKd, 0); 
+    pid.setOutputRange(ShooterConstants.ShooterMin, ShooterConstants.ShooterMax, 0);
   }
 
   public void shootBall(double speed, Units rotationUnit) {
-    switch (rotationUnit) { //Allows for multiple units, saddly poorly compressable
+    switch (rotationUnit) { //Converts to RPS
       case DEGREES:
         speed = speed / 360.0;
         break;
       case RADIANS:
         speed = speed / (2 * Math.PI);
         break;
+      case PERCENT:
+        speed = speed * ShooterConstants.maximumVelocity;
+        break;
     }
+
+    currentTime = System.currentTimeMillis() * 1000;
+    shooterFFVoltage = shooterWrapper.calculateFeedForward(currentTime, speed);
     shooterPID.setReference(speed, ControlType.kVelocity);
   }
 
   public void shootBall(){ //Conveinence wrapper for shooting slam-aligned
-    shootBall(ShooterConstants.slamAlignedShotSpeed, Units.DEGREES);
+    shootBall(ShooterConstants.slamAlignedShotSpeed, Units.ROTATIONS);
   }
 
   public void stopShooting() {
     shooterMotors[0].set(0.0);
+    shooterWrapper.resetRun();
   }
 
   public void grabSensors() {

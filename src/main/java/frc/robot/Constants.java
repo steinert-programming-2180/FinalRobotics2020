@@ -32,7 +32,8 @@ public final class Constants {
         INCHES,
         DEGREES,
         RADIANS,
-        ROTATIONS
+        ROTATIONS,
+        PERCENT
     }
     public static class IOPorts{
         public static int[] beamSensors = {0,1,2,3,4,5};
@@ -74,11 +75,21 @@ public final class Constants {
         public static double wheelDiameter = 3; //Should be in meters
         public static double positionConversionFactor = gearRatio * wheelDiameter;
         public static double velocityConversionFactor = positionConversionFactor / 60.0;
+        public static double maximumVelocity = 10;
     }
     
     public static class PaddyConstants{
         public static int[] turnerMotors = {12};
         public static boolean[] inversionsTurner = {false};
+
+        public static double PaddyKp = 0.0;
+        public static double PaddyKi = 0.0;
+        public static double PaddyKd = 0.0;
+        public static double PaddyMin = -1;
+        public static double PaddyMax = 1;
+        public static double PaddyKs = 0;
+        public static double PaddyKv = 0;
+        public static double PaddyKa = 0;
 
         public static double[] blueVals = {0.232154, 0.427, 0.429};
         public static double[] greenVals = {0.197, 0.561, 0.240};
@@ -95,9 +106,14 @@ public final class Constants {
         public static double ShooterKd = 0.0;
         public static double ShooterMin = -1;
         public static double ShooterMax = 1;
+        public static double ShooterKs = 0;
+        public static double ShooterKv = 0;
+        public static double ShooterKa = 0;
 
+        public static double gearRatio = 24.0 / 18.0;
         public static double positionConversionFactor = 1;
         public static double velocityConversionFactor = 1.0 / 60.0;
+        public static double maximumVelocity = 1;
 
         public static double slamAlignedShotSpeed = 35;
     }
@@ -108,9 +124,34 @@ public final class Constants {
     }
 
     public static class IntakeConstants{
-        public static int[] beamTripPorts = {0, 1, 2};
+        public static class Conveyer {
+            public static int[] motorPorts = {0};
+            public static boolean[] motorInversions = {false};
 
-        public static int conveyorMotorPort = 0;
-        public static boolean[] motorInversion = {false};
+            public static double gearRatio = 1; //Expressed in terms of final rotations over motor rotations
+            public static double driveGearDiameter = 1;
+            public static double positionConversionFactor = driveGearDiameter * Math.PI * 2 * gearRatio;
+            public static double velocityConversionFactor = positionConversionFactor / 60;
+            public static double maxSpeed = 0;
+        } public static class Funnel {
+            public static int[] motorPorts = {1};
+            public static boolean[] motorInversions = {false};
+
+            public static double gearRatio = 1; //Expressed in terms of final rotations over motor rotations
+            public static double driveGearDiameter = 1;
+            public static double positionConversionFactor = driveGearDiameter * Math.PI * 2 * gearRatio;
+            public static double velocityConversionFactor = positionConversionFactor / 60;
+            public static double maxSpeed = 0;
+        } public static class Intake {
+            public static int[] motorPorts = {0, 1};
+            public static boolean[] motorInversions = {false};
+
+            public static double gearRatio = 1; //Expressed in terms of final rotations over motor rotations
+            public static double driveGearDiameter = 1;
+            public static double positionConversionFactor = driveGearDiameter * Math.PI * 2 * gearRatio;
+            public static double velocityConversionFactor = positionConversionFactor / 60;
+            public static double maxSpeed = 0;
+        }
+        public static int[] beamTripPorts = {0, 1, 2};
     }
 }

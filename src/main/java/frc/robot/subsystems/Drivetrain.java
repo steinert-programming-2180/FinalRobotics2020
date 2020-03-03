@@ -27,6 +27,7 @@ import edu.wpi.first.wpiutil.math.MathUtil;
 import static frc.robot.Constants.DrivetrainConstants;
 import static frc.robot.Constants.Units;
 import static frc.robot.RobotUtilities.*;
+import frc.robot.DriveWrapper;
 
 public class Drivetrain extends SubsystemBase {
   /**
@@ -36,8 +37,7 @@ public class Drivetrain extends SubsystemBase {
   private CANSparkMax[] rightMotors;
   private CANEncoder leftEncoder, rightEncoder;
   private CANPIDController leftLinearPid, rightLinearPid;
-  
-  private SimpleMotorFeedforward leftFeedForward, rightFeedForward;
+
   private DifferentialDriveKinematics kinematicsCalc;
   private DifferentialDriveWheelSpeeds internalWheelSpeeds;
   private ChassisSpeeds internalChassis;
@@ -48,8 +48,8 @@ public class Drivetrain extends SubsystemBase {
   private double leftFFVoltage = 0;
   private double rightFFVoltage = 0;
 
-  private long previousTime = 0;
-  private double previousDesireVel = 0;
+  private DriveWrapper leftDrive, rightDrive;
+  private double currentTime;
   
   private double leftPosition, leftVelocity, rightPosition, rightVelocity, //Grab from encoders, linear
           chassisVelocity, chassisPosition, chassisAccelleration, chassisAngle, rotVelocity; //Grab from NavX
@@ -62,48 +62,55 @@ public class Drivetrain extends SubsystemBase {
     leftEncoder = leftMotors[0].getEncoder();
     leftEncoder.setPositionConversionFactor(DrivetrainConstants.positionConversionFactor); //Converts to meters and meters/sec
     leftEncoder.setVelocityConversionFactor(DrivetrainConstants.velocityConversionFactor);
+    leftDrive = new DriveWrapper(DrivetrainConstants.Ks[0], DrivetrainConstants.Kv[0], DrivetrainConstants.Ka[0]);
+
     rightEncoder = rightMotors[0].getEncoder();
     rightEncoder.setVelocityConversionFactor(DrivetrainConstants.velocityConversionFactor);
     rightEncoder.setPositionConversionFactor(DrivetrainConstants.positionConversionFactor);
-
-    navX = new AHRS(SPI.Port.kMXP);
-    anglePid = new PIDController(DrivetrainConstants.AngleKp, DrivetrainConstants.AngleKi,DrivetrainConstants.AngleKd);
+    rightDrive = new DriveWrapper(DrivetrainConstants.Ks[1], DrivetrainConstants.Kv[1], DrivetrainConstants.Ka[1]);
 
     leftLinearPid = new CANPIDController(leftMotors[0]);
     rightLinearPid = new CANPIDController(rightMotors[0]);
 
-    leftFeedForward = new SimpleMotorFeedforward(DrivetrainConstants.Ks[0], DrivetrainConstants.Kv[0]);
-    rightFeedForward = new SimpleMotorFeedforward(DrivetrainConstants.Ks[1], DrivetrainConstants.Kv[1]);
-
     setupPID(leftLinearPid, leftFFVoltage, true);
     setupPID(rightLinearPid, rightFFVoltage, false);
+    
+    navX = new AHRS(SPI.Port.kMXP);
+    anglePid = new PIDController(DrivetrainConstants.AngleKp, DrivetrainConstants.AngleKi,DrivetrainConstants.AngleKd);
   }
 
   void setupPID(CANPIDController linearPID, double FF, boolean isLeft){
     int index = isLeft ? 0:1;
 
-    linearPID.setP(DrivetrainConstants.Kp[index]);
-    linearPID.setI(DrivetrainConstants.Ki[index]);
-    linearPID.setD(DrivetrainConstants.Kd[index]);
-    linearPID.setIZone(DrivetrainConstants.Izone[index]);
-    linearPID.setOutputRange(DrivetrainConstants.Min[index], DrivetrainConstants.Max[index]);
+    linearPID.setP(DrivetrainConstants.Kp[index], 0);
+    linearPID.setI(DrivetrainConstants.Ki[index], 0);
+    linearPID.setD(DrivetrainConstants.Kd[index], 0);
+    linearPID.setIZone(DrivetrainConstants.Izone[index], 0);
+    linearPID.setOutputRange(DrivetrainConstants.Min[index], DrivetrainConstants.Max[index], 0);
   }
 
   public void setDrive(double leftSpeed, double rightSpeed, Units lengthUnit){ //Pure differential drive
     switch (lengthUnit) { //Permits the use of all kinds of units.  Internally still working with m/s though
-      case INCHES: 
-        leftSpeed = leftSpeed / DrivetrainConstants.conversionFactor; 
+      case INCHES:
+        leftSpeed = leftSpeed / DrivetrainConstants.conversionFactor;
         rightSpeed = rightSpeed / DrivetrainConstants.conversionFactor;
         break;
-      case ROTATIONS: 
+      case ROTATIONS:
         leftSpeed = leftSpeed * DrivetrainConstants.gearRatio * DrivetrainConstants.wheelDiameter * Math.PI;
         rightSpeed = rightSpeed * DrivetrainConstants.gearRatio * DrivetrainConstants.wheelDiameter * Math.PI;
         break;
+      case PERCENT:
+        leftSpeed = leftSpeed * DrivetrainConstants.maximumVelocity;
+        rightSpeed = rightSpeed * DrivetrainConstants.maximumVelocity;
+        break;
     }
+    currentTime = System.currentTimeMillis() * 1000;
 
-    leftLinearPid.setReference(leftSpeed, ControlType.kVelocity);
-    rightLinearPid.setReference(rightSpeed, ControlType.kVelocity);
-  } 
+    leftFFVoltage = leftDrive.calculateFeedForward(currentTime, leftSpeed);
+    leftLinearPid.setReference(leftSpeed, ControlType.kVelocity, 0, leftFFVoltage);
+    rightFFVoltage = rightDrive.calculateFeedForward(currentTime, rightSpeed);
+    rightLinearPid.setReference(rightSpeed, ControlType.kVelocity, 0, rightFFVoltage);
+  }
   
   //This version just uses Chassis classes to convert from velocity and rotational terms to two velocity terms, and passes them to the 
   //OG setDrive.
@@ -128,26 +135,21 @@ public class Drivetrain extends SubsystemBase {
 
     internalChassis = new ChassisSpeeds(speed, 0, rotationalVelocity);
     internalWheelSpeeds = kinematicsCalc.toWheelSpeeds(internalChassis);
-    this.setDrive(internalWheelSpeeds.leftMetersPerSecond, internalWheelSpeeds.rightMetersPerSecond, Units.METERS);
+    this.setDrive(internalWheelSpeeds.leftMetersPerSecond, 
+      internalWheelSpeeds.rightMetersPerSecond, 
+      Units.METERS);
   }
 
-  public void turnToAngle(double angleInDegrees){
-    double pidVal = MathUtil.clamp(anglePid.calculate(navX.getAngle()), -1, 1);
-
-    //What happens initially, since actualTurnToAngle would setDrive with 0
-    if(!actualTurnToAngle()){
-      actualTurnToAngle();
-    } else{
-      anglePid.setSetpoint(navX.getAngle() + angleInDegrees);
-    }
+  public void turnToAngleInit(double angleInDegrees){
+    anglePid.setSetpoint(navX.getAngle() + angleInDegrees);
   }
 
-  public boolean actualTurnToAngle(){
+  public boolean turnToAngle(){
     double pidVal = MathUtil.clamp(anglePid.calculate(navX.getAngle()), -1, 1);
     setDrive(pidVal, pidVal, Units.METERS);
     if(pidVal > 0.05){
       return false;
-    } else{
+    } else {
       return true;
     }
   }
@@ -186,15 +188,6 @@ public class Drivetrain extends SubsystemBase {
 
     leftLinearPid.setFF(leftFFVoltage / leftMotors[0].getBusVoltage());
     rightLinearPid.setFF(rightFFVoltage / rightMotors[0].getBusVoltage());
-  }
-
-  double getPIDAcceleration(double currentDesireVel){
-    double changeInVelocity = currentDesireVel-previousDesireVel;
-    previousDesireVel = currentDesireVel;
-    double changeInTime = System.currentTimeMillis() - previousTime;
-    previousTime = System.currentTimeMillis(); 
-
-    return changeInVelocity/changeInTime;
   }
 
   @Override
