@@ -96,6 +96,13 @@ public final class Constants {
         public static double[] redVals = {0.291504, 0.322754, 0.110107};
         public static double[] yellowVals = {0.322266, 0.571777, 0.105957};
     }
+    public  class customController{
+         int shooterPort = 0;
+         int paddyPort = 0;
+         int intake = 0; 
+         int climber = 0;
+         
+            }
     
     public static class ShooterConstants {        
         public static int[] shooterMotorPorts = {7, 8};

@@ -9,12 +9,15 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.IOPorts;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.BeamTripTrig;
 
 /**
@@ -25,6 +28,7 @@ import frc.robot.BeamTripTrig;
  */
 public class RobotContainer {
   private Drivetrain drivetrain;
+  private DefaultDrive l;
   private Paddy paddy;
 
   DigitalInput beamTrip;
@@ -32,13 +36,16 @@ public class RobotContainer {
   BeamTripTrig funnelBeam, bottomBeam, topBeam;
 
   XboxController controller;
+  Joystick a = new Joystick(0);
+  JoystickButton b = new JoystickButton(a, 1);
+
+  Button bruh;
   
 
   public RobotContainer() {
     
     // Configure the button bindings
     beamTrip = new DigitalInput(IOPorts.beamSensors[0]);
-
     controller = new XboxController(IOPorts.driverPorts[0]);
 
     this.drivetrain.setDefaultCommand(new DefaultDrive(drivetrain));

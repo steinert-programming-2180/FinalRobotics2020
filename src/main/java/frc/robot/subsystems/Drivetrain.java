@@ -163,7 +163,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double getAcceleration(){
-    return this.chassisAccelleration;
+    return this.chassisAccelleration; 
   }
 
   public double getLeftSpeed() {
