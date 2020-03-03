@@ -30,12 +30,14 @@ public class RobotContainer {
   private Drivetrain drivetrain;
   private DefaultDrive l;
   private Paddy paddy;
+  private Intake intake;
 
   DigitalInput beamTrip;
 
-  BeamTripTrig funnelBeam, bottomBeam, topBeam;
+  BeamTripTrig funnelTrip = new BeamTripTrig(Constants.IOPorts.beamSensors[0]);
+  BeamTripTrig topTrip = new BeamTripTrig(Constants.IOPorts.beamSensors[5]);
 
-  XboxController controller;
+  XboxController controller = new XboxController(IOPorts.driverPorts[0]);
   Joystick a = new Joystick(0);
   JoystickButton b = new JoystickButton(a, 1);
 
@@ -43,12 +45,8 @@ public class RobotContainer {
   
 
   public RobotContainer() {
-    
-    // Configure the button bindings
-    beamTrip = new DigitalInput(IOPorts.beamSensors[0]);
-    controller = new XboxController(IOPorts.driverPorts[0]);
-
     this.drivetrain.setDefaultCommand(new DefaultDrive(drivetrain));
+
     configureButtonBindings();
   }
 
@@ -59,7 +57,9 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-
+    funnelTrip.and(topTrip.negate().and(b.negate())).whileActiveOnce(new BringBallUp(intake));
+    funnelTrip.and(topTrip.and(b.negate()).whenActive(new StopFunnel(intake)));
+    b.whenHeld(new FeedBallsToShooter(intake));
   }
 
   private void setUpSubsystems() {

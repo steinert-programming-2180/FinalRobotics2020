@@ -36,7 +36,7 @@ public final class Constants {
         PERCENT
     }
     public static class IOPorts{
-        public static int[] beamSensors = {0,1,2,3,4,5};
+        public static int[] beamSensors = {0,1,2,3,4,5}; //Order from bottom to top, back to front.  Starts with funnel.
 
         public static int[] driverPorts = {0}; //Controls go from left to right
         public static int[] operatorPorts = {1}; 
@@ -140,6 +140,8 @@ public final class Constants {
             public static double positionConversionFactor = driveGearDiameter * Math.PI * 2 * gearRatio;
             public static double velocityConversionFactor = positionConversionFactor / 60;
             public static double maxSpeed = 0;
+
+            
         } public static class Funnel {
             public static int[] motorPorts = {1};
             public static boolean[] motorInversions = {false};
@@ -152,6 +154,9 @@ public final class Constants {
         } public static class Intake {
             public static int[] motorPorts = {0, 1};
             public static boolean[] motorInversions = {false};
+
+            public static int[][] solinoidPistonPorts = {{0 , 1}, //Left
+                                                        {2, 3}}; //Right
 
             public static double gearRatio = 1; //Expressed in terms of final rotations over motor rotations
             public static double driveGearDiameter = 1;
