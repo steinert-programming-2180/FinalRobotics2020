@@ -38,7 +38,7 @@ public class RobotContainer {
   XboxController controller;
   Joystick a = new Joystick(0);
   JoystickButton b = new JoystickButton(a, 1);
-  
+
   Button bruh;
   
 
@@ -47,9 +47,6 @@ public class RobotContainer {
     // Configure the button bindings
     beamTrip = new DigitalInput(IOPorts.beamSensors[0]);
     controller = new XboxController(IOPorts.driverPorts[0]);
-    
-    b.whenPressed(l);
-
 
     this.drivetrain.setDefaultCommand(new DefaultDrive(drivetrain));
     configureButtonBindings();

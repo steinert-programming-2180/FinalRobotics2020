@@ -128,22 +128,28 @@ public class Drivetrain extends SubsystemBase {
 
     internalChassis = new ChassisSpeeds(speed, 0, rotationalVelocity);
     internalWheelSpeeds = kinematicsCalc.toWheelSpeeds(internalChassis);
-    this.setDrive(internalWheelSpeeds.leftMetersPerSecond, internalWheelSpeeds.rightMetersPerSecond, units.METERS);
+    this.setDrive(internalWheelSpeeds.leftMetersPerSecond, internalWheelSpeeds.rightMetersPerSecond, Units.METERS);
   }
 
-  public boolean turnToAngle(double angleInDegrees){
-    anglePid.setSetpoint(navX.getAngle() + angleInDegrees);
+  public void turnToAngle(double angleInDegrees){
     double pidVal = MathUtil.clamp(anglePid.calculate(navX.getAngle()), -1, 1);
-    while(pidVal > 0.05){
-      setDrive(pidVal, pidVal, Units.METERS);
-      return false;
+
+    //What happens initially, since actualTurnToAngle would setDrive with 0
+    if(!actualTurnToAngle()){
+      actualTurnToAngle();
+    } else{
+      anglePid.setSetpoint(navX.getAngle() + angleInDegrees);
     }
-    return true;
   }
 
-  public void actualTurnToAngle(){
+  public boolean actualTurnToAngle(){
     double pidVal = MathUtil.clamp(anglePid.calculate(navX.getAngle()), -1, 1);
     setDrive(pidVal, pidVal, Units.METERS);
+    if(pidVal > 0.05){
+      return false;
+    } else{
+      return true;
+    }
   }
 
   public double getAngularVelocity(){

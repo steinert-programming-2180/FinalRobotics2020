@@ -37,8 +37,6 @@ public class RotateToColor extends CommandBase {
   @Override
   public void initialize() {
     wheelMotor = new CANSparkMax(1, MotorType.kBrushless);
-    joy1 = new Joystick(0);
-    joy2 = new Joystick(1);
   }
 
 
