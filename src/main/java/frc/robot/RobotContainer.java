@@ -12,11 +12,12 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.XboxController.Button;
+//import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.IOPorts;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.BeamTripTrig;
 
@@ -31,7 +32,8 @@ public class RobotContainer {
   private DefaultDrive l;
   private Paddy paddy;
   private Intake intake;
-
+  private FeedBallsToShooter fed = new FeedBallsToShooter(intake);
+  
   DigitalInput beamTrip;
 
   BeamTripTrig funnelTrip = new BeamTripTrig(Constants.IOPorts.beamSensors[0]);
@@ -40,9 +42,7 @@ public class RobotContainer {
   XboxController controller = new XboxController(IOPorts.driverPorts[0]);
   Joystick a = new Joystick(0);
   JoystickButton b = new JoystickButton(a, 1);
-
-  Button bruh;
-  
+  JoystickButton bruh = new JoystickButton(controller, XboxController.Button.kX.value);
 
   public RobotContainer() {
     this.drivetrain.setDefaultCommand(new DefaultDrive(drivetrain));
@@ -58,7 +58,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     funnelTrip.and(topTrip.negate().and(b.negate())).whileActiveOnce(new BringBallUp(intake));
-    funnelTrip.and(topTrip.and(b.negate()).whenActive(new StopFunnel(intake)));
+    funnelTrip.and(topTrip.and(b.negate()).whenActive(new StopFunnel(intake)));    
+    bruh.whenActive(fed);
     b.whenHeld(new FeedBallsToShooter(intake));
   }
 
