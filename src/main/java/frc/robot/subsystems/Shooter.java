@@ -21,8 +21,6 @@ import static frc.robot.Constants.ShooterConstants;
 import static frc.robot.RobotUtilities.*;
 import frc.robot.DriveWrapper;
 
-import com.kauailabs.navx.frc.AHRS;
-
 public class Shooter extends SubsystemBase {
   /**
    * Creates a new ExampleSubsystem.
@@ -30,18 +28,29 @@ public class Shooter extends SubsystemBase {
   CANSparkMax[] shooterMotors;
   CANEncoder shooterEncoder;
   CANPIDController shooterPID;
+<<<<<<< HEAD
 
   private double rotSpeed, targetSpeed, error;
   private double currentTime, shooterFFVoltage;
 
   private CANEncoder leftEncoder, rightEncoder;
+=======
+  DriveWrapper shooterWrapper;
+  private double shooterFFVoltage, shooterSpeed, shooterTargetSpeed;
+>>>>>>> 625e2c62c2e7cb7e8c78bd79f07badf986355c1d
 
   public Shooter() {
      shooterMotors = SetUpMotors(ShooterConstants.shooterMotorPorts, ShooterConstants.inversionsShooter);
 
+<<<<<<< HEAD
     shooterEncoder = shooterMotors[0].getEncoder();
     shooterEncoder.setPositionConversionFactor(ShooterConstants.positionConversionFactor); //Rotations can stay, value is 1
     shooterEncoder.setVelocityConversionFactor(ShooterConstants.velocityConversionFactor); //Turns rpm to rps, value is 1/60
+=======
+     shooterEncoder = shooterMotors[0].getEncoder();
+     shooterEncoder.setPositionConversionFactor(ShooterConstants.positionConversionFactor); //Rotations can stay, value is 1
+     shooterEncoder.setVelocityConversionFactor(ShooterConstants.velocityConversionFactor); //Turns rpm to rps, value is 1/60 * gear ratio
+>>>>>>> 625e2c62c2e7cb7e8c78bd79f07badf986355c1d
     
     shooterPID = new CANPIDController(shooterMotors[0]);
     setUpPID(shooterPID);
@@ -70,9 +79,13 @@ public class Shooter extends SubsystemBase {
         break;
     }
 
+<<<<<<< HEAD
     this.targetSpeed = speed;
 
     currentTime = System.currentTimeMillis() * 1000;
+=======
+    shooterFFVoltage = shooterWrapper.calculateFeedForward(speed);
+>>>>>>> 625e2c62c2e7cb7e8c78bd79f07badf986355c1d
     shooterPID.setReference(speed, ControlType.kVelocity);
     // shooterMotors[0].setVoltage(shooterFFVoltage);
   }
@@ -86,9 +99,15 @@ public class Shooter extends SubsystemBase {
   }
 
   public void grabSensors() {
+<<<<<<< HEAD
     this.rotSpeed = shooterEncoder.getVelocity();
     this.error = this.rotSpeed - this.targetSpeed;
   }
+=======
+    this.shooterSpeed = shooterEncoder.getVelocity();
+  }
+  
+>>>>>>> 625e2c62c2e7cb7e8c78bd79f07badf986355c1d
   
   @Override
   public void periodic() {

@@ -95,8 +95,13 @@ public class Drivetrain extends SubsystemBase {
   public void setDrive(double leftSpeed, double rightSpeed, Units lengthUnit){ //Pure differential drive
     switch (lengthUnit) { //Permits the use of all kinds of units.  Internally still working with m/s though
       case INCHES:
+<<<<<<< HEAD
         leftSpeed = leftSpeed / 39.3701;
         rightSpeed = rightSpeed / 39.3701;
+=======
+        leftSpeed = leftSpeed /  39.3701;
+        rightSpeed = rightSpeed /  39.3701;
+>>>>>>> 625e2c62c2e7cb7e8c78bd79f07badf986355c1d
         break;
       case ROTATIONS:
         leftSpeed = leftSpeed * DrivetrainConstants.gearRatio * DrivetrainConstants.wheelDiameter * Math.PI;

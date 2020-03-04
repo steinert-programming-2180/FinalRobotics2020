@@ -66,11 +66,14 @@ public class Paddy extends SubsystemBase {
     return null;
   }
   public void grabSensors() {
+<<<<<<< HEAD
     if (this.getColor() != null) {
       this.currentColor = this.getColor();
     } else {
       this.currentColor = Color.kAntiqueWhite;
     }
+=======
+>>>>>>> 625e2c62c2e7cb7e8c78bd79f07badf986355c1d
   }
 
 
