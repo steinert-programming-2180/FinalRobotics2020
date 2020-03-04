@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.Units;
 import frc.robot.subsystems.Drivetrain;
@@ -29,8 +30,8 @@ public class DefaultDrive extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     drivetrain = driveSub;
     addRequirements(drivetrain);
-    leftStick = new Joystick(0);
-    rightStick = new Joystick(1);
+    leftStick = Constants.customController.left1;
+    rightStick = Constants.customController.right1;
   }
 
   // Called when the command is initially scheduled.
@@ -44,7 +45,7 @@ public class DefaultDrive extends CommandBase {
   public void execute() {
     leftSpeed = DrivetrainConstants.defaultMotorFactor * ((5000/60) * DrivetrainConstants.gearRatio * DrivetrainConstants.wheelDiameter) * leftStick.getRawAxis(1);
     rightSpeed = DrivetrainConstants.defaultMotorFactor * ((5000/60) * DrivetrainConstants.gearRatio * DrivetrainConstants.wheelDiameter) * rightStick.getRawAxis(1);
-    this.drivetrain.setDrive(leftSpeed, rightSpeed, Units.METERS);
+    drivetrain.setDrive(leftSpeed, rightSpeed, Units.METERS);
   }
 
   // Called once the command ends or is interrupted.

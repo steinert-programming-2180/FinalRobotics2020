@@ -28,41 +28,21 @@ import frc.robot.BeamTripTrig;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  private Drivetrain drivetrain;
-  private DefaultDrive l;
+  private Drivetrain driveSub;
+  private DefaultDrive driveCom;
   private Paddy paddy;
   private Intake intake;
-<<<<<<< HEAD
-  private FeedBallsToShooter fed = new FeedBallsToShooter(intake);
-  
-  DigitalInput beamTrip;
-
-  BeamTripTrig funnelTrip = new BeamTripTrig(Constants.IOPorts.beamSensors[0]);
-  BeamTripTrig topTrip = new BeamTripTrig(Constants.IOPorts.beamSensors[5]);
-
-  XboxController controller = new XboxController(IOPorts.driverPorts[0]);
-  Joystick a = new Joystick(0);
-  JoystickButton b = new JoystickButton(a, 1);
-  JoystickButton bruh = new JoystickButton(controller, XboxController.Button.kX.value);
-=======
   private Shooter shooter;
 
   DigitalInput beamTrip;
 
   // BeamTripTrig funnelTrip = new BeamTripTrig(Constants.IOPorts.beamSensors[0]);
   // BeamTripTrig topTrip = new BeamTripTrig(Constants.IOPorts.beamSensors[5]);
->>>>>>> 7606d9de5f35696f5178b4358b32708dfdad249f
 
-  // XboxController controller = new XboxController(IOPorts.driverPorts[0]);
-  // Joystick a = new Joystick(0);
-  // JoystickButton b = new JoystickButton(a, 1);
-  Joystick stick = new Joystick(0); //This is TEMPORARY.  IF I SEE THIS AT BETHESDA ILL BE ANGRY
-  JoystickButton b = new JoystickButton(stick, 1);
   public RobotContainer() {
     //this.drivetrain.setDefaultCommand(new DefaultDrive(drivetrain));
     
     setUpSubsystems();
-    shooter.setDefaultCommand(new ShooterTest(shooter, stick));
     configureButtonBindings();
   }
 
@@ -73,21 +53,13 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-<<<<<<< HEAD
-    funnelTrip.and(topTrip.negate().and(b.negate())).whileActiveOnce(new BringBallUp(intake));
-    funnelTrip.and(topTrip.and(b.negate()).whenActive(new StopFunnel(intake)));    
-    bruh.whenActive(fed);
-    b.whenHeld(new FeedBallsToShooter(intake));
-=======
     // funnelTrip.and(topTrip.negate().and(b.negate())).whileActiveOnce(new BringBallUp(intake));
     // funnelTrip.and(topTrip.and(b.negate()).whenActive(new StopFunnel(intake)));
     // b.whenHeld(new FeedBallsToShooter(intake));
-    b.whenActive(new RotateNumOfTimes(paddy));
->>>>>>> 7606d9de5f35696f5178b4358b32708dfdad249f
   }
 
   private void setUpSubsystems() {
-    drivetrain = new Drivetrain();
+    driveSub = new Drivetrain();
     paddy = new Paddy();
     shooter = new Shooter();
   }

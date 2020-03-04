@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
+
 /**
  * Conventions of constants:
  * -All constants should be named specifically, even in a single subsystem, to allow for new features to be added.
@@ -48,10 +50,6 @@ public final class Constants {
         public static boolean[] inversionsLeft = {false, false, false};
         public static int[] rightMotorPorts = {4, 5, 6};
         public static boolean[] inversionsRight = {true, false, false};
-<<<<<<< HEAD
-        //2371 on motor for shooter
-=======
->>>>>>> 625e2c62c2e7cb7e8c78bd79f07badf986355c1d
    
         public static double AngleKp = 0.0;
         public static double AngleKi = 0.0;
@@ -101,11 +99,11 @@ public final class Constants {
 
         public static double defaultTurnSpeed;
     }
-    public  class customController{
-         int shooterPort = 0;
-         int paddyPort = 0;
-         int intake = 0; 
-         int climber = 0;
+    
+    public static class customController{
+        public static Joystick left1 = new Joystick(0);
+        public static Joystick right1 = new Joystick(1);
+        public static int paddy = 7; //Button is on left1
     }
     
     public static class ShooterConstants {        
@@ -124,13 +122,8 @@ public final class Constants {
 
         public static double gearRatio = 24.0 / 18.0;
         public static double positionConversionFactor = 1;
-<<<<<<< HEAD
-        public static double velocityConversionFactor = 0.0166666;
-        public static double maximumVelocity = 80;
-=======
         public static double velocityConversionFactor = (1.0 / 60.0) * gearRatio;
         public static double maximumVelocity = 1;
->>>>>>> 625e2c62c2e7cb7e8c78bd79f07badf986355c1d
 
         public static double slamAlignedShotSpeed = 35;
     }
@@ -161,7 +154,8 @@ public final class Constants {
             public static double positionConversionFactor = driveGearDiameter * Math.PI * 2 * gearRatio;
             public static double velocityConversionFactor = positionConversionFactor / 60;
             public static double maxSpeed = 0;
-        } public static class Intake {
+        }
+        public static class Intake {
             public static int[] motorPorts = {0, 1};
             public static boolean[] motorInversions = {false};
 
