@@ -31,22 +31,23 @@ public class RobotContainer {
   private DefaultDrive l;
   private Paddy paddy;
   private Intake intake;
+  private Shooter shooter;
 
   DigitalInput beamTrip;
 
-  BeamTripTrig funnelTrip = new BeamTripTrig(Constants.IOPorts.beamSensors[0]);
-  BeamTripTrig topTrip = new BeamTripTrig(Constants.IOPorts.beamSensors[5]);
+  // BeamTripTrig funnelTrip = new BeamTripTrig(Constants.IOPorts.beamSensors[0]);
+  // BeamTripTrig topTrip = new BeamTripTrig(Constants.IOPorts.beamSensors[5]);
 
-  XboxController controller = new XboxController(IOPorts.driverPorts[0]);
-  Joystick a = new Joystick(0);
-  JoystickButton b = new JoystickButton(a, 1);
-
-  Button bruh;
-  
-
+  // XboxController controller = new XboxController(IOPorts.driverPorts[0]);
+  // Joystick a = new Joystick(0);
+  // JoystickButton b = new JoystickButton(a, 1);
+  Joystick stick = new Joystick(0); //This is TEMPORARY.  IF I SEE THIS AT BETHESDA ILL BE ANGRY
+  JoystickButton b = new JoystickButton(stick, 1);
   public RobotContainer() {
-    this.drivetrain.setDefaultCommand(new DefaultDrive(drivetrain));
-
+    //this.drivetrain.setDefaultCommand(new DefaultDrive(drivetrain));
+    
+    setUpSubsystems();
+    shooter.setDefaultCommand(new ShooterTest(shooter, stick));
     configureButtonBindings();
   }
 
@@ -57,14 +58,16 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    funnelTrip.and(topTrip.negate().and(b.negate())).whileActiveOnce(new BringBallUp(intake));
-    funnelTrip.and(topTrip.and(b.negate()).whenActive(new StopFunnel(intake)));
-    b.whenHeld(new FeedBallsToShooter(intake));
+    // funnelTrip.and(topTrip.negate().and(b.negate())).whileActiveOnce(new BringBallUp(intake));
+    // funnelTrip.and(topTrip.and(b.negate()).whenActive(new StopFunnel(intake)));
+    // b.whenHeld(new FeedBallsToShooter(intake));
+    b.whenActive(new RotateNumOfTimes(paddy));
   }
 
   private void setUpSubsystems() {
     drivetrain = new Drivetrain();
     paddy = new Paddy();
+    shooter = new Shooter();
   }
 
   /**
