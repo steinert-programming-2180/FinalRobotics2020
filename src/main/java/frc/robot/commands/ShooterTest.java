@@ -7,51 +7,32 @@
 
 package frc.robot.commands;
 
-import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Paddy;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import frc.robot.Constants.Units;
+import frc.robot.subsystems.Shooter;
 
-public class RotateNumOfTimes extends CommandBase {
-  Color currentColor;
-  Color previousColor;
-  Color startingColor;
-  Paddy paddy;
-  CANSparkMax wheelMotor;
-  int counter;
-
+public class ShooterTest extends CommandBase {
   /**
-   * Creates a new RotateNumOfTimes.
+   * Creates a new ShooterTest.
    */
-  public RotateNumOfTimes(Paddy padSub) {
-    addRequirements(padSub);
-    paddy = padSub;
-    // Use addRequirements() here to declare subsystem dependencies.
+  Shooter shooter;
+  Joystick stick;
+  public ShooterTest(Shooter kShooter, Joystick kStick) {
+    addRequirements(kShooter);
+    shooter = kShooter;
+    stick = kStick;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    startingColor = this.paddy.getColor();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    currentColor = this.paddy.getColor();
-
-    if((currentColor != previousColor) && (currentColor == startingColor)){
-      counter++;
-    }
-    if(counter > 6){
-    wheelMotor.set(0);
-   }else{
-    wheelMotor.set(0.7);
-   }
-   previousColor = currentColor;
+    shooter.shootBall((stick.getRawAxis(2) - 1) * -0.5, Units.PERCENT);
   }
 
   // Called once the command ends or is interrupted.

@@ -34,8 +34,8 @@ public class Intake extends SubsystemBase {
   private DoubleSolenoid leftIntakePiston, rightIntakePiston;
 
   private int ballsInStorage = 0;
-
-  boolean bottomTripVal;
+  private double conveyerSpeed, conveyerPosition, funnelSpeed, funnelPosition;
+  private boolean bottomTripVal;
 
   public Intake() {
     bottomTrip = new DigitalInput(IntakeConstants.beamTripPorts[2]);
@@ -97,6 +97,11 @@ public class Intake extends SubsystemBase {
 
   public void grabSensors() {
     this.bottomTripVal = bottomTrip.get();
+
+    this.conveyerPosition = conveyerEncoder.getPosition();
+    this.conveyerSpeed = conveyerEncoder.getVelocity();
+    this.funnelPosition = funnelEncoder.getPosition();
+    this.funnelSpeed = funnelEncoder.getVelocity();
   }
 
   @Override

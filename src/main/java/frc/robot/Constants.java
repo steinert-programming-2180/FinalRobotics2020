@@ -48,10 +48,15 @@ public final class Constants {
         public static boolean[] inversionsLeft = {false, false, false};
         public static int[] rightMotorPorts = {4, 5, 6};
         public static boolean[] inversionsRight = {true, false, false};
+<<<<<<< HEAD
+        //2371 on motor for shooter
+=======
+>>>>>>> 625e2c62c2e7cb7e8c78bd79f07badf986355c1d
    
         public static double AngleKp = 0.0;
         public static double AngleKi = 0.0;
         public static double AngleKd = 0.0;
+        public static double AngleTolerance = 0;
 
         //Variable = {LeftValue, RightValue}
         public static double[] Kp = {0.0, 0.0};
@@ -77,7 +82,7 @@ public final class Constants {
     }
     
     public static class PaddyConstants{
-        public static int[] turnerMotors = {12};
+        public static int[] turnerMotors = {9};
         public static boolean[] inversionsTurner = {false};
 
         public static double PaddyKp = 0.0;
@@ -93,6 +98,8 @@ public final class Constants {
         public static double[] greenVals = {0.197, 0.561, 0.240};
         public static double[] redVals = {0.291504, 0.322754, 0.110107};
         public static double[] yellowVals = {0.322266, 0.571777, 0.105957};
+
+        public static double defaultTurnSpeed;
     }
     public  class customController{
          int shooterPort = 0;
@@ -102,22 +109,28 @@ public final class Constants {
     }
     
     public static class ShooterConstants {        
-        public static int[] shooterMotorPorts = {7, 8};
+        public static int[] shooterMotorPorts = {10, 11};
         public static boolean[] inversionsShooter = {true, true};
 
-        public static double ShooterKp = 0.0;
+        public static double ShooterKp = 0.000218;
         public static double ShooterKi = 0.0;
         public static double ShooterKd = 0.0;
+        public static double ShooterKf = 0.000305;
         public static double ShooterMin = -1;
         public static double ShooterMax = 1;
-        public static double ShooterKs = 0;
-        public static double ShooterKv = 0;
-        public static double ShooterKa = 0;
+        public static double ShooterKs = 0.139;
+        public static double ShooterKv = 0.0948;
+        public static double ShooterKa = 0.0219;
 
         public static double gearRatio = 24.0 / 18.0;
         public static double positionConversionFactor = 1;
+<<<<<<< HEAD
+        public static double velocityConversionFactor = 0.0166666;
+        public static double maximumVelocity = 80;
+=======
         public static double velocityConversionFactor = (1.0 / 60.0) * gearRatio;
         public static double maximumVelocity = 1;
+>>>>>>> 625e2c62c2e7cb7e8c78bd79f07badf986355c1d
 
         public static double slamAlignedShotSpeed = 35;
     }
@@ -129,7 +142,7 @@ public final class Constants {
 
     public static class IntakeConstants{
         public static class Conveyer {
-            public static int[] motorPorts = {0};
+            public static int[] motorPorts = {8};
             public static boolean[] motorInversions = {false};
 
             public static double gearRatio = 1; //Expressed in terms of final rotations over motor rotations
@@ -140,7 +153,7 @@ public final class Constants {
 
             
         } public static class Funnel {
-            public static int[] motorPorts = {1};
+            public static int[] motorPorts = {7};
             public static boolean[] motorInversions = {false};
 
             public static double gearRatio = 1; //Expressed in terms of final rotations over motor rotations
