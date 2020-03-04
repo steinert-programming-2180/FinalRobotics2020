@@ -25,6 +25,7 @@ package frc.robot;
  *   Derivatives thereof, however, MUST be with respect to SECONDS (ie. with inches velocity would by in/sec and with meters
  *   acceleration would be m/sec^2).  Yes sparks run rpm, yes I only want it in seconds because good ol Letson trained me to
  *   expect it.
+ * -Gear ratios seem to have inconsistant rules, so when in doubt use [final turns] / [motor turns]
  */
 public final class Constants {
     public static enum Units {
@@ -47,9 +48,6 @@ public final class Constants {
         public static boolean[] inversionsLeft = {false, false, false};
         public static int[] rightMotorPorts = {4, 5, 6};
         public static boolean[] inversionsRight = {true, false, false};
-
-        public static double conversionFactor = 39.3701;
-        //2371 on motor for shooter
    
         public static double AngleKp = 0.0;
         public static double AngleKi = 0.0;
@@ -101,8 +99,7 @@ public final class Constants {
          int paddyPort = 0;
          int intake = 0; 
          int climber = 0;
-         
-            }
+    }
     
     public static class ShooterConstants {        
         public static int[] shooterMotorPorts = {7, 8};
@@ -119,7 +116,7 @@ public final class Constants {
 
         public static double gearRatio = 24.0 / 18.0;
         public static double positionConversionFactor = 1;
-        public static double velocityConversionFactor = 1.0 / 60.0;
+        public static double velocityConversionFactor = (1.0 / 60.0) * gearRatio;
         public static double maximumVelocity = 1;
 
         public static double slamAlignedShotSpeed = 35;

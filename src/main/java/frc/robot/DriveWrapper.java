@@ -20,8 +20,10 @@ public class DriveWrapper {
         } else {
             previousTime = newTime;
             previousSpeed = newSpeed;
-            return ffCalc.calculate(newSpeed);
+            return this.calculateFeedForward(newSpeed);
         }
+    } public double calculateFeedForward (double speed) {
+        return ffCalc.calculate(speed);
     }
 
     public void resetRun () {

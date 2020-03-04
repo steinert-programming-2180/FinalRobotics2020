@@ -20,8 +20,6 @@ import static frc.robot.Constants.ShooterConstants;
 import static frc.robot.RobotUtilities.*;
 import frc.robot.DriveWrapper;
 
-import com.kauailabs.navx.frc.AHRS;
-
 public class Shooter extends SubsystemBase {
   /**
    * Creates a new ExampleSubsystem.
@@ -30,22 +28,14 @@ public class Shooter extends SubsystemBase {
   CANEncoder shooterEncoder;
   CANPIDController shooterPID;
   DriveWrapper shooterWrapper;
-
-  private double leftPosition, leftVelocity, rightPosition, rightVelocity, //Grab from encoders, linear
-  chassisVelocity, chassisPosition, chassisAccelleration, chassisAngle, rotVelocity; //Grab from NavX
-  private double currentTime, shooterFFVoltage;
-
-  private CANEncoder leftEncoder, rightEncoder;
-  private AHRS navX;
-
-  double speed;
+  private double shooterFFVoltage, shooterSpeed, shooterTargetSpeed;
 
   public Shooter() {
      shooterMotors = SetUpMotors(ShooterConstants.shooterMotorPorts, ShooterConstants.inversionsShooter);
 
      shooterEncoder = shooterMotors[0].getEncoder();
      shooterEncoder.setPositionConversionFactor(ShooterConstants.positionConversionFactor); //Rotations can stay, value is 1
-     shooterEncoder.setPositionConversionFactor(ShooterConstants.velocityConversionFactor); //Turns rpm to rps, value is 1/60
+     shooterEncoder.setVelocityConversionFactor(ShooterConstants.velocityConversionFactor); //Turns rpm to rps, value is 1/60 * gear ratio
     
      shooterPID = new CANPIDController(shooterMotors[0]);
      setUpPID(shooterPID);
@@ -74,8 +64,7 @@ public class Shooter extends SubsystemBase {
         break;
     }
 
-    currentTime = System.currentTimeMillis() * 1000;
-    shooterFFVoltage = shooterWrapper.calculateFeedForward(currentTime, speed);
+    shooterFFVoltage = shooterWrapper.calculateFeedForward(speed);
     shooterPID.setReference(speed, ControlType.kVelocity);
   }
 
@@ -89,18 +78,8 @@ public class Shooter extends SubsystemBase {
   }
 
   public void grabSensors() {
-    
-      this.leftPosition = this.leftEncoder.getPosition();
-      this.leftVelocity = this.leftEncoder.getVelocity();
-      this.rightPosition = this.rightEncoder.getPosition();
-      this.rightVelocity = this.rightEncoder.getVelocity();
-      
-      this.chassisAngle = this.navX.getAngle();
-      this.chassisPosition = this.navX.getDisplacementX();
-      this.chassisVelocity = this.navX.getVelocityX();
-      this.chassisAccelleration = this.navX.getRawAccelX();
-      this.rotVelocity = this.navX.getRawGyroZ();
-    }
+    this.shooterSpeed = shooterEncoder.getVelocity();
+  }
   
   
 

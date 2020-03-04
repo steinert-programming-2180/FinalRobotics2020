@@ -32,10 +32,6 @@ public class Paddy extends SubsystemBase {
   Color[] colors = new Color[4];
   Color currentColor;
   double motorPosition, motorSpeed;
-  private double leftPosition, leftVelocity, rightPosition, rightVelocity, //Grab from encoders, linear
-  chassisVelocity, chassisPosition, chassisAccelleration, chassisAngle, rotVelocity; //Grab from NavX
-  private CANEncoder leftEncoder, rightEncoder;
-  private AHRS navX;
 
   public Paddy() {
     turner = SetUpMotors(PaddyConstants.turnerMotors, PaddyConstants.inversionsTurner);
@@ -65,16 +61,6 @@ public class Paddy extends SubsystemBase {
     return null;
   }
   public void grabSensors() {
-    this.leftPosition = this.leftEncoder.getPosition();
-    this.leftVelocity = this.leftEncoder.getVelocity();
-    this.rightPosition = this.rightEncoder.getPosition();
-    this.rightVelocity = this.rightEncoder.getVelocity();
-    
-    this.chassisAngle = this.navX.getAngle();
-    this.chassisPosition = this.navX.getDisplacementX();
-    this.chassisVelocity = this.navX.getVelocityX();
-    this.chassisAccelleration = this.navX.getRawAccelX();
-    this.rotVelocity = this.navX.getRawGyroZ();
   }
 
 
