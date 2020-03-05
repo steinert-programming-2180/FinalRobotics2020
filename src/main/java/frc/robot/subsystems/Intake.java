@@ -71,23 +71,27 @@ public class Intake extends SubsystemBase {
         speed = speed * IntakeConstants.Conveyer.maxSpeed;
     }
     conveyerMotors[0].set(1);
-  } public void stopConveyer () {
+  }
+  public void stopConveyer () {
     runConveyer(0, Units.PERCENT);
   }
 
   public void intakeDown() {
     leftIntakePiston.set(Value.kForward);
     rightIntakePiston.set(Value.kForward);
-  } public void intakeUp() {
+  }
+  public void intakeUp() {
     leftIntakePiston.set(Value.kReverse);
     rightIntakePiston.set(Value.kForward);
-  } public void spinIntake () {
+  }
+  public void spinIntake () {
     //intakeMotors[0].set(ControlMode.PercentOutput, 1);
   }
 
   public void runFunnel (double speed, Units rotationUnits) {
     funnelMotors[0].set(speed);
-  } public void stopFunnel () {
+  }
+  public void stopFunnel () {
     runFunnel(0, Units.PERCENT);
   }
 

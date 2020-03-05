@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.util.Color;
 
 /**
  * Conventions of constants:
@@ -92,10 +93,12 @@ public final class Constants {
         public static double PaddyKv = 0;
         public static double PaddyKa = 0;
 
-        public static double[] blueVals = {0.232154, 0.427, 0.429};
-        public static double[] greenVals = {0.197, 0.561, 0.240};
-        public static double[] redVals = {0.291504, 0.322754, 0.110107};
-        public static double[] yellowVals = {0.322266, 0.571777, 0.105957};
+        public static Color blue = new Color(0.232154, 0.427, 0.429);
+        public static Color green = new Color(0.197, 0.561, 0.240);
+        public static Color red = new Color(0.291504, 0.322754, 0.110107);
+        public static Color yellow = new Color(0.322266, 0.571777, 0.105957);
+
+        public static Color targetColor = null;
 
         public static double defaultTurnSpeed;
     }
@@ -143,9 +146,8 @@ public final class Constants {
             public static double positionConversionFactor = driveGearDiameter * Math.PI * 2 * gearRatio;
             public static double velocityConversionFactor = positionConversionFactor / 60;
             public static double maxSpeed = 0;
-
-            
-        } public static class Funnel {
+        }
+        public static class Funnel {
             public static int[] motorPorts = {7};
             public static boolean[] motorInversions = {false};
 

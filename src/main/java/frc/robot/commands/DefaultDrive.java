@@ -48,7 +48,7 @@ public class DefaultDrive extends CommandBase {
     leftSpeed = leftStick.getRawAxis(1);
     rightSpeed = rightStick.getRawAxis(1);
     //drivetrain.setDrive(leftSpeed, rightSpeed, Units.METERS);
-    drivetrain.setDrive(leftSpeed, rightSpeed);
+    drivetrain.setDrive(leftSpeed, -rightSpeed);
   }
 
   // Called once the command ends or is interrupted.

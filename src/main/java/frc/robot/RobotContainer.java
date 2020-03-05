@@ -28,13 +28,26 @@ import frc.robot.BeamTripTrig;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  private Drivetrain driveSub;
   private DefaultDrive driveCom;
-  private Paddy paddy;
-  private Intake intake;
+  private ShooterTest shooterCom;
+  private BringBallUp raiseIntake;
+  private RotateToColor colorRot;
+  private RotateNumOfTimes wheelRot;
+
+  private Drivetrain driveSub;
   private Shooter shooter;
+  private Intake intake;
+  private Paddy paddy;
 
   DigitalInput beamTrip;
+
+  Joystick left1 = Constants.customController.left1;
+  Joystick right1 = Constants.customController.right1;
+
+  JoystickButton shooterBtn = new JoystickButton(right1, 1);
+  JoystickButton intakeBtn = new JoystickButton(right1, 3);
+  JoystickButton colorRotBtn = new JoystickButton(right1, 8);
+  JoystickButton wheelRotBtn = new JoystickButton(right1, 9);
 
   // BeamTripTrig funnelTrip = new BeamTripTrig(Constants.IOPorts.beamSensors[0]);
   // BeamTripTrig topTrip = new BeamTripTrig(Constants.IOPorts.beamSensors[5]);
@@ -56,12 +69,22 @@ public class RobotContainer {
     // funnelTrip.and(topTrip.negate().and(b.negate())).whileActiveOnce(new BringBallUp(intake));
     // funnelTrip.and(topTrip.and(b.negate()).whenActive(new StopFunnel(intake)));
     // b.whenHeld(new FeedBallsToShooter(intake));
+    shooterBtn.whenPressed(shooterCom);
+    intakeBtn.whenPressed(raiseIntake);
+    colorRotBtn.whenPressed(colorRot);
+    wheelRotBtn.whenPressed(wheelRot);
   }
 
   private void setUpSubsystems() {
     driveSub = new Drivetrain();
-    paddy = new Paddy();
     shooter = new Shooter();
+    intake = new Intake();
+    paddy = new Paddy();
+
+    shooterCom = new ShooterTest(shooter, right1);
+    raiseIntake = new BringBallUp(intake);
+    colorRot = new RotateToColor(paddy);
+    wheelRot = new RotateNumOfTimes(paddy);
   }
 
   /**

@@ -42,14 +42,7 @@ public class RotateToColor extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    currentColor = this.sub.getColor();
-    
-    if(currentColor == desiredColor){
-      sub.rotateWheel();
-    } else {
-      sub.rotateWheel();
-    }
-   
+    sub.turnToColor();
   }
 
   // Called once the command ends or is interrupted.

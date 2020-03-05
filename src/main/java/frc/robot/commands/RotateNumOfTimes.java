@@ -10,6 +10,7 @@ package frc.robot.commands;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Paddy;
@@ -41,17 +42,9 @@ public class RotateNumOfTimes extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    currentColor = this.paddy.getColor();
-
-    if((currentColor != previousColor) && (currentColor == startingColor)){
-      counter++;
-    }
-    if(counter > 6){
-    wheelMotor.set(0);
-   }else{
-    wheelMotor.set(0.7);
-   }
-   previousColor = currentColor;
+    SmartDashboard.putNumber("Hi", System.currentTimeMillis());
+    paddy.testColor();
+    paddy.rotateWheel();
   }
 
   // Called once the command ends or is interrupted.
