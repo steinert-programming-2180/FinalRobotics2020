@@ -8,11 +8,11 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import static frc.robot.Constants.PaddyConstants;
 import static frc.robot.RobotUtilities.*;
 
@@ -32,6 +32,8 @@ public class Paddy extends SubsystemBase {
   Color[] colors = new Color[4];
   Color currentColor;
   double motorPosition, motorSpeed;
+
+  long startTime;
 
   public Paddy() {
     turner = SetUpMotors(PaddyConstants.turnerMotors, PaddyConstants.inversionsTurner);
@@ -60,6 +62,7 @@ public class Paddy extends SubsystemBase {
     }
     return null;
   }
+
   public void grabSensors() {
   }
 
