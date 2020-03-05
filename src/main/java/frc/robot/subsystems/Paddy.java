@@ -41,7 +41,7 @@ public class Paddy extends SubsystemBase {
     turner = SetUpMotors(PaddyConstants.turnerMotors, PaddyConstants.inversionsTurner);
     turnerEncoder = turner[0].getEncoder();
 
-    colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
+    colorSensor = new ColorSensorV3(I2C.Port.kMXP);
     colorMatcher = new ColorMatch();
     colors[0] = ColorMatch.makeColor(PaddyConstants.blueVals[0], PaddyConstants.blueVals[1], PaddyConstants.blueVals[2]); //Blue
     colors[1] = ColorMatch.makeColor(PaddyConstants.greenVals[0], PaddyConstants.greenVals[1], PaddyConstants.greenVals[2]); //Green
@@ -75,8 +75,8 @@ public class Paddy extends SubsystemBase {
   @Override
   public void periodic() {
     grabSensors();
-    SmartDashboard.putNumber("R", this.currentColor.red);
-    SmartDashboard.putNumber("G", this.currentColor.green);
-    SmartDashboard.putNumber("B", this.currentColor.blue);
+    // SmartDashboard.putNumber("R", this.currentColor.red);
+    // SmartDashboard.putNumber("G", this.currentColor.green);
+    // SmartDashboard.putNumber("B", this.currentColor.blue);
   }
 }

@@ -27,6 +27,8 @@ import edu.wpi.first.wpiutil.math.MathUtil;
 import static frc.robot.Constants.DrivetrainConstants;
 import static frc.robot.Constants.Units;
 import static frc.robot.RobotUtilities.*;
+
+import frc.robot.Constants;
 import frc.robot.DriveWrapper;
 
 public class Drivetrain extends SubsystemBase {
@@ -82,6 +84,15 @@ public class Drivetrain extends SubsystemBase {
     anglePid.setTolerance(DrivetrainConstants.AngleTolerance);
   }
 
+  public void startUp(){
+    for(CANSparkMax i : leftMotors){
+      i.set(0);
+    }
+    for(CANSparkMax i : rightMotors){
+      i.set(0);
+    }
+  }
+
   void setupPID(CANPIDController linearPID, double FF, boolean isLeft){
     int index = isLeft ? 0:1;
 
@@ -113,8 +124,26 @@ public class Drivetrain extends SubsystemBase {
     leftLinearPid.setReference(leftSpeed, ControlType.kVelocity, 0, leftFFVoltage);
     rightFFVoltage = rightDrive.calculateFeedForward(currentTime, rightSpeed);
     rightLinearPid.setReference(rightSpeed, ControlType.kVelocity, 0, rightFFVoltage);
+
+    SmartDashboard.putNumber("0", leftMotors[0].getEncoder().getVelocity());
+    SmartDashboard.putNumber("1", leftMotors[1].getEncoder().getVelocity());
+    SmartDashboard.putNumber("2", leftMotors[2].getEncoder().getVelocity());
+    SmartDashboard.putNumber("3", leftMotors[3].getEncoder().getVelocity());
   }
   
+  public void setDrive(double leftSpeed, double rightSpeed){
+    //Ravi, you're setDrive code is not working well when going backwards!
+    for(int i : Constants.DrivetrainConstants.leftMotorPorts){
+      CANSparkMax l = new CANSparkMax(i, MotorType.kBrushless);
+      l.set(Constants.customController.left1.getRawAxis(1));
+    }
+
+    for(int i : Constants.DrivetrainConstants.rightMotorPorts){
+      CANSparkMax l = new CANSparkMax(i, MotorType.kBrushless);
+      l.set(-Constants.customController.left1.getRawAxis(1));
+    }
+  }
+
   //This version just uses Chassis classes to convert from velocity and rotational terms to two velocity terms, 
   //and passes them to the OG setDrive.
   public void setDrive (double speed, double rotationalVelocity, Units lengthUnit, Units rotationUnit) { 
@@ -138,6 +167,7 @@ public class Drivetrain extends SubsystemBase {
 
     internalChassis = new ChassisSpeeds(speed, 0, rotationalVelocity);
     internalWheelSpeeds = kinematicsCalc.toWheelSpeeds(internalChassis);
+
     this.setDrive(internalWheelSpeeds.leftMetersPerSecond, 
       internalWheelSpeeds.rightMetersPerSecond, 
       Units.METERS);
@@ -189,8 +219,8 @@ public class Drivetrain extends SubsystemBase {
     this.chassisAccelleration = this.navX.getRawAccelX();
     this.rotVelocity = this.navX.getRawGyroZ();
 
-    leftLinearPid.setFF(leftFFVoltage / leftMotors[0].getBusVoltage());
-    rightLinearPid.setFF(rightFFVoltage / rightMotors[0].getBusVoltage());
+    leftLinearPid.setFF(-Math.abs(leftFFVoltage / leftMotors[0].getBusVoltage()));
+    rightLinearPid.setFF(-Math.abs(rightFFVoltage / rightMotors[0].getBusVoltage()));
   }
 
   @Override
