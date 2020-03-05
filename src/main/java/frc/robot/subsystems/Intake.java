@@ -7,9 +7,9 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FollowerType;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+//import com.ctre.phoenix.motorcontrol.ControlMode;
+//import com.ctre.phoenix.motorcontrol.FollowerType;
+//import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -29,13 +29,13 @@ public class Intake extends SubsystemBase {
   private DigitalInput[] beamTrips;
   private DigitalInput bottomTrip;
   private CANSparkMax[] conveyerMotors, funnelMotors;
-  private TalonSRX[] intakeMotors = new TalonSRX[2];
+  //private TalonSRX[] intakeMotors = new TalonSRX[2];
   private CANEncoder conveyerEncoder, funnelEncoder;
   private DoubleSolenoid leftIntakePiston, rightIntakePiston;
 
   private int ballsInStorage = 0;
-
-  boolean bottomTripVal;
+  private double conveyerSpeed, conveyerPosition, funnelSpeed, funnelPosition;
+  private boolean bottomTripVal;
 
   public Intake() {
     bottomTrip = new DigitalInput(IntakeConstants.beamTripPorts[2]);
@@ -50,11 +50,11 @@ public class Intake extends SubsystemBase {
     funnelEncoder.setPositionConversionFactor(IntakeConstants.Funnel.positionConversionFactor);
     funnelEncoder.setVelocityConversionFactor(IntakeConstants.Funnel.velocityConversionFactor);
 
-    intakeMotors[0] = new TalonSRX(IntakeConstants.Intake.motorPorts[0]);
-    intakeMotors[0].setInverted(IntakeConstants.Intake.motorInversions[0]);
-    intakeMotors[1] = new TalonSRX(IntakeConstants.Intake.motorPorts[1]);
-    intakeMotors[1].follow(intakeMotors[1]);
-    intakeMotors[1].setInverted(IntakeConstants.Intake.motorInversions[0] ^ IntakeConstants.Intake.motorInversions[1]);
+    //intakeMotors[0] = new TalonSRX(IntakeConstants.Intake.motorPorts[0]);
+    //intakeMotors[0].setInverted(IntakeConstants.Intake.motorInversions[0]);
+    //intakeMotors[1] = new TalonSRX(IntakeConstants.Intake.motorPorts[1]);
+    //intakeMotors[1].follow(intakeMotors[1]);
+    //intakeMotors[1].setInverted(IntakeConstants.Intake.motorInversions[0] ^ IntakeConstants.Intake.motorInversions[1]);
 
     leftIntakePiston = new DoubleSolenoid(IntakeConstants.Intake.solinoidPistonPorts[0][0], //Forward port
                                           IntakeConstants.Intake.solinoidPistonPorts[0][1]);  //Reverse port
@@ -82,7 +82,7 @@ public class Intake extends SubsystemBase {
     leftIntakePiston.set(Value.kReverse);
     rightIntakePiston.set(Value.kForward);
   } public void spinIntake () {
-    intakeMotors[0].set(ControlMode.PercentOutput, 1);
+    //intakeMotors[0].set(ControlMode.PercentOutput, 1);
   }
 
   public void runFunnel (double speed, Units rotationUnits) {
@@ -97,6 +97,11 @@ public class Intake extends SubsystemBase {
 
   public void grabSensors() {
     this.bottomTripVal = bottomTrip.get();
+
+    this.conveyerPosition = conveyerEncoder.getPosition();
+    this.conveyerSpeed = conveyerEncoder.getVelocity();
+    this.funnelPosition = funnelEncoder.getPosition();
+    this.funnelSpeed = funnelEncoder.getVelocity();
   }
 
   @Override

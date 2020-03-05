@@ -36,7 +36,6 @@ public class RotateToColor extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    wheelMotor = new CANSparkMax(1, MotorType.kBrushless);
   }
 
 
@@ -46,9 +45,9 @@ public class RotateToColor extends CommandBase {
     currentColor = this.sub.getColor();
     
     if(currentColor == desiredColor){
-      wheelMotor.set(0);
+      sub.rotateWheel();
     } else {
-      wheelMotor.set(0.5);
+      sub.rotateWheel();
     }
    
   }

@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -27,6 +28,7 @@ public class Paddy extends SubsystemBase {
    * Creates a new ExampleSubsystem.
    * */
   CANSparkMax[] turner;
+  CANEncoder turnerEncoder;
   ColorSensorV3 colorSensor;
   ColorMatch colorMatcher;
   Color[] colors = new Color[4];
@@ -37,7 +39,8 @@ public class Paddy extends SubsystemBase {
 
   public Paddy() {
     turner = SetUpMotors(PaddyConstants.turnerMotors, PaddyConstants.inversionsTurner);
-    
+    turnerEncoder = turner[0].getEncoder();
+
     colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
     colorMatcher = new ColorMatch();
     colors[0] = ColorMatch.makeColor(PaddyConstants.blueVals[0], PaddyConstants.blueVals[1], PaddyConstants.blueVals[2]); //Blue
@@ -50,7 +53,9 @@ public class Paddy extends SubsystemBase {
   }
 
   public void rotateWheel(){
-    turner[0].set(1);
+    turner[0].set(PaddyConstants.defaultTurnSpeed);
+  } public void stopWheel() {
+    turner[0].set(0);
   }
 
   public Color getColor(){
@@ -70,5 +75,8 @@ public class Paddy extends SubsystemBase {
   @Override
   public void periodic() {
     grabSensors();
+    SmartDashboard.putNumber("R", this.currentColor.red);
+    SmartDashboard.putNumber("G", this.currentColor.green);
+    SmartDashboard.putNumber("B", this.currentColor.blue);
   }
 }

@@ -76,7 +76,10 @@ public class Drivetrain extends SubsystemBase {
     setupPID(rightLinearPid, rightFFVoltage, false);
     
     navX = new AHRS(SPI.Port.kMXP);
-    anglePid = new PIDController(DrivetrainConstants.AngleKp, DrivetrainConstants.AngleKi,DrivetrainConstants.AngleKd);
+    anglePid = new PIDController(DrivetrainConstants.AngleKp, 
+                                  DrivetrainConstants.AngleKi,
+                                  DrivetrainConstants.AngleKd);
+    anglePid.setTolerance(DrivetrainConstants.AngleTolerance);
   }
 
   void setupPID(CANPIDController linearPID, double FF, boolean isLeft){
@@ -112,8 +115,8 @@ public class Drivetrain extends SubsystemBase {
     rightLinearPid.setReference(rightSpeed, ControlType.kVelocity, 0, rightFFVoltage);
   }
   
-  //This version just uses Chassis classes to convert from velocity and rotational terms to two velocity terms, and passes them to the 
-  //OG setDrive.
+  //This version just uses Chassis classes to convert from velocity and rotational terms to two velocity terms, 
+  //and passes them to the OG setDrive.
   public void setDrive (double speed, double rotationalVelocity, Units lengthUnit, Units rotationUnit) { 
     switch (lengthUnit) { //Allows for multiple units, saddly poorly compressable
       case INCHES:
@@ -124,9 +127,9 @@ public class Drivetrain extends SubsystemBase {
         break;
     }
 
-    switch (rotationUnit) {
+    switch (rotationUnit) { //Converts to rad/sec
       case ROTATIONS:
-        rotationalVelocity = rotationalVelocity / (Math.PI * 2);
+        rotationalVelocity = rotationalVelocity * (Math.PI * 2);
         break;
       case DEGREES:
         rotationalVelocity = rotationalVelocity * (Math.PI / 180);
@@ -144,13 +147,13 @@ public class Drivetrain extends SubsystemBase {
     anglePid.setSetpoint(navX.getAngle() + angleInDegrees);
   }
 
-  public boolean turnToAngle(){
+  public boolean reachedAngle(){
     double pidVal = MathUtil.clamp(anglePid.calculate(navX.getAngle()), -1, 1);
     setDrive(pidVal, pidVal, Units.METERS);
-    if(pidVal > 0.05){
-      return false;
-    } else {
+    if (anglePid.atSetpoint()) {
       return true;
+    } else {
+      return false;
     }
   }
 
