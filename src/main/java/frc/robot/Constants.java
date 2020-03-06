@@ -106,7 +106,6 @@ public final class Constants {
     public static class customController{
         public static Joystick left1 = new Joystick(0);
         public static Joystick right1 = new Joystick(1);
-        public static int paddy = 7; //Button is on left1
     }
     
     public static class ShooterConstants {        
@@ -159,7 +158,7 @@ public final class Constants {
         }
         public static class Intake {
             public static int[] motorPorts = {0, 1};
-            public static boolean[] motorInversions = {false};
+            public static boolean[] motorInversions = {false, false};
 
             public static int[][] solinoidPistonPorts = {{0 , 1}, //Left
                                                         {2, 3}}; //Right
@@ -170,6 +169,6 @@ public final class Constants {
             public static double velocityConversionFactor = positionConversionFactor / 60;
             public static double maxSpeed = 0;
         }
-        public static int[] beamTripPorts = {0, 1, 2};
+        //public static int[] beamTripPorts = {0, 1, 2};
     }
 }

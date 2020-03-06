@@ -11,12 +11,16 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.Units;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Paddy;
+import frc.robot.subsystems.Shooter;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -25,10 +29,15 @@ import frc.robot.subsystems.Paddy;
  * project.
  */
 public class Robot extends TimedRobot {
+
+  private Compressor compressor;
+
   private Command m_autonomousCommand;
-  private Drivetrain driveSub = new Drivetrain();
-  private DefaultDrive driveCommand = new DefaultDrive(driveSub);
-  Paddy paddy;
+  private Intake intake;
+  private Shooter shooter;
+  // private Drivetrain driveSub = new Drivetrain();
+  // private DefaultDrive driveCommand = new DefaultDrive(driveSub);
+  // Paddy paddy;
 
   private RobotContainer m_robotContainer;
   Constants c = new Constants();
@@ -43,7 +52,13 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    paddy = new Paddy();
+    intake = new Intake();
+    shooter = new Shooter();
+
+    compressor = new Compressor();
+
+    compressor.start();
+    // paddy = new Paddy();
   }
 
   /**
@@ -109,8 +124,39 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    driveCommand.execute();
+    // driveCommand.execute();
     //paddy.periodic();
+
+
+    if(Constants.customController.left1.getRawButton(1)) {
+      intake.spinIntake();
+    }
+     
+    if(Constants.customController.left1.getRawButton(6)) {
+      intake.intakeUp();
+    }
+
+    if(Constants.customController.left1.getRawButton(7)) {
+      intake.intakeDown();
+    }
+
+    if(Constants.customController.left1.getRawAxis(2) < 0) {
+      intake.runConveyer();
+    } else {
+      intake.stopConveyer();
+    }
+
+    if(Constants.customController.left1.getRawButton(3)) {
+      intake.runFunnel(1, Units.PERCENT);
+    } else {
+      intake.stopFunnel();
+    }
+
+    double inSpeed = Constants.customController.right1.getRawAxis(2);
+
+    double outSpeed = (-inSpeed + 1) * 0.5;
+
+    shooter.shootBall(outSpeed, Units.PERCENT);
   }
 
   @Override
