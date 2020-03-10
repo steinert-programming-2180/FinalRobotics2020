@@ -65,8 +65,8 @@ public class Shooter extends SubsystemBase {
         break;
     }
 
-    shooterFFVoltage = shooterWrapper.calculateFeedForward(speed);
-    shooterPID.setReference(speed, ControlType.kVelocity);
+    // shooterFFVoltage = shooterWrapper.calculateFeedForward(speed);
+    // shooterPID.setReference(speed, ControlType.kVelocity);
     // shooterMotors[0].setVoltage(shooterFFVoltage);
 
     shooterMotors[0].set(speed / ShooterConstants.maximumVelocity);

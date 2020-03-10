@@ -5,31 +5,15 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.simpledriveshoot;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Paddy;
 
-public class RotateToColor extends CommandBase {
-
-  Color currentColor;
-  Color previousColor;
-  Paddy sub;
-  Color desiredColor;
-  CANSparkMax wheelMotor;
-  Joystick joy1, joy2; 
-  
-    
+public class MoveForward extends CommandBase {
   /**
-   * Creates a new RotateToColor.
+   * Creates a new MoveForward.
    */
-  public RotateToColor(Paddy padSub) {
-   sub = padSub;
+  public MoveForward() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -38,11 +22,9 @@ public class RotateToColor extends CommandBase {
   public void initialize() {
   }
 
-
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    sub.turnToColor();
   }
 
   // Called once the command ends or is interrupted.

@@ -15,7 +15,7 @@ public class IntakeMode extends CommandBase {
    * Creates a new IntakeMode.
    */
   Intake intake;
-  public IntakeMode(Intake, kintake) {
+  public IntakeMode(Intake kintake) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(kintake);
     intake = kintake;
@@ -31,15 +31,11 @@ public class IntakeMode extends CommandBase {
   @Override
   public void execute() {
     intake.spinIntake();
-    intake.runConveyer();
-    intake.runFunnel();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.stopConveyer();
-    intake.stopFunnel();
     intake.intakeUp();
     intake.stopIntake();
   }

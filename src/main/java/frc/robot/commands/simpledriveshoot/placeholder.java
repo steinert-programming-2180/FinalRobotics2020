@@ -5,25 +5,33 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.simpledriveshoot;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
+import frc.robot.Constants.Units;
+import frc.robot.subsystems.*;
 
-public class StopFunnel extends CommandBase {
+public class placeholder extends CommandBase {
   /**
-   * Creates a new StopFunnel.
+   * Creates a new placeholder.
    */
-  Intake intake;
-  public StopFunnel(Intake kIntake) {
-    addRequirements(kIntake);
-    intake = kIntake;
+  Drivetrain drivetrain;
+  Shooter shooter;
+  long setTime, time;
+  public placeholder(Drivetrain kdrive, Shooter kshoot, long ktime) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(kdrive, kshoot);
+    drivetrain = kdrive;
+    shooter = kshoot;
+    time = ktime;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intake.stopFunnel();
+    setTime = System.currentTimeMillis();
+    shooter.shootBall();
+    drivetrain.setDrive(-0.15, -0.15, Units.PERCENT);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -34,11 +42,12 @@ public class StopFunnel extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    drivetrain.setDrive(0,0,Units.PERCENT);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return System.currentTimeMillis() - setTime > time * 1000;
   }
 }

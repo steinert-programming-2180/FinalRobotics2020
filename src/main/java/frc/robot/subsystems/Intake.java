@@ -29,9 +29,9 @@ public class Intake extends SubsystemBase {
   private DigitalInput[] beamTrips;
   private DigitalInput bottomTrip;
   private CANSparkMax[] conveyerMotors, funnelMotors;
-  private TalonSRX[] intakeMotors = new TalonSRX[2];
   private CANEncoder conveyerEncoder, funnelEncoder;
   private DoubleSolenoid intakePiston;
+  private TalonSRX leftIntake, rightIntake;
 
   private int ballsInStorage = 0;
   private double conveyerSpeed, conveyerPosition, funnelSpeed, funnelPosition;
@@ -39,82 +39,36 @@ public class Intake extends SubsystemBase {
 
 
   public Intake() {
-    //bottomTrip = new DigitalInput(IntakeConstants.beamTripPorts[2]);
-
-    conveyerMotors = SetUpMotors(IntakeConstants.Conveyer.motorPorts, IntakeConstants.Conveyer.motorInversions);
-    conveyerEncoder = conveyerMotors[0].getEncoder();
-    conveyerEncoder.setPositionConversionFactor(IntakeConstants.Conveyer.positionConversionFactor);
-    conveyerEncoder.setVelocityConversionFactor(IntakeConstants.Conveyer.velocityConversionFactor);
-
-    funnelMotors = SetUpMotors(IntakeConstants.Funnel.motorPorts, IntakeConstants.Funnel.motorInversions);
-    funnelEncoder = funnelMotors[0].getEncoder();
-    funnelEncoder.setPositionConversionFactor(IntakeConstants.Funnel.positionConversionFactor);
-    funnelEncoder.setVelocityConversionFactor(IntakeConstants.Funnel.velocityConversionFactor);
-
-    intakeMotors[0] = new TalonSRX(IntakeConstants.Intake.motorPorts[0]);
-    intakeMotors[0].setInverted(IntakeConstants.Intake.motorInversions[0]);
-    intakeMotors[1] = new TalonSRX(IntakeConstants.Intake.motorPorts[1]);
-    intakeMotors[1].follow(intakeMotors[1]);
-    intakeMotors[1].setInverted(IntakeConstants.Intake.motorInversions[1]);
+    leftIntake = new TalonSRX(14);
+    rightIntake = new TalonSRX(15);
 
     intakePiston = new DoubleSolenoid(0, 1);
   }
 
-  /** 
-  public void runConveyer (double speed, Units liftingUnits){ //Runs in inches per second
-    switch (liftingUnits) {
-      case METERS: 
-        speed = speed * 39.3701;
-        break;
-      case PERCENT:
-        speed = speed * IntakeConstants.Conveyer.maxSpeed;
-    }
-    conveyerMotors[0].set(1);
-  }
-  **/
-
-  public void runConveyer() {
-    conveyerMotors[0].set(1);
-  }
-
-  // public void stopConveyer () {
-  //   runConveyer(0, Units.PERCENT);
-  // }
-
-    public void stopConveyer() {
-      conveyerMotors[0].set(0);
-    }
-
   public void intakeDown() {
-    intakePiston.set(Value.kForward);
-  }
-  public void intakeUp() {
     intakePiston.set(Value.kReverse);
   }
+  public void intakeUp() {
+    intakePiston.set(Value.kForward);
+  }
   public void spinIntake () {
-    intakeMotors[0].set(ControlMode.PercentOutput, 1);
-  } public void stopIntake () {
-    intakeMotors[0].set(ControlMode.PercentOutput, 0);
+    leftIntake.set(ControlMode.PercentOutput, -1);
+    rightIntake.set(ControlMode.PercentOutput, 1);
   }
-
-  public void runFunnel (double speed, Units rotationUnits) {
-    funnelMotors[0].set(speed);
+  public void reverseIntake () {
+    leftIntake.set(ControlMode.PercentOutput, 1);
+    rightIntake.set(ControlMode.PercentOutput, -1);
   }
-  public void stopFunnel () {
-    runFunnel(0, Units.PERCENT);
-  }
-
-  public boolean getBottomTrip () {
-    return this.bottomTripVal;
+  public void stopIntake () {
+    leftIntake.set(ControlMode.PercentOutput, 0);
+    rightIntake.set(ControlMode.PercentOutput, 0);
   }
 
   public void grabSensors() {
-    this.bottomTripVal = bottomTrip.get();
-
-    this.conveyerPosition = conveyerEncoder.getPosition();
-    this.conveyerSpeed = conveyerEncoder.getVelocity();
-    this.funnelPosition = funnelEncoder.getPosition();
-    this.funnelSpeed = funnelEncoder.getVelocity();
+    // this.conveyerPosition = conveyerEncoder.getPosition();
+    // this.conveyerSpeed = conveyerEncoder.getVelocity();
+    // this.funnelPosition = funnelEncoder.getPosition();
+    // this.funnelSpeed = funnelEncoder.getVelocity();
   }
 
   @Override

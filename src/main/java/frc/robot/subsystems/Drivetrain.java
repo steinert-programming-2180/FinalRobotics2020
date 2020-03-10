@@ -140,16 +140,14 @@ public class Drivetrain extends SubsystemBase {
   //This version just uses Chassis classes to convert from velocity and rotational terms to two velocity terms, 
   //and passes them to the OG setDrive.
   public void setDrive (double speed, double rotationalVelocity, Units lengthUnit, Units rotationUnit) { 
-    switch (lengthUnit) { //Allows for multiple units, saddly poorly compressable
+    switch (lengthUnit) { //Converts to m/s
       case INCHES:
         speed = speed / 39.3701;
         break;
       case ROTATIONS:
         speed = speed * DrivetrainConstants.gearRatio * DrivetrainConstants.wheelDiameter * Math.PI;
         break;
-    }
-
-    switch (rotationUnit) { //Converts to rad/sec
+    } switch (rotationUnit) { //Converts to rad/sec
       case ROTATIONS:
         rotationalVelocity = rotationalVelocity * (Math.PI * 2);
         break;
@@ -158,45 +156,33 @@ public class Drivetrain extends SubsystemBase {
         break;
     }
 
-    internalChassis = new ChassisSpeeds(speed, 0, rotationalVelocity);
+    internalChassis = new ChassisSpeeds(speed, 0, rotationalVelocity); //These simply convert between the units to wheel speeds
     internalWheelSpeeds = kinematicsCalc.toWheelSpeeds(internalChassis);
 
-    this.setDrive(internalWheelSpeeds.leftMetersPerSecond, 
+    this.setDrive(internalWheelSpeeds.leftMetersPerSecond, //And this just passes it through
       internalWheelSpeeds.rightMetersPerSecond, 
       Units.METERS);
   }
 
-  public void turnToAngleInit(double angleInDegrees){
+  public void turnToAngleInit(double angleInDegrees){ //This should be called ONCE, to move an amount relative to current angle
     anglePid.setSetpoint(navX.getAngle() + angleInDegrees);
   }
 
-  public boolean reachedAngle(){
+  public boolean reachedAngle(){ //This does the actual work of angle PID
     double pidVal = MathUtil.clamp(anglePid.calculate(navX.getAngle()), -1, 1);
     setDrive(pidVal, pidVal, Units.METERS);
-    if (anglePid.atSetpoint()) {
-      return true;
-    } else {
-      return false;
-    }
+    return anglePid.atSetpoint();
   }
 
   public double getAngularVelocity(){
     return this.rotVelocity;
-  }
-
-  public double getAngle(){
+  } public double getAngle(){
     return this.chassisAngle;
-  }
-
-  public double getAcceleration(){
+  } public double getAcceleration(){
     return this.chassisAccelleration; 
-  }
-
-  public double getLeftSpeed() {
+  } public double getLeftSpeed() {
     return this.leftVelocity;
-  }
-
-  public double getRightSpeed() {
+  } public double getRightSpeed() {
     return this.rightVelocity;
   }
 

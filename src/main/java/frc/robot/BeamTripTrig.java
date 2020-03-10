@@ -5,8 +5,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class BeamTripTrig extends Trigger{
     DigitalInput beam;
-    BeamTripTrig(int beamIn){
-        beam = new DigitalInput(beamIn);
+    BeamTripTrig(DigitalInput beamIn){
+        beam = beamIn;
     }
 
     @Override
