@@ -87,8 +87,8 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     grabSensors();
     SmartDashboard.putNumber("Speed", shooterEncoder.getVelocity());
-    SmartDashboard.putNumber("Target", this.targetSpeed);
-    SmartDashboard.putNumber("Error", this.error);
+    // SmartDashboard.putNumber("Target", this.targetSpeed);
+    // SmartDashboard.putNumber("Error", this.error);
     SmartDashboard.putNumber("Factor", shooterEncoder.getVelocityConversionFactor());
     SmartDashboard.putNumber("Applied Out", shooterMotors[0].getAppliedOutput() * 
                               shooterMotors[0].getBusVoltage());
