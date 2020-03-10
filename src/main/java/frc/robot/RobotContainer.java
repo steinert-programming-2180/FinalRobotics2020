@@ -8,16 +8,13 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
-//import edu.wpi.first.wpilibj.XboxController.Button;
-import frc.robot.Constants.IOPorts;
+import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.commands.*;
+import frc.robot.commands.drivemodes.*;
+import frc.robot.commands.simpledriveshoot.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.BeamTripTrig;
 
@@ -28,49 +25,91 @@ import frc.robot.BeamTripTrig;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  private Drivetrain driveSub;
-  private DefaultDrive driveCom;
-  private Paddy paddy;
-  private Intake intake;
+  private Drivetrain drivetrain;
   private Shooter shooter;
+  private Intake intake;
+  private Paddy paddy;
+  private Conveyer conveyer;
+  private Funnel funnel;
 
-  DigitalInput beamTrip;
+  DigitalInput funnelBeam, bottomBeam, topBeam;
+
+  Joystick left1 = new Joystick(0);
+  Joystick right1 = new Joystick(1);
+  Joystick operator1 = new Joystick(2);
+
+  JoystickButton shooterBtn = new JoystickButton(operator1, 1);
+  JoystickButton intakeRunButton = new JoystickButton(operator1, 2);
+  JoystickButton clearIntake = new JoystickButton(operator1, 10);
+  JoystickButton clearShooter = new JoystickButton(operator1, 9);
+  JoystickButton clearConveyer = new JoystickButton(operator1, 8);
+  JoystickButton runConveyer = new JoystickButton(operator1, 7);
+
+  JoystickButton fullSpeed1 = new JoystickButton(left1, 1);
+  JoystickButton fullSpeed2 = new JoystickButton(right1, 1);
+
+  BeamTripTrig funnelTrip = new BeamTripTrig(funnelBeam);
+  BeamTripTrig bottomTrip = new BeamTripTrig(bottomBeam);
+  BeamTripTrig topTrip = new BeamTripTrig(topBeam);
 
   // BeamTripTrig funnelTrip = new BeamTripTrig(Constants.IOPorts.beamSensors[0]);
   // BeamTripTrig topTrip = new BeamTripTrig(Constants.IOPorts.beamSensors[5]);
 
   public RobotContainer() {
     //this.drivetrain.setDefaultCommand(new DefaultDrive(drivetrain));
-    
     setUpSubsystems();
     configureButtonBindings();
+
+    drivetrain.setDefaultCommand(new DefaultDrive(drivetrain, left1, right1));
   }
 
-  /**
-   * Use this method to define your button->command mappings.  Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
-   * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
   private void configureButtonBindings() {
     // funnelTrip.and(topTrip.negate().and(b.negate())).whileActiveOnce(new BringBallUp(intake));
     // funnelTrip.and(topTrip.and(b.negate()).whenActive(new StopFunnel(intake)));
     // b.whenHeld(new FeedBallsToShooter(intake));
+    Trigger automaticMode = runConveyer.or(clearConveyer).negate();
+    Trigger roomToLoad = topTrip.negate();
+
+    intakeRunButton.whenHeld(new IntakeMode(intake)); //This one isn't inlined because it isn't primitive
+
+    shooterBtn.whenPressed(() -> shooter.shootBall())
+              .whenReleased(() -> shooter.stopShooting());
+
+    runConveyer.whenPressed(() -> conveyer.bringUp()).whenPressed(() -> funnel.suckIn())
+              .whenReleased(() -> conveyer.stopSuck()).whenReleased(() -> funnel.stopSuck());
+
+    clearIntake.whenPressed(() -> intake.reverseIntake())
+                .whenReleased(() -> intake.stopIntake());
+
+    clearShooter.whenPressed(() -> shooter.shootBall())
+                .whenReleased(() -> shooter.stopShooting());
+
+    clearConveyer.whenPressed(() -> conveyer.letDown()).whenPressed(() -> funnel.reverseSuck())
+                  .whenReleased(() -> conveyer.stopSuck()).whenReleased(() -> funnel.stopSuck());
+
+    //These functions manage the automatic storage of balls.  The first runs the funnel, the second the conveyer
+    (funnelTrip.and(roomToLoad.negate())).and(automaticMode).whenInactive(() -> funnel.suckIn())
+                                                              .whenActive(() -> funnel.stopSuck());
+
+    roomToLoad.and(bottomTrip.negate().or(funnelTrip)).and(automaticMode).whenActive(() -> conveyer.bringUp())
+                                                                          .whenInactive(() -> conveyer.stopSuck());
+
+    //Simple speed control code
+    fullSpeed1.and(fullSpeed2).whileActiveOnce(new FullDrive(drivetrain, left1, right1));
+    fullSpeed1.or(fullSpeed2).whileActiveOnce(new SeventyFivePower(drivetrain, left1, right1));
   }
 
   private void setUpSubsystems() {
-    driveSub = new Drivetrain();
-    paddy = new Paddy();
+    drivetrain = new Drivetrain();
     shooter = new Shooter();
+    intake = new Intake();
+    funnel = new Funnel(funnelBeam);
+    conveyer = new Conveyer(bottomBeam, topBeam);
+    //paddy = new Paddy();
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new PlaceholderAutonomousPlsDelete(); //This is why that command exists.  It stops the error without deleting the method.
+    return new SimpleDriveShoot(drivetrain, shooter, (long)6);
   }
 }

@@ -10,11 +10,11 @@ package frc.robot;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.DefaultDrive;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Shooter;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -23,12 +23,16 @@ import frc.robot.subsystems.Drivetrain;
  * project.
  */
 public class Robot extends TimedRobot {
+
+  private Compressor compressor;
+
   private Command m_autonomousCommand;
-  private Drivetrain driveSub = new Drivetrain();
-  private DefaultDrive driveCommand = new DefaultDrive(driveSub);
+  // private Intake intake;
+  private Shooter shooter;
+
+  CANSparkMax conveyer, funnel;
 
   private RobotContainer m_robotContainer;
-  Constants c = new Constants();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -40,6 +44,10 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+
+    compressor = new Compressor();
+
+    compressor.start();
   }
 
   /**
@@ -98,7 +106,6 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    
   }
 
   /**
@@ -106,7 +113,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    driveCommand.execute();
   }
 
   @Override

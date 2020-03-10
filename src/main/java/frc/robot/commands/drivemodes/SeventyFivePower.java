@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.drivemodes;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -19,33 +19,37 @@ import frc.robot.subsystems.Drivetrain;
 /**
  * An example command that uses an example subsystem.
  */
-public class DefaultDrive extends CommandBase {
+public class SeventyFivePower extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
   Drivetrain drivetrain;
   Joystick leftStick, rightStick;
   double leftSpeed, rightSpeed;
+  boolean reverseDrive = true;
 
-  public DefaultDrive(Drivetrain driveSub) {
+  public SeventyFivePower(Drivetrain driveSub, Joystick l, Joystick r) {
     // Use addRequirements() here to declare subsystem dependencies.
     drivetrain = driveSub;
     addRequirements(drivetrain);
-    leftStick = Constants.customController.left1;
-    rightStick = Constants.customController.right1;
+    leftStick = l;
+    rightStick = r;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    leftSpeed = DrivetrainConstants.defaultMotorFactor * ((5000/60) * DrivetrainConstants.gearRatio * DrivetrainConstants.wheelDiameter) * leftStick.getRawAxis(1);
-    rightSpeed = DrivetrainConstants.defaultMotorFactor * ((5000/60) * DrivetrainConstants.gearRatio * DrivetrainConstants.wheelDiameter) * rightStick.getRawAxis(1);
-    drivetrain.setDrive(leftSpeed, rightSpeed, Units.METERS);
+    //leftSpeed = DrivetrainConstants.defaultMotorFactor * ((5000/60) * DrivetrainConstants.gearRatio * DrivetrainConstants.wheelDiameter) * leftStick.getRawAxis(1);
+    //rightSpeed = DrivetrainConstants.defaultMotorFactor * ((5000/60) * DrivetrainConstants.gearRatio * DrivetrainConstants.wheelDiameter) * rightStick.getRawAxis(1);
+    leftSpeed = leftStick.getRawAxis(1) * -0.75;
+    rightSpeed = rightStick.getRawAxis(1) * -0.75;
+    //drivetrain.setDrive(leftSpeed, rightSpeed, Units.METERS);
+    // reverseDrive = !leftStick.getRawButton(3);
+    drivetrain.setDrive(leftSpeed, rightSpeed, reverseDrive, Units.PERCENT);
   }
 
   // Called once the command ends or is interrupted.

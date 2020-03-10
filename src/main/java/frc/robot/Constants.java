@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.util.Color;
 
 /**
  * Conventions of constants:
@@ -69,7 +70,7 @@ public final class Constants {
         public static double[] Kv = {0.0679, 0.0712};
         public static double[] Ka = {0.00675, 0.0141};
 
-        public static double defaultMotorFactor = 0.4;
+        public static double defaultMotorFactor = 0.5;
 
         public static double effectiveDrivebaseWidth = 0; //Should be in meters
         public static double gearRatio = 1; //Number of rotations of final wheel:Number of rotations of motor
@@ -92,18 +93,14 @@ public final class Constants {
         public static double PaddyKv = 0;
         public static double PaddyKa = 0;
 
-        public static double[] blueVals = {0.232154, 0.427, 0.429};
-        public static double[] greenVals = {0.197, 0.561, 0.240};
-        public static double[] redVals = {0.291504, 0.322754, 0.110107};
-        public static double[] yellowVals = {0.322266, 0.571777, 0.105957};
+        public static Color blue = new Color(0.232154, 0.427, 0.429);
+        public static Color green = new Color(0.197, 0.561, 0.240);
+        public static Color red = new Color(0.291504, 0.322754, 0.110107);
+        public static Color yellow = new Color(0.322266, 0.571777, 0.105957);
+
+        public static Color targetColor = null;
 
         public static double defaultTurnSpeed;
-    }
-    
-    public static class customController{
-        public static Joystick left1 = new Joystick(0);
-        public static Joystick right1 = new Joystick(1);
-        public static int paddy = 7; //Button is on left1
     }
     
     public static class ShooterConstants {        
@@ -123,7 +120,7 @@ public final class Constants {
         public static double gearRatio = 24.0 / 18.0;
         public static double positionConversionFactor = 1;
         public static double velocityConversionFactor = (1.0 / 60.0) * gearRatio;
-        public static double maximumVelocity = 1;
+        public static double maximumVelocity = 10;
 
         public static double slamAlignedShotSpeed = 35;
     }
@@ -133,41 +130,41 @@ public final class Constants {
         public static boolean[] inversionsElevator = {false, true};
     }
 
-    public static class IntakeConstants{
-        public static class Conveyer {
-            public static int[] motorPorts = {8};
-            public static boolean[] motorInversions = {false};
+    public static class ConveyerConstants {
+        public static int[] motorPorts = {8};
+        public static boolean[] motorInversions = {true};
 
-            public static double gearRatio = 1; //Expressed in terms of final rotations over motor rotations
-            public static double driveGearDiameter = 1;
-            public static double positionConversionFactor = driveGearDiameter * Math.PI * 2 * gearRatio;
-            public static double velocityConversionFactor = positionConversionFactor / 60;
-            public static double maxSpeed = 0;
+        public static double defaultSpeed = 0.7;
 
-            
-        } public static class Funnel {
-            public static int[] motorPorts = {7};
-            public static boolean[] motorInversions = {false};
+        public static double gearRatio = 1; //Expressed in terms of final rotations over motor rotations
+        public static double driveGearDiameter = 1;
+        public static double positionConversionFactor = driveGearDiameter * Math.PI * 2 * gearRatio;
+        public static double velocityConversionFactor = positionConversionFactor / 60;
+        public static double maxSpeed = 10;
+    }
+    public static class FunnelConstants {
+        public static int[] motorPorts = {7};
+        public static boolean[] motorInversions = {false};
 
-            public static double gearRatio = 1; //Expressed in terms of final rotations over motor rotations
-            public static double driveGearDiameter = 1;
-            public static double positionConversionFactor = driveGearDiameter * Math.PI * 2 * gearRatio;
-            public static double velocityConversionFactor = positionConversionFactor / 60;
-            public static double maxSpeed = 0;
-        }
-        public static class Intake {
-            public static int[] motorPorts = {0, 1};
-            public static boolean[] motorInversions = {false};
+        public static double defaultSpeed = 1;
 
-            public static int[][] solinoidPistonPorts = {{0 , 1}, //Left
-                                                        {2, 3}}; //Right
+        public static double gearRatio = 1; //Expressed in terms of final rotations over motor rotations
+        public static double driveGearDiameter = 1;
+        public static double positionConversionFactor = driveGearDiameter * Math.PI * 2 * gearRatio;
+        public static double velocityConversionFactor = positionConversionFactor / 60;
+        public static double maxSpeed = 10;
+    }
+    public static class IntakeConstants {
+        public static int[] motorPorts = {14, 15};
+        public static boolean[] motorInversions = {true, true};
 
-            public static double gearRatio = 1; //Expressed in terms of final rotations over motor rotations
-            public static double driveGearDiameter = 1;
-            public static double positionConversionFactor = driveGearDiameter * Math.PI * 2 * gearRatio;
-            public static double velocityConversionFactor = positionConversionFactor / 60;
-            public static double maxSpeed = 0;
-        }
-        public static int[] beamTripPorts = {0, 1, 2};
+        public static int[][] solinoidPistonPorts = {{0 , 1}, //Left
+                                                    {2, 3}}; //Right
+
+        public static double gearRatio = 1; //Expressed in terms of final rotations over motor rotations
+        public static double driveGearDiameter = 1;
+        public static double positionConversionFactor = driveGearDiameter * Math.PI * 2 * gearRatio;
+        public static double velocityConversionFactor = positionConversionFactor / 60;
+        public static double maxSpeed = 10;
     }
 }

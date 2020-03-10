@@ -27,6 +27,8 @@ import edu.wpi.first.wpiutil.math.MathUtil;
 import static frc.robot.Constants.DrivetrainConstants;
 import static frc.robot.Constants.Units;
 import static frc.robot.RobotUtilities.*;
+
+import frc.robot.Constants;
 import frc.robot.DriveWrapper;
 
 public class Drivetrain extends SubsystemBase {
@@ -82,6 +84,15 @@ public class Drivetrain extends SubsystemBase {
     anglePid.setTolerance(DrivetrainConstants.AngleTolerance);
   }
 
+  public void startUp(){
+    for(CANSparkMax i : leftMotors){
+      i.set(0);
+    }
+    for(CANSparkMax i : rightMotors){
+      i.set(0);
+    }
+  }
+
   void setupPID(CANPIDController linearPID, double FF, boolean isLeft){
     int index = isLeft ? 0:1;
 
@@ -107,27 +118,36 @@ public class Drivetrain extends SubsystemBase {
         rightSpeed = rightSpeed * DrivetrainConstants.maximumVelocity;
         break;
     }
-    currentTime = System.currentTimeMillis() * 1000;
+    // currentTime = System.currentTimeMillis() * 1000;
 
-    leftFFVoltage = leftDrive.calculateFeedForward(currentTime, leftSpeed);
-    leftLinearPid.setReference(leftSpeed, ControlType.kVelocity, 0, leftFFVoltage);
-    rightFFVoltage = rightDrive.calculateFeedForward(currentTime, rightSpeed);
-    rightLinearPid.setReference(rightSpeed, ControlType.kVelocity, 0, rightFFVoltage);
+    // leftFFVoltage = leftDrive.calculateFeedForward(leftSpeed);
+    // leftLinearPid.setReference(leftSpeed, ControlType.kVelocity, 0, leftFFVoltage);
+    // rightFFVoltage = rightDrive.calculateFeedForward(rightSpeed);
+    // rightLinearPid.setReference(rightSpeed, ControlType.kVelocity, 0, rightFFVoltage);
+
+    leftSpeed = leftSpeed / DrivetrainConstants.maximumVelocity;
+    rightSpeed = rightSpeed / DrivetrainConstants.maximumVelocity;
+    leftMotors[0].set(leftSpeed);
+    rightMotors[0].set(rightSpeed);
   }
-  
+
+  public void setDrive (double leftSpeed, double rightSpeed, boolean revDrive, Units inUnits) { //Reversable drive wrapper
+    if (revDrive) {
+      this.setDrive(-rightSpeed, -leftSpeed, inUnits);
+    }
+  }
+
   //This version just uses Chassis classes to convert from velocity and rotational terms to two velocity terms, 
   //and passes them to the OG setDrive.
   public void setDrive (double speed, double rotationalVelocity, Units lengthUnit, Units rotationUnit) { 
-    switch (lengthUnit) { //Allows for multiple units, saddly poorly compressable
+    switch (lengthUnit) { //Converts to m/s
       case INCHES:
         speed = speed / 39.3701;
         break;
       case ROTATIONS:
         speed = speed * DrivetrainConstants.gearRatio * DrivetrainConstants.wheelDiameter * Math.PI;
         break;
-    }
-
-    switch (rotationUnit) { //Converts to rad/sec
+    } switch (rotationUnit) { //Converts to rad/sec
       case ROTATIONS:
         rotationalVelocity = rotationalVelocity * (Math.PI * 2);
         break;
@@ -136,44 +156,33 @@ public class Drivetrain extends SubsystemBase {
         break;
     }
 
-    internalChassis = new ChassisSpeeds(speed, 0, rotationalVelocity);
+    internalChassis = new ChassisSpeeds(speed, 0, rotationalVelocity); //These simply convert between the units to wheel speeds
     internalWheelSpeeds = kinematicsCalc.toWheelSpeeds(internalChassis);
-    this.setDrive(internalWheelSpeeds.leftMetersPerSecond, 
+
+    this.setDrive(internalWheelSpeeds.leftMetersPerSecond, //And this just passes it through
       internalWheelSpeeds.rightMetersPerSecond, 
       Units.METERS);
   }
 
-  public void turnToAngleInit(double angleInDegrees){
+  public void turnToAngleInit(double angleInDegrees){ //This should be called ONCE, to move an amount relative to current angle
     anglePid.setSetpoint(navX.getAngle() + angleInDegrees);
   }
 
-  public boolean reachedAngle(){
+  public boolean reachedAngle(){ //This does the actual work of angle PID
     double pidVal = MathUtil.clamp(anglePid.calculate(navX.getAngle()), -1, 1);
     setDrive(pidVal, pidVal, Units.METERS);
-    if (anglePid.atSetpoint()) {
-      return true;
-    } else {
-      return false;
-    }
+    return anglePid.atSetpoint();
   }
 
   public double getAngularVelocity(){
     return this.rotVelocity;
-  }
-
-  public double getAngle(){
+  } public double getAngle(){
     return this.chassisAngle;
-  }
-
-  public double getAcceleration(){
+  } public double getAcceleration(){
     return this.chassisAccelleration; 
-  }
-
-  public double getLeftSpeed() {
+  } public double getLeftSpeed() {
     return this.leftVelocity;
-  }
-
-  public double getRightSpeed() {
+  } public double getRightSpeed() {
     return this.rightVelocity;
   }
 
@@ -188,9 +197,6 @@ public class Drivetrain extends SubsystemBase {
     this.chassisVelocity = this.navX.getVelocityX();
     this.chassisAccelleration = this.navX.getRawAccelX();
     this.rotVelocity = this.navX.getRawGyroZ();
-
-    leftLinearPid.setFF(leftFFVoltage / leftMotors[0].getBusVoltage());
-    rightLinearPid.setFF(rightFFVoltage / rightMotors[0].getBusVoltage());
   }
 
   @Override

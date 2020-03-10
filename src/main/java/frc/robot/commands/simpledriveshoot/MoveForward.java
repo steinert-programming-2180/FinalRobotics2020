@@ -5,20 +5,16 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.simpledriveshoot;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.Units;
-import frc.robot.subsystems.Intake;
 
-public class FeedBallsToShooter extends CommandBase {
+public class MoveForward extends CommandBase {
   /**
-   * Creates a new FeedBallsToShooter.
+   * Creates a new MoveForward.
    */
-  Intake intake;
-  public FeedBallsToShooter(Intake kIntake) {
-    addRequirements(kIntake);
-    intake = kIntake;
+  public MoveForward() {
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -29,12 +25,6 @@ public class FeedBallsToShooter extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.runConveyer(0.5, Units.PERCENT);
-    if (!intake.getBottomTrip()) {
-      intake.runFunnel(0.7, Units.PERCENT);
-    } else {
-      intake.stopFunnel();
-    }
   }
 
   // Called once the command ends or is interrupted.

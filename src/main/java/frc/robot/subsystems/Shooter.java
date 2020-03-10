@@ -41,7 +41,7 @@ public class Shooter extends SubsystemBase {
     shooterPID = new CANPIDController(shooterMotors[0]);
     setUpPID(shooterPID);
 
-    this.targetSpeed = 0;
+    //this.targetSpeed = 0;
   }
 
   public void setUpPID (CANPIDController pid) {
@@ -65,13 +65,16 @@ public class Shooter extends SubsystemBase {
         break;
     }
 
-    shooterFFVoltage = shooterWrapper.calculateFeedForward(speed);
-    shooterPID.setReference(speed, ControlType.kVelocity);
+    // shooterFFVoltage = shooterWrapper.calculateFeedForward(speed);
+    // shooterPID.setReference(speed, ControlType.kVelocity);
     // shooterMotors[0].setVoltage(shooterFFVoltage);
+
+    shooterMotors[0].set(speed / ShooterConstants.maximumVelocity);
   }
 
   public void shootBall(){ //Conveinence wrapper for shooting slam-aligned
-    shootBall(ShooterConstants.slamAlignedShotSpeed, Units.ROTATIONS);
+    // shootBall(ShooterConstants.slamAlignedShotSpeed, Units.ROTATIONS);
+    shooterMotors[0].set(1);
   }
 
   public void stopShooting() {

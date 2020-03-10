@@ -5,63 +5,52 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.simpledriveshoot;
 
 import com.revrobotics.CANSparkMax;
-
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.util.Color;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Paddy;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-public class RotateNumOfTimes extends CommandBase {
-  Color currentColor;
-  Color previousColor;
-  Color startingColor;
-  Paddy paddy;
-  CANSparkMax wheelMotor;
-  int counter;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
+public class runBalls extends CommandBase {
   /**
-   * Creates a new RotateNumOfTimes.
+   * Creates a new runBalls.
    */
-  public RotateNumOfTimes(Paddy padSub) {
-    addRequirements(padSub);
-    paddy = padSub;
+  Intake intake;
+  long setTime;
+  CANSparkMax conveyer;
+  Shooter shooter;
+  public runBalls(Shooter ks) {
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(ks);
+    conveyer = new CANSparkMax(8, MotorType.kBrushless);
+    shooter = ks;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    startingColor = this.paddy.getColor();
+    setTime = System.currentTimeMillis();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    currentColor = this.paddy.getColor();
-
-    if((currentColor != previousColor) && (currentColor == startingColor)){
-      counter++;
-    }
-    if(counter > 6){
-    wheelMotor.set(0);
-   }else{
-    wheelMotor.set(0.7);
-   }
-   previousColor = currentColor;
+    conveyer.set(0.7);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    conveyer.set(0.0);
+    shooter.stopShooting();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return System.currentTimeMillis() - setTime > 4000;
   }
 }

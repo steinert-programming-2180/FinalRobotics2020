@@ -5,21 +5,33 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.simpledriveshoot;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.Units;
+import frc.robot.subsystems.*;
 
-public class PlaceholderAutonomousPlsDelete extends CommandBase {
+public class placeholder extends CommandBase {
   /**
-   * Creates a new PlaceholderAutonomousPlsDelete.
+   * Creates a new placeholder.
    */
-  public PlaceholderAutonomousPlsDelete() {
+  Drivetrain drivetrain;
+  Shooter shooter;
+  long setTime, time;
+  public placeholder(Drivetrain kdrive, Shooter kshoot, long ktime) {
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(kdrive, kshoot);
+    drivetrain = kdrive;
+    shooter = kshoot;
+    time = ktime;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    setTime = System.currentTimeMillis();
+    shooter.shootBall();
+    drivetrain.setDrive(-0.15, -0.15, Units.PERCENT);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -30,11 +42,12 @@ public class PlaceholderAutonomousPlsDelete extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    drivetrain.setDrive(0,0,Units.PERCENT);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return System.currentTimeMillis() - setTime > time * 1000;
   }
 }
