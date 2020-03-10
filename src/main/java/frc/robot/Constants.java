@@ -70,7 +70,7 @@ public final class Constants {
         public static double[] Kv = {0.0679, 0.0712};
         public static double[] Ka = {0.00675, 0.0141};
 
-        public static double defaultMotorFactor = 0.4;
+        public static double defaultMotorFactor = 0.5;
 
         public static double effectiveDrivebaseWidth = 0; //Should be in meters
         public static double gearRatio = 1; //Number of rotations of final wheel:Number of rotations of motor
@@ -106,6 +106,7 @@ public final class Constants {
     public static class customController{
         public static Joystick left1 = new Joystick(0);
         public static Joystick right1 = new Joystick(1);
+        public static Joystick operator1 = new Joystick(2);
     }
     
     public static class ShooterConstants {        
@@ -125,7 +126,7 @@ public final class Constants {
         public static double gearRatio = 24.0 / 18.0;
         public static double positionConversionFactor = 1;
         public static double velocityConversionFactor = (1.0 / 60.0) * gearRatio;
-        public static double maximumVelocity = 1;
+        public static double maximumVelocity = 10;
 
         public static double slamAlignedShotSpeed = 35;
     }
@@ -138,27 +139,27 @@ public final class Constants {
     public static class IntakeConstants{
         public static class Conveyer {
             public static int[] motorPorts = {8};
-            public static boolean[] motorInversions = {false};
+            public static boolean[] motorInversions = {true};
 
             public static double gearRatio = 1; //Expressed in terms of final rotations over motor rotations
             public static double driveGearDiameter = 1;
             public static double positionConversionFactor = driveGearDiameter * Math.PI * 2 * gearRatio;
             public static double velocityConversionFactor = positionConversionFactor / 60;
-            public static double maxSpeed = 0;
+            public static double maxSpeed = 10;
         }
         public static class Funnel {
             public static int[] motorPorts = {7};
-            public static boolean[] motorInversions = {false};
+            public static boolean[] motorInversions = {true};
 
             public static double gearRatio = 1; //Expressed in terms of final rotations over motor rotations
             public static double driveGearDiameter = 1;
             public static double positionConversionFactor = driveGearDiameter * Math.PI * 2 * gearRatio;
             public static double velocityConversionFactor = positionConversionFactor / 60;
-            public static double maxSpeed = 0;
+            public static double maxSpeed = 10;
         }
         public static class Intake {
-            public static int[] motorPorts = {0, 1};
-            public static boolean[] motorInversions = {false, false};
+            public static int[] motorPorts = {14, 15};
+            public static boolean[] motorInversions = {false, true};
 
             public static int[][] solinoidPistonPorts = {{0 , 1}, //Left
                                                         {2, 3}}; //Right
@@ -167,7 +168,7 @@ public final class Constants {
             public static double driveGearDiameter = 1;
             public static double positionConversionFactor = driveGearDiameter * Math.PI * 2 * gearRatio;
             public static double velocityConversionFactor = positionConversionFactor / 60;
-            public static double maxSpeed = 0;
+            public static double maxSpeed = 10;
         }
         //public static int[] beamTripPorts = {0, 1, 2};
     }

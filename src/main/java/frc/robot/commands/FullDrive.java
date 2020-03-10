@@ -38,7 +38,6 @@ public class DefaultDrive extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    drivetrain.startUp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -46,10 +45,10 @@ public class DefaultDrive extends CommandBase {
   public void execute() {
     //leftSpeed = DrivetrainConstants.defaultMotorFactor * ((5000/60) * DrivetrainConstants.gearRatio * DrivetrainConstants.wheelDiameter) * leftStick.getRawAxis(1);
     //rightSpeed = DrivetrainConstants.defaultMotorFactor * ((5000/60) * DrivetrainConstants.gearRatio * DrivetrainConstants.wheelDiameter) * rightStick.getRawAxis(1);
-    leftSpeed = leftStick.getRawAxis(1) * DrivetrainConstants.defaultMotorFactor;
-    rightSpeed = rightStick.getRawAxis(1) * DrivetrainConstants.defaultMotorFactor;
+    leftSpeed = leftStick.getRawAxis(1);
+    rightSpeed = rightStick.getRawAxis(1);
     //drivetrain.setDrive(leftSpeed, rightSpeed, Units.METERS);
-    reverseDrive = !leftStick.getRawButton(3);
+    // reverseDrive = !leftStick.getRawButton(3);
     drivetrain.setDrive(leftSpeed, rightSpeed, reverseDrive, Units.PERCENT);
   }
 

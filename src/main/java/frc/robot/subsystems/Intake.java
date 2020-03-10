@@ -93,6 +93,8 @@ public class Intake extends SubsystemBase {
   }
   public void spinIntake () {
     intakeMotors[0].set(ControlMode.PercentOutput, 1);
+  } public void stopIntake () {
+    intakeMotors[0].set(ControlMode.PercentOutput, 0);
   }
 
   public void runFunnel (double speed, Units rotationUnits) {

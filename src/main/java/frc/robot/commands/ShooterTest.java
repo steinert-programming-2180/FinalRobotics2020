@@ -18,6 +18,7 @@ public class ShooterTest extends CommandBase {
    */
   Shooter shooter;
   Joystick stick;
+  double shootPercent;
   public ShooterTest(Shooter kShooter, Joystick kStick) {
     addRequirements(kShooter);
     shooter = kShooter;
@@ -32,7 +33,8 @@ public class ShooterTest extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.shootBall((stick.getRawAxis(2) - 1) * -0.5, Units.PERCENT);
+    shootPercent = (stick.getRawAxis(2) - 1) * -0.5;
+    shooter.shootBall();
   }
 
   // Called once the command ends or is interrupted.

@@ -8,27 +8,29 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.Units;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.Intake;
 
-public class BringBallUp extends CommandBase {
+public class IntakeMode extends CommandBase {
   /**
-   * Creates a new BringBallUp.
+   * Creates a new IntakeMode.
    */
   Intake intake;
-  public BringBallUp(Intake kIntake) {
-    intake = kIntake;
-    addRequirements(intake);
+  public IntakeMode(Intake, kintake) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(kintake);
+    intake = kintake;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    intake.intakeDown();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    intake.spinIntake();
     intake.runConveyer();
     intake.runFunnel();
   }
@@ -38,6 +40,8 @@ public class BringBallUp extends CommandBase {
   public void end(boolean interrupted) {
     intake.stopConveyer();
     intake.stopFunnel();
+    intake.intakeUp();
+    intake.stopIntake();
   }
 
   // Returns true when the command should end.

@@ -118,29 +118,22 @@ public class Drivetrain extends SubsystemBase {
         rightSpeed = rightSpeed * DrivetrainConstants.maximumVelocity;
         break;
     }
-    currentTime = System.currentTimeMillis() * 1000;
+    // currentTime = System.currentTimeMillis() * 1000;
 
-    leftFFVoltage = leftDrive.calculateFeedForward(currentTime, leftSpeed);
-    leftLinearPid.setReference(leftSpeed, ControlType.kVelocity, 0, leftFFVoltage);
-    rightFFVoltage = rightDrive.calculateFeedForward(currentTime, rightSpeed);
-    rightLinearPid.setReference(rightSpeed, ControlType.kVelocity, 0, rightFFVoltage);
+    // leftFFVoltage = leftDrive.calculateFeedForward(leftSpeed);
+    // leftLinearPid.setReference(leftSpeed, ControlType.kVelocity, 0, leftFFVoltage);
+    // rightFFVoltage = rightDrive.calculateFeedForward(rightSpeed);
+    // rightLinearPid.setReference(rightSpeed, ControlType.kVelocity, 0, rightFFVoltage);
 
-    SmartDashboard.putNumber("0", leftMotors[0].getEncoder().getVelocity());
-    SmartDashboard.putNumber("1", leftMotors[1].getEncoder().getVelocity());
-    SmartDashboard.putNumber("2", leftMotors[2].getEncoder().getVelocity());
-    SmartDashboard.putNumber("3", leftMotors[3].getEncoder().getVelocity());
+    leftSpeed = leftSpeed / DrivetrainConstants.maximumVelocity;
+    rightSpeed = rightSpeed / DrivetrainConstants.maximumVelocity;
+    leftMotors[0].set(leftSpeed);
+    rightMotors[0].set(rightSpeed);
   }
-  
-  public void setDrive(double leftSpeed, double rightSpeed){
-    //Ravi, you're setDrive code is not working well when going backwards!
-    for(int i : Constants.DrivetrainConstants.leftMotorPorts){
-      CANSparkMax l = new CANSparkMax(i, MotorType.kBrushless);
-      l.set(Constants.customController.left1.getRawAxis(1));
-    }
 
-    for(int i : Constants.DrivetrainConstants.rightMotorPorts){
-      CANSparkMax l = new CANSparkMax(i, MotorType.kBrushless);
-      l.set(-Constants.customController.left1.getRawAxis(1));
+  public void setDrive (double leftSpeed, double rightSpeed, boolean revDrive, Units inUnits) { //Reversable drive wrapper
+    if (revDrive) {
+      this.setDrive(-rightSpeed, -leftSpeed, inUnits);
     }
   }
 
@@ -218,9 +211,6 @@ public class Drivetrain extends SubsystemBase {
     this.chassisVelocity = this.navX.getVelocityX();
     this.chassisAccelleration = this.navX.getRawAccelX();
     this.rotVelocity = this.navX.getRawGyroZ();
-
-    leftLinearPid.setFF(-Math.abs(leftFFVoltage / leftMotors[0].getBusVoltage()));
-    rightLinearPid.setFF(-Math.abs(rightFFVoltage / rightMotors[0].getBusVoltage()));
   }
 
   @Override
