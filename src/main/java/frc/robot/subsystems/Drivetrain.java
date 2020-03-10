@@ -21,6 +21,9 @@ import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
 
@@ -52,6 +55,9 @@ public class Drivetrain extends SubsystemBase {
 
   private DriveWrapper leftDrive, rightDrive;
   private double currentTime;
+
+  TrapezoidProfile trapProf;
+  long startTime;
   
   private double leftPosition, leftVelocity, rightPosition, rightVelocity, //Grab from encoders, linear
           chassisVelocity, chassisPosition, chassisAccelleration, chassisAngle, rotVelocity; //Grab from NavX
@@ -164,6 +170,21 @@ public class Drivetrain extends SubsystemBase {
       Units.METERS);
   }
 
+  public void trapezoidProfilingInit(double distance){
+    Constraints newConstraints = new Constraints(0.75, 10); // Accel: m/s^2
+    State goal = new State(distance, 0);
+    State start = new State(0, this.leftVelocity);
+    trapProf = new TrapezoidProfile(newConstraints, goal, start);
+    startTime = System.currentTimeMillis() * 1000;
+  }
+
+  public boolean trapezoidProfiling(){
+    long passedTime = System.currentTimeMillis()*1000-startTime;
+    double trapezoidVel = trapProf.calculate(passedTime).velocity;
+    setDrive(trapezoidVel, trapezoidVel, Units.METERS);
+    return trapProf.isFinished(passedTime);
+  }
+  
   public void turnToAngleInit(double angleInDegrees){ //This should be called ONCE, to move an amount relative to current angle
     anglePid.setSetpoint(navX.getAngle() + angleInDegrees);
   }
