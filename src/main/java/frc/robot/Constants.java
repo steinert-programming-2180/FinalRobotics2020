@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import java.util.HashMap;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.util.Color;
 

@@ -29,6 +29,7 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   // private Intake intake;
   private Shooter shooter;
+  UniversalVar universalVar;
 
   CANSparkMax conveyer, funnel;
 
@@ -44,6 +45,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    universalVar = m_robotContainer.configureUniversalVar();
 
     compressor = new Compressor();
     compressor.stop();
@@ -64,6 +66,7 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    universalVar.generalUpdate();
   }
 
   /**
@@ -113,6 +116,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    
   }
 
   @Override

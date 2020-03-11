@@ -216,14 +216,20 @@ public class Drivetrain extends SubsystemBase {
 
   public double getAngularVelocity(){
     return this.rotVelocity;
+  } public double getChassisVelocity(){
+    return this.chassisVelocity;
   } public double getAngle(){
     return this.chassisAngle;
   } public double getAcceleration(){
-    return this.chassisAccelleration;
+    return 0;
   } public double getLeftSpeed() {
     return this.leftVelocity;
-  } public double getRightSpeed() {
+  } public double getLeftPosition(){
+    return this.leftPosition;
+  } public double getRightSpeed(){git 
     return this.rightVelocity;
+  } public double getRightPosition() {
+    return this.rightPosition;
   }
 
   public void grabSensors() {
