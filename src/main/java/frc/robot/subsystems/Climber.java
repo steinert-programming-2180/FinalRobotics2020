@@ -11,7 +11,9 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotUtilities;
+import frc.robot.UniversalVar;
+
+import static frc.robot.RobotUtilities.*;
 
 import static frc.robot.Constants.ClimberConstants;
 
@@ -19,46 +21,37 @@ public class Climber extends SubsystemBase {
   /**
    * Creates a new Climber.
    */
-  CANSparkMax[] leftMotors = new CANSparkMax[ClimberConstants.leftClimberMotorPorts.length];
-  CANSparkMax[] rightMotors = new CANSparkMax[ClimberConstants.rightClimberMotorPorts.length];
+  CANSparkMax[] elevatorMotors;
   CANEncoder encoder;
-  private double velocity, position;
-  
-  public Climber() {
-    leftMotors = RobotUtilities.SetUpMotors(ClimberConstants.leftClimberMotorPorts);
-    rightMotors = RobotUtilities.SetUpMotors(ClimberConstants.rightClimberMotorPorts);
-     encoder = new CANEncoder(rightMotors[0]);
-     
 
-    leftMotors[0].setInverted(true);
-    for(int i = 1; i < leftMotors.length; i++){
-      leftMotors[i].follow(leftMotors[0], false);
-      rightMotors[0].setInverted(false);
-    }
-    for(int i = 1; i < rightMotors.length; i++){
-      rightMotors[i].follow(rightMotors[0], false);
-    }
+  UniversalVar uniVar;
+  private double position, velocity; //Grab from encoder
+
+  public Climber(UniversalVar uniVar) {
+    this.uniVar = uniVar;
+    elevatorMotors = SetUpMotors(ClimberConstants.elevatorMotorPorts, ClimberConstants.inversionsElevator);
+    encoder = elevatorMotors[0].getEncoder();
   }
-   public void startClimb(){
-
-   }
-   public void endClimb(){
-
-   }
-   public double getPosition(){
-     return this.getPosition();
-   }
-   public double getVelocity(){
-    return this.getVelocity();
-   }
-   public void grabSensors(){
-     this.velocity = this.encoder.getVelocity();
-     this.position = this.encoder.getPosition();
-   }
+  
+  public void startClimb(){}
+  public void endClimb(){}
+  
+  public double getPosition(){
+     return this.position;
+  } public double getVelocity(){
+     return this.velocity;
+  }
+   
+  public void grabSensors(){
+    this.position = this.encoder.getPosition();
+    this.velocity = this.encoder.getVelocity();
+    
+    uniVar.add("Climber-Position", position);
+    uniVar.add("Climber-Velocity", velocity);
+  }
 
   @Override
   public void periodic() {
-   grabSensors();
-    // This method will be called once per scheduler run
+    grabSensors();
   }
 }
