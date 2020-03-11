@@ -41,6 +41,7 @@ import java.util.ArrayList;
 
 import frc.robot.Constants;
 import frc.robot.DriveWrapper;
+import frc.robot.UniversalVar;
 
 public class Drivetrain extends SubsystemBase {
   /**
@@ -54,6 +55,8 @@ public class Drivetrain extends SubsystemBase {
   private DifferentialDriveKinematics kinematicsCalc;
   private DifferentialDriveWheelSpeeds internalWheelSpeeds;
   private ChassisSpeeds internalChassis;
+
+  private UniversalVar uniVar;
   
   private AHRS navX;
   private PIDController anglePid;
@@ -70,7 +73,9 @@ public class Drivetrain extends SubsystemBase {
   private double leftPosition, leftVelocity, rightPosition, rightVelocity, //Grab from encoders, linear
           chassisVelocity, chassisPosition, chassisAccelleration, chassisAngle, rotVelocity; //Grab from NavX
   
-  public Drivetrain() {
+  public Drivetrain(UniversalVar uniVar) {
+    this.uniVar = uniVar;
+
     leftMotors = SetUpMotors(DrivetrainConstants.leftMotorPorts, DrivetrainConstants.inversionsLeft); //All motor stuff
     rightMotors = SetUpMotors(DrivetrainConstants.rightMotorPorts, DrivetrainConstants.inversionsRight);
     kinematicsCalc = new DifferentialDriveKinematics(DrivetrainConstants.effectiveDrivebaseWidth);
@@ -245,6 +250,15 @@ public class Drivetrain extends SubsystemBase {
     this.chassisVelocity = this.navX.getVelocityX();
     this.chassisAccelleration = this.navX.getRawAccelX();
     this.rotVelocity = this.navX.getRawGyroZ();
+
+    uniVar.add("Drivetrain-LeftPos", leftPosition);
+    uniVar.add("Drivetrain-LeftVel", leftVelocity);
+    uniVar.add("Drivetrain-RightPos", rightPosition);
+    uniVar.add("Drivetrain-RightVel", rightVelocity);
+    uniVar.add("Drivetrain-ChassisAngle", chassisAngle);
+    uniVar.add("Drivetrain-ChassisPosition", chassisPosition);
+    uniVar.add("Drivetrain-ChassisAccelleration", chassisAccelleration);
+    uniVar.add("Drivetrain-RotVel", rotVelocity);
   }
 
   @Override
