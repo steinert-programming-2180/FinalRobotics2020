@@ -12,7 +12,7 @@ public class UniversalVar{
 
     UniversalVar(){
         netInst = NetworkTableInstance.getDefault();
-        table = netInst.getTable("datatable");
+        table = netInst.getTable("DataTableDashboard");
     }
 
     public void writeToTable(){
