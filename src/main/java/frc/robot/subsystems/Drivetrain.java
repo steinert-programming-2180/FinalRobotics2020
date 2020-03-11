@@ -16,11 +16,17 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile.State;
@@ -30,6 +36,8 @@ import edu.wpi.first.wpiutil.math.MathUtil;
 import static frc.robot.Constants.DrivetrainConstants;
 import static frc.robot.Constants.Units;
 import static frc.robot.RobotUtilities.*;
+
+import java.util.ArrayList;
 
 import frc.robot.Constants;
 import frc.robot.DriveWrapper;
@@ -168,6 +176,17 @@ public class Drivetrain extends SubsystemBase {
     this.setDrive(internalWheelSpeeds.leftMetersPerSecond, //And this just passes it through
       internalWheelSpeeds.rightMetersPerSecond, 
       Units.METERS);
+  }
+
+  public void trajectoryInit(){
+    TrajectoryConfig config = new TrajectoryConfig(0.75, 10);
+    ArrayList<Translation2d> points = new ArrayList<Translation2d>();
+    Pose2d startTraj = new Pose2d(1.54, 23.23, Rotation2d.fromDegrees(-180));
+    Pose2d end = new Pose2d(23.7, 6.8, Rotation2d.fromDegrees(-160));
+    
+    points.add(new Translation2d(14, 23));
+    points.add(new Translation2d(21, 18));
+    var trajectory = TrajectoryGenerator.generateTrajectory(startTraj, points, end, config);
   }
 
   public void trapezoidProfilingInit(double distance){
