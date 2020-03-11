@@ -134,15 +134,15 @@ public class Drivetrain extends SubsystemBase {
     }
     // currentTime = System.currentTimeMillis() * 1000;
 
-    // leftFFVoltage = leftDrive.calculateFeedForward(leftSpeed);
-    // leftLinearPid.setReference(leftSpeed, ControlType.kVelocity, 0, leftFFVoltage);
-    // rightFFVoltage = rightDrive.calculateFeedForward(rightSpeed);
-    // rightLinearPid.setReference(rightSpeed, ControlType.kVelocity, 0, rightFFVoltage);
+    leftFFVoltage = leftDrive.calculateFeedForward(leftSpeed);
+    leftLinearPid.setReference(0, ControlType.kVelocity, 0, leftFFVoltage);
+    rightFFVoltage = rightDrive.calculateFeedForward(rightSpeed);
+    rightLinearPid.setReference(0, ControlType.kVelocity, 0, rightFFVoltage);
 
-    leftSpeed = leftSpeed / DrivetrainConstants.maximumVelocity;
-    rightSpeed = rightSpeed / DrivetrainConstants.maximumVelocity;
-    leftMotors[0].set(leftSpeed);
-    rightMotors[0].set(rightSpeed);
+    // leftSpeed = leftSpeed / DrivetrainConstants.maximumVelocity;
+    // rightSpeed = rightSpeed / DrivetrainConstants.maximumVelocity;
+    // leftMotors[0].set(leftSpeed);
+    // rightMotors[0].set(rightSpeed);
   }
 
   public void setDrive (double leftSpeed, double rightSpeed, boolean revDrive, Units inUnits) { //Reversable drive wrapper
@@ -219,7 +219,7 @@ public class Drivetrain extends SubsystemBase {
   } public double getAngle(){
     return this.chassisAngle;
   } public double getAcceleration(){
-    return this.chassisAccelleration; 
+    return this.chassisAccelleration;
   } public double getLeftSpeed() {
     return this.leftVelocity;
   } public double getRightSpeed() {
@@ -242,5 +242,7 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     grabSensors();
+    SmartDashboard.putNumber("Left Speed", this.leftVelocity);
+    SmartDashboard.putNumber("Right Speed", this.rightVelocity);
   }
 }

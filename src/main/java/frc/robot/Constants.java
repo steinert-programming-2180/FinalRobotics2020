@@ -66,18 +66,18 @@ public final class Constants {
         public static double[] Max = {1.0, 1.0};
         public static double[] Accel = {0.0, 0.0};
         public static double[] MaxVel = {0.0, 0.0};
-        public static double[] Ks = {0.106, 0.137};
-        public static double[] Kv = {0.0679, 0.0712};
-        public static double[] Ka = {0.00675, 0.0141};
+        public static double[] Ks = {0.149, 0.149};
+        public static double[] Kv = {2.53, 2.54};
+        public static double[] Ka = {0.385, 0.37};
 
         public static double defaultMotorFactor = 0.5;
 
-        public static double effectiveDrivebaseWidth = 0; //Should be in meters
-        public static double gearRatio = 1; //Number of rotations of final wheel:Number of rotations of motor
-        public static double wheelDiameter = 3; //Should be in meters
-        public static double positionConversionFactor = gearRatio * wheelDiameter;
+        public static double effectiveDrivebaseWidth = 0.6945; //Should be in meters
+        public static double gearRatio = 1.0 / 9.64; //Number of rotations of final wheel:Number of rotations of motor
+        public static double wheelDiameter = 0.1538; //Should be in meters
+        public static double positionConversionFactor = gearRatio * wheelDiameter * Math.PI;
         public static double velocityConversionFactor = positionConversionFactor / 60.0;
-        public static double maximumVelocity = 10;
+        public static double maximumVelocity = 3.78;
     }
     
     public static class PaddyConstants{
@@ -107,10 +107,10 @@ public final class Constants {
         public static int[] shooterMotorPorts = {10, 11};
         public static boolean[] inversionsShooter = {true, true};
 
-        public static double ShooterKp = 0.000218;
+        public static double ShooterKp = 0.0;// 0.000218;
         public static double ShooterKi = 0.0;
         public static double ShooterKd = 0.0;
-        public static double ShooterKf = 0.000305;
+        public static double ShooterKf = 0.0;
         public static double ShooterMin = -1;
         public static double ShooterMax = 1;
         public static double ShooterKs = 0.139;
@@ -120,9 +120,9 @@ public final class Constants {
         public static double gearRatio = 24.0 / 18.0;
         public static double positionConversionFactor = 1;
         public static double velocityConversionFactor = (1.0 / 60.0) * gearRatio;
-        public static double maximumVelocity = 10;
+        public static double maximumVelocity = 100;
 
-        public static double slamAlignedShotSpeed = 35;
+        public static double slamAlignedShotSpeed = 100;
     }
 
     public static class ClimberConstants{

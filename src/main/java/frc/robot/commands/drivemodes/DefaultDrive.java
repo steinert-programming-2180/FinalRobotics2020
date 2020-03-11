@@ -50,6 +50,7 @@ public class DefaultDrive extends CommandBase {
     //drivetrain.setDrive(leftSpeed, rightSpeed, Units.METERS);
     reverseDrive = !leftStick.getRawButton(3);
     drivetrain.setDrive(leftSpeed, rightSpeed, reverseDrive, Units.PERCENT);
+    // drivetrain.setDrive(0,0,false,Units.PERCENT);
   }
 
   // Called once the command ends or is interrupted.
