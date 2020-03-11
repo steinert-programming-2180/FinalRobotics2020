@@ -80,7 +80,7 @@ public class RobotContainer {
 
     intakeRunButton.whenHeld(new IntakeMode(intake)); //This one isn't inlined because it isn't primitive
 
-    shooterBtn.whenPressed(() -> shooter.shootBall())
+    shooterBtn.whileHeld(() -> shooter.shootBall(operator1.getRawAxis(2), Units.PERCENT))
               .whenReleased(() -> shooter.stopShooting());
 
     runConveyer.whenPressed(() -> conveyer.bringUp()).whenPressed(() -> funnel.suckIn())
@@ -96,11 +96,11 @@ public class RobotContainer {
                   .whenReleased(() -> conveyer.stopSuck()).whenReleased(() -> funnel.stopSuck());
 
     //These functions manage the automatic storage of balls.  The first runs the funnel, the second the conveyer
-    (funnelTrip.and(roomToLoad.negate())).and(automaticMode).negate().whileActiveContinuous(() -> funnel.suckIn());
-    (funnelTrip.and(roomToLoad.negate())).and(automaticMode).whileActiveContinuous(() -> funnel.stopSuck());
+    // (funnelTrip.and(roomToLoad.negate())).and(automaticMode).negate().whileActiveContinuous(() -> funnel.suckIn());
+    // (funnelTrip.and(roomToLoad.negate())).and(automaticMode).whileActiveContinuous(() -> funnel.stopSuck());
 
-    (roomToLoad.and(bottomTrip.negate().or(funnelTrip))).and(automaticMode).whileActiveContinuous(() -> conveyer.bringUp());
-    (roomToLoad.and(bottomTrip.negate().or(funnelTrip))).and(automaticMode).negate().whileActiveContinuous(() -> conveyer.stopSuck());
+    // (roomToLoad.and(bottomTrip.negate().or(funnelTrip))).and(automaticMode).whileActiveContinuous(() -> conveyer.bringUp());
+    // (roomToLoad.and(bottomTrip.negate().or(funnelTrip))).and(automaticMode).negate().whileActiveContinuous(() -> conveyer.stopSuck());
 
     //Simple speed control code
     fullSpeed1.and(fullSpeed2).whileActiveOnce(new FullDrive(drivetrain, left1, right1));
