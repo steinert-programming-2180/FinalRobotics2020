@@ -11,6 +11,7 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
@@ -57,6 +58,7 @@ public class Funnel extends SubsystemBase {
     this.beamVal = beam.get();
     this.funnelPosition = funnelEncoder.getPosition();
     this.funnelVelocity = funnelEncoder.getVelocity();
+    SmartDashboard.putBoolean("Funnel Beam",!this.beamVal);
   }
 
   @Override

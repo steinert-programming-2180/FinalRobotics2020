@@ -134,7 +134,7 @@ public final class Constants {
         public static int[] motorPorts = {8};
         public static boolean[] motorInversions = {true};
 
-        public static double defaultSpeed = 0.7;
+        public static double defaultSpeed = 0.3;
 
         public static double gearRatio = 1; //Expressed in terms of final rotations over motor rotations
         public static double driveGearDiameter = 1;
@@ -144,9 +144,9 @@ public final class Constants {
     }
     public static class FunnelConstants {
         public static int[] motorPorts = {7};
-        public static boolean[] motorInversions = {false};
+        public static boolean[] motorInversions = {true};
 
-        public static double defaultSpeed = 1;
+        public static double defaultSpeed = 0.7;
 
         public static double gearRatio = 1; //Expressed in terms of final rotations over motor rotations
         public static double driveGearDiameter = 1;

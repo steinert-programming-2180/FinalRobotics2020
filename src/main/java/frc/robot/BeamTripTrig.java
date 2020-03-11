@@ -11,7 +11,7 @@ public class BeamTripTrig extends Trigger{
 
     @Override
     public boolean get(){ //Should return true if the beam is BROKEN.  If this isn't true in testing, fix in code
-                            //Related- TODO: Test that the above is true
-        return beam.get();
+                  //Related- TODO: Test that the above is true
+        return !beam.get();
     }
 }

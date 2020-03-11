@@ -11,6 +11,7 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
@@ -58,6 +59,8 @@ public class Conveyer extends SubsystemBase {
 
   public void grabSensors() {
     this.topVal = topBeam.get();
+    SmartDashboard.putBoolean("IsRoom", topBeam.get());
+    SmartDashboard.putBoolean("Bottom Beam", !bottomBeam.get());
     this.bottomVal = bottomBeam.get();
     this.conveyerPosition = conveyerEncoder.getPosition();
     this.conveyerVelocity = conveyerEncoder.getVelocity();

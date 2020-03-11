@@ -17,6 +17,7 @@ import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.BeamTripTrig;
+import frc.robot.Constants.Units;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -32,7 +33,10 @@ public class RobotContainer {
   private Conveyer conveyer;
   private Funnel funnel;
 
-  DigitalInput funnelBeam, bottomBeam, topBeam;
+  DigitalInput funnelBeam = new DigitalInput(5);
+  DigitalInput bottomBeam = new DigitalInput(7);
+  DigitalInput veryBottom = new DigitalInput(8);
+  DigitalInput topBeam = new DigitalInput(6);
 
   Joystick left1 = new Joystick(0);
   Joystick right1 = new Joystick(1);
@@ -67,8 +71,8 @@ public class RobotContainer {
     // funnelTrip.and(topTrip.negate().and(b.negate())).whileActiveOnce(new BringBallUp(intake));
     // funnelTrip.and(topTrip.and(b.negate()).whenActive(new StopFunnel(intake)));
     // b.whenHeld(new FeedBallsToShooter(intake));
-    Trigger automaticMode = runConveyer.or(clearConveyer).negate();
-    Trigger roomToLoad = topTrip.negate();
+    final Trigger automaticMode = runConveyer.or(clearConveyer).negate();
+    final Trigger roomToLoad = topTrip.negate();
 
     intakeRunButton.whenHeld(new IntakeMode(intake)); //This one isn't inlined because it isn't primitive
 
@@ -81,18 +85,18 @@ public class RobotContainer {
     clearIntake.whenPressed(() -> intake.reverseIntake())
                 .whenReleased(() -> intake.stopIntake());
 
-    clearShooter.whenPressed(() -> shooter.shootBall())
+    clearShooter.whenPressed(() -> shooter.shootBall(-1, Units.PERCENT))
                 .whenReleased(() -> shooter.stopShooting());
 
     clearConveyer.whenPressed(() -> conveyer.letDown()).whenPressed(() -> funnel.reverseSuck())
                   .whenReleased(() -> conveyer.stopSuck()).whenReleased(() -> funnel.stopSuck());
 
     //These functions manage the automatic storage of balls.  The first runs the funnel, the second the conveyer
-    (funnelTrip.and(roomToLoad.negate())).and(automaticMode).whenInactive(() -> funnel.suckIn())
-                                                              .whenActive(() -> funnel.stopSuck());
+    (funnelTrip.and(roomToLoad.negate())).and(automaticMode).negate().whileActiveContinuous(() -> funnel.suckIn());
+    (funnelTrip.and(roomToLoad.negate())).and(automaticMode).whileActiveContinuous(() -> funnel.stopSuck());
 
-    roomToLoad.and(bottomTrip.negate().or(funnelTrip)).and(automaticMode).whenActive(() -> conveyer.bringUp())
-                                                                          .whenInactive(() -> conveyer.stopSuck());
+    (roomToLoad.and(bottomTrip.negate().or(funnelTrip))).and(automaticMode).whileActiveContinuous(() -> conveyer.bringUp());
+    (roomToLoad.and(bottomTrip.negate().or(funnelTrip))).and(automaticMode).negate().whileActiveContinuous(() -> conveyer.stopSuck());
 
     //Simple speed control code
     fullSpeed1.and(fullSpeed2).whileActiveOnce(new FullDrive(drivetrain, left1, right1));
@@ -104,7 +108,7 @@ public class RobotContainer {
     shooter = new Shooter();
     intake = new Intake();
     funnel = new Funnel(funnelBeam);
-    conveyer = new Conveyer(bottomBeam, topBeam);
+    conveyer = new Conveyer(topBeam, bottomBeam);
     //paddy = new Paddy();
   }
 
