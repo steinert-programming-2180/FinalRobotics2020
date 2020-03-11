@@ -226,7 +226,7 @@ public class Drivetrain extends SubsystemBase {
     return this.leftVelocity;
   } public double getLeftPosition(){
     return this.leftPosition;
-  } public double getRightSpeed(){git 
+  } public double getRightSpeed(){
     return this.rightVelocity;
   } public double getRightPosition() {
     return this.rightPosition;
