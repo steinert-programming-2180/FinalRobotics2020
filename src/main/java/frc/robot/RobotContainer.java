@@ -32,6 +32,7 @@ public class RobotContainer {
   private Paddy paddy;
   private Conveyer conveyer;
   private Funnel funnel;
+  private Climber climb;
 
   DigitalInput funnelBeam = new DigitalInput(5);
   DigitalInput bottomBeam = new DigitalInput(7);
@@ -109,7 +110,13 @@ public class RobotContainer {
     intake = new Intake();
     funnel = new Funnel(funnelBeam);
     conveyer = new Conveyer(topBeam, bottomBeam);
+    climb = new Climber();
     //paddy = new Paddy();
+  }
+
+  public UniversalVar configureUniversalVar(){
+    UniversalVar var = new UniversalVar(drivetrain, climb, conveyer, funnel, shooter);
+    return var;
   }
 
   public Command getAutonomousCommand() {

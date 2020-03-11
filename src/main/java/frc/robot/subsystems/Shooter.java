@@ -81,6 +81,10 @@ public class Shooter extends SubsystemBase {
     shooterMotors[0].set(0.0);
   }
 
+  public double getSpeed(){
+    return this.shooterSpeed;
+  }
+
   public void grabSensors() {
     this.shooterSpeed = shooterEncoder.getVelocity();
   }
