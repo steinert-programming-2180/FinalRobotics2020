@@ -125,12 +125,7 @@ public class Paddy extends SubsystemBase {
 
   public Color getColor(){
     Color closestMatch = colorMatcher.matchClosestColor(colorSensor.getColor()).color;
-    for(Color i : colors){
-        if(closestMatch == i){
-            return i;
-        }
-    }
-    return null;
+    return closestMatch;
   }
 
   public void grabSensors() {

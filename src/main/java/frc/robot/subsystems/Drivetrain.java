@@ -16,17 +16,28 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
 
 import static frc.robot.Constants.DrivetrainConstants;
 import static frc.robot.Constants.Units;
 import static frc.robot.RobotUtilities.*;
+
+import java.util.ArrayList;
 
 import frc.robot.Constants;
 import frc.robot.DriveWrapper;
@@ -52,6 +63,9 @@ public class Drivetrain extends SubsystemBase {
 
   private DriveWrapper leftDrive, rightDrive;
   private double currentTime;
+
+  TrapezoidProfile trapProf;
+  long startTime;
   
   private double leftPosition, leftVelocity, rightPosition, rightVelocity, //Grab from encoders, linear
           chassisVelocity, chassisPosition, chassisAccelleration, chassisAngle, rotVelocity; //Grab from NavX
@@ -164,6 +178,32 @@ public class Drivetrain extends SubsystemBase {
       Units.METERS);
   }
 
+  public void trajectoryInit(){
+    TrajectoryConfig config = new TrajectoryConfig(0.75, 10);
+    ArrayList<Translation2d> points = new ArrayList<Translation2d>();
+    Pose2d startTraj = new Pose2d(1.54, 23.23, Rotation2d.fromDegrees(-180));
+    Pose2d end = new Pose2d(23.7, 6.8, Rotation2d.fromDegrees(-160));
+    
+    points.add(new Translation2d(14, 23));
+    points.add(new Translation2d(21, 18));
+    var trajectory = TrajectoryGenerator.generateTrajectory(startTraj, points, end, config);
+  }
+
+  public void trapezoidProfilingInit(double distance){
+    Constraints newConstraints = new Constraints(0.75, 10); // Accel: m/s^2
+    State goal = new State(distance, 0);
+    State start = new State(0, this.leftVelocity);
+    trapProf = new TrapezoidProfile(newConstraints, goal, start);
+    startTime = System.currentTimeMillis() * 1000;
+  }
+
+  public boolean trapezoidProfiling(){
+    long passedTime = System.currentTimeMillis()*1000-startTime;
+    double trapezoidVel = trapProf.calculate(passedTime).velocity;
+    setDrive(trapezoidVel, trapezoidVel, Units.METERS);
+    return trapProf.isFinished(passedTime);
+  }
+  
   public void turnToAngleInit(double angleInDegrees){ //This should be called ONCE, to move an amount relative to current angle
     anglePid.setSetpoint(navX.getAngle() + angleInDegrees);
   }
