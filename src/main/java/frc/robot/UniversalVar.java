@@ -10,6 +10,8 @@ public class UniversalVar{
     HashMap<String, HashMap<String, Object>> universalHash = new HashMap<String, HashMap<String, Object>>();
     Drivetrain drive; Climber climb; Conveyer conveyer; Funnel funnel; Shooter shooter;
 
+    //General Layout
+    //{"Climber": {"Position": pos, "Velocity": vel}, "Subsys": ...}
     UniversalVar(Drivetrain drive, Climber climb, Conveyer conveyer, Funnel funnel, Shooter shooter){
         this.drive = drive;
         this.climb = climb;
@@ -27,8 +29,8 @@ public class UniversalVar{
         updateShooter(shooter.getSpeed());
     }
 
-    public Object getVal(String key){
-        return universalHash.get(key);
+    public Object getVal(String subsystem, String key){
+        return universalHash.get(subsystem).get(key);
     }
     
     public void updateClimber(double position, double velocity){
@@ -36,7 +38,6 @@ public class UniversalVar{
             HashMap<String, Object> current = universalHash.get("Climber");
             current.put("Position", position);
             current.put("Velocity", velocity);
-            //{"Climber": }
         } else{
             universalHash.put("Climber", new HashMap<String, Object>());
         }
