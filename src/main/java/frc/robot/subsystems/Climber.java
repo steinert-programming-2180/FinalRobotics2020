@@ -46,12 +46,10 @@ public class Climber extends SubsystemBase {
 
    }
    public double getPosition(){
-     
      return this.getPosition();
    }
    public double getVelocity(){
-     
-    return this.getVelocity(); 
+    return this.getVelocity();
    }
    public void grabSensors(){
      this.velocity = this.encoder.getVelocity();
@@ -60,7 +58,7 @@ public class Climber extends SubsystemBase {
 
   @Override
   public void periodic() {
-
+   grabSensors();
     // This method will be called once per scheduler run
   }
 }
