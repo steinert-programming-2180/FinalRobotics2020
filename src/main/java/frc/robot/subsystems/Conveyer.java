@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.*;
+import frc.robot.UniversalVar;
 import frc.robot.commands.*;
 import static frc.robot.Constants.ConveyerConstants;
 import static frc.robot.RobotUtilities.*;
@@ -27,9 +28,12 @@ public class Conveyer extends SubsystemBase {
   private CANEncoder conveyerEncoder;
   private DigitalInput topBeam, bottomBeam;
 
+  private UniversalVar uniVar;
+
   private boolean topVal, bottomVal;
   private double conveyerVelocity, conveyerPosition;
-  public Conveyer(DigitalInput kt, DigitalInput kb) {
+  public Conveyer(DigitalInput kt, DigitalInput kb, UniversalVar uniVar) {
+    this.uniVar = uniVar;
     conveyerMotors = SetUpMotors(ConveyerConstants.motorPorts, ConveyerConstants.motorInversions);
     topBeam = kt;
     bottomBeam = kb;
@@ -64,6 +68,11 @@ public class Conveyer extends SubsystemBase {
     this.bottomVal = bottomBeam.get();
     this.conveyerPosition = conveyerEncoder.getPosition();
     this.conveyerVelocity = conveyerEncoder.getVelocity();
+    
+    uniVar.add("Conveyer-TopBeam", topVal);
+    uniVar.add("Conveyer-BottomBeam", bottomVal);
+    uniVar.add("Conveyer-Position", conveyerPosition);
+    uniVar.add("Conveyer-Velocity", conveyerVelocity);
   }
 
   @Override

@@ -20,6 +20,7 @@ import frc.robot.Constants.Units;
 import static frc.robot.Constants.ShooterConstants;
 import static frc.robot.RobotUtilities.*;
 import frc.robot.DriveWrapper;
+import frc.robot.UniversalVar;
 
 public class Shooter extends SubsystemBase {
   /**
@@ -29,14 +30,18 @@ public class Shooter extends SubsystemBase {
   CANEncoder shooterEncoder;
   CANPIDController shooterPID;
   DriveWrapper shooterWrapper;
+
+  UniversalVar uniVar;
+
   private double shooterFFVoltage, shooterSpeed, shooterTargetSpeed;
 
-  public Shooter() {
-     shooterMotors = SetUpMotors(ShooterConstants.shooterMotorPorts, ShooterConstants.inversionsShooter);
+  public Shooter(UniversalVar uniVar) {
+    this.uniVar = uniVar;
+    shooterMotors = SetUpMotors(ShooterConstants.shooterMotorPorts, ShooterConstants.inversionsShooter);
 
-     shooterEncoder = shooterMotors[0].getEncoder();
-     shooterEncoder.setPositionConversionFactor(ShooterConstants.positionConversionFactor); //Rotations can stay, value is 1
-     shooterEncoder.setVelocityConversionFactor(ShooterConstants.velocityConversionFactor); //Turns rpm to rps, value is 1/60 * gear ratio
+    shooterEncoder = shooterMotors[0].getEncoder();
+    shooterEncoder.setPositionConversionFactor(ShooterConstants.positionConversionFactor); //Rotations can stay, value is 1
+    shooterEncoder.setVelocityConversionFactor(ShooterConstants.velocityConversionFactor); //Turns rpm to rps, value is 1/60 * gear ratio
     
     shooterPID = new CANPIDController(shooterMotors[0]);
     setUpPID(shooterPID);
@@ -91,6 +96,7 @@ public class Shooter extends SubsystemBase {
 
   public void grabSensors() {
     this.shooterSpeed = shooterEncoder.getVelocity();
+    uniVar.add("Shooter-Speed", shooterSpeed);
   }
   
   

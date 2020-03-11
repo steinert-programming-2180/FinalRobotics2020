@@ -34,6 +34,8 @@ public class RobotContainer {
   private Funnel funnel;
   private Climber climb;
 
+  UniversalVar uniVar;
+
   DigitalInput funnelBeam = new DigitalInput(5);
   DigitalInput bottomBeam = new DigitalInput(7);
   DigitalInput veryBottom = new DigitalInput(8);
@@ -60,7 +62,8 @@ public class RobotContainer {
   // BeamTripTrig funnelTrip = new BeamTripTrig(Constants.IOPorts.beamSensors[0]);
   // BeamTripTrig topTrip = new BeamTripTrig(Constants.IOPorts.beamSensors[5]);
 
-  public RobotContainer() {
+  public RobotContainer(UniversalVar uniVar) {
+    this.uniVar = uniVar;
     //this.drivetrain.setDefaultCommand(new DefaultDrive(drivetrain));
     setUpSubsystems();
     configureButtonBindings();
@@ -105,20 +108,15 @@ public class RobotContainer {
   }
 
   private void setUpSubsystems() {
-    drivetrain = new Drivetrain();
-    shooter = new Shooter();
+    drivetrain = new Drivetrain(uniVar);
+    shooter = new Shooter(uniVar);
     intake = new Intake();
     funnel = new Funnel(funnelBeam);
-    conveyer = new Conveyer(topBeam, bottomBeam);
-    climb = new Climber();
+    conveyer = new Conveyer(topBeam, bottomBeam, uniVar);
+    climb = new Climber(uniVar);
     //paddy = new Paddy();
   }
-
-  public UniversalVar configureUniversalVar(){
-    UniversalVar var = new UniversalVar(drivetrain, climb, conveyer, funnel, shooter);
-    return var;
-  }
-
+  
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     return new SimpleDriveShoot(drivetrain, shooter, (long)6);

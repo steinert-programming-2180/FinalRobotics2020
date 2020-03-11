@@ -11,6 +11,7 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.UniversalVar;
 
 import static frc.robot.RobotUtilities.*;
 
@@ -23,9 +24,11 @@ public class Climber extends SubsystemBase {
   CANSparkMax[] elevatorMotors;
   CANEncoder encoder;
 
+  UniversalVar uniVar;
   private double position, velocity; //Grab from encoder
 
-  public Climber() {
+  public Climber(UniversalVar uniVar) {
+    this.uniVar = uniVar;
     elevatorMotors = SetUpMotors(ClimberConstants.elevatorMotorPorts, ClimberConstants.inversionsElevator);
     encoder = elevatorMotors[0].getEncoder();
   }
@@ -42,6 +45,9 @@ public class Climber extends SubsystemBase {
   public void grabSensors(){
     this.position = this.encoder.getPosition();
     this.velocity = this.encoder.getVelocity();
+    
+    uniVar.add("Climber-Position", position);
+    uniVar.add("Climber-Velocity", velocity);
   }
 
   @Override
