@@ -98,7 +98,7 @@ public class RobotContainer {
                   .whenReleased(() -> conveyer.stopSuck()).whenReleased(() -> funnel.stopSuck());
     
     runPaddyRot.whenPressed(() -> paddy.rotateWheel());
-    runPaddyColor.whenPressed(() -> paddy.turnToColor()));
+    runPaddyColor.whenPressed(() -> paddy.turnToColor());
     //These functions manage the automatic storage of balls.  The first runs the funnel, the second the conveyer
     // (funnelTrip.and(roomToLoad.negate())).and(automaticMode).negate().whileActiveContinuous(() -> funnel.suckIn());
     // (funnelTrip.and(roomToLoad.negate())).and(automaticMode).whileActiveContinuous(() -> funnel.stopSuck());
