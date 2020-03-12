@@ -9,10 +9,14 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 import static frc.robot.Constants.PaddyConstants;
 import static frc.robot.RobotUtilities.*;
@@ -47,13 +51,12 @@ public class Paddy extends SubsystemBase {
   double motorPosition, motorSpeed;
 
   long startTime;
-  private final I2C.Port i2cPort = I2C.Port.kOnboard;
 
   public Paddy() {
     turner = SetUpMotors(PaddyConstants.turnerMotors, PaddyConstants.inversionsTurner);
     turnerEncoder = turner[0].getEncoder();
 
-    colorSensor = new ColorSensorV3(i2cPort);
+    colorSensor = new ColorSensorV3(Port.kOnboard);
     colorMatcher = new ColorMatch();
     targetColor = PaddyConstants.targetColor;
 
@@ -70,6 +73,28 @@ public class Paddy extends SubsystemBase {
     for(Color i : colors){
       colorMatcher.addColorMatch(i);
     }
+  }
+
+  public void getTarget(){
+    String data = DriverStation.getInstance().getGameSpecificMessage();
+    switch(data.charAt(0)){
+      case 'R':
+        Constants.PaddyConstants.targetColor = red;
+        break;
+      case 'B':
+        Constants.PaddyConstants.targetColor = blue;
+        break;
+      case 'G':
+        Constants.PaddyConstants.targetColor = green;
+        break;
+      case 'Y':
+        Constants.PaddyConstants.targetColor = yellow;
+        break;
+      default:
+        Constants.PaddyConstants.targetColor = null;
+        break;
+    }
+    targetColor = Constants.PaddyConstants.targetColor;
   }
 
   public void rotateWheel(){
@@ -95,20 +120,6 @@ public class Paddy extends SubsystemBase {
     }
   }
 
-  public void testColor(){
-    if (getColor() == blue) {
-      SmartDashboard.putString("Color", "Blue");
-    } else if (getColor() == red) {
-      SmartDashboard.putString("Color", "REd");
-    } else if (getColor() == green) {
-      SmartDashboard.putString("Color", "Green");
-    } else if (getColor() == yellow) {
-      SmartDashboard.putString("Color", "Yellow");
-    } else {
-      SmartDashboard.putString("Color", "Unknown");
-    }
-  }
-
   public void turnToColor(){
     if(targetColor == null){
       return;
@@ -117,6 +128,7 @@ public class Paddy extends SubsystemBase {
     while(getColor() != targetColor){
       turner[0].set(PaddyConstants.defaultTurnSpeed);
     }
+    turner[0].set(0);
   }
 
   public void stopWheel() {
