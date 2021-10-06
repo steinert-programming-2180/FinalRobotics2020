@@ -24,7 +24,8 @@ import static frc.robot.RobotUtilities.*;
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorMatch;
-import  com.revrobotics.CANEncoder;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 
 public class Paddy extends SubsystemBase {
@@ -54,6 +55,7 @@ public class Paddy extends SubsystemBase {
 
   public Paddy() {
     turner = SetUpMotors(PaddyConstants.turnerMotors, PaddyConstants.inversionsTurner);
+    turner[0].setIdleMode(IdleMode.kBrake);
     turnerEncoder = turner[0].getEncoder();
 
     colorSensor = new ColorSensorV3(Port.kOnboard);

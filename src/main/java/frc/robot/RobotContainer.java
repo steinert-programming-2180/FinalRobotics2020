@@ -51,7 +51,8 @@ public class RobotContainer {
   JoystickButton clearShooter = new JoystickButton(operator1, 9);
   JoystickButton clearConveyer = new JoystickButton(operator1, 8);
   JoystickButton runConveyer = new JoystickButton(operator1, 7);
-  JoystickButton runPaddy = new JoystickButton(operator1, 5);
+  JoystickButton runPaddyColor = new JoystickButton(operator1, 5);
+  JoystickButton runPaddyRot = new JoystickButton(operator1, 4);
 
   JoystickButton fullSpeed1 = new JoystickButton(left1, 1);
   JoystickButton fullSpeed2 = new JoystickButton(right1, 1);
@@ -96,8 +97,8 @@ public class RobotContainer {
     clearConveyer.whenPressed(() -> conveyer.letDown()).whenPressed(() -> funnel.reverseSuck())
                   .whenReleased(() -> conveyer.stopSuck()).whenReleased(() -> funnel.stopSuck());
     
-    runPaddy.whenPressed(() -> paddy.turnToColor());
-
+    runPaddyRot.whenPressed(() -> paddy.rotateWheel());
+    runPaddyColor.whenPressed(() -> paddy.turnToColor());
     //These functions manage the automatic storage of balls.  The first runs the funnel, the second the conveyer
     // (funnelTrip.and(roomToLoad.negate())).and(automaticMode).negate().whileActiveContinuous(() -> funnel.suckIn());
     // (funnelTrip.and(roomToLoad.negate())).and(automaticMode).whileActiveContinuous(() -> funnel.stopSuck());

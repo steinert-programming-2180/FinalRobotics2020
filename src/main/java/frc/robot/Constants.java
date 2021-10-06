@@ -100,9 +100,9 @@ public final class Constants {
         public static Color red = new Color(0.291504, 0.322754, 0.110107);
         public static Color yellow = new Color(0.322266, 0.571777, 0.105957);
 
-        public static Color targetColor = null;
+        public static Color targetColor = blue;
 
-        public static double defaultTurnSpeed;
+        public static double defaultTurnSpeed = 0.2;
     }
     
     public static class ShooterConstants {        
