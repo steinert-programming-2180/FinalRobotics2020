@@ -123,6 +123,7 @@ public class RobotContainer {
   
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
+    //for 1 second drive
     return new SimpleDriveShoot(drivetrain, shooter, (long)6);
   }
 }

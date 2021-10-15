@@ -20,8 +20,9 @@ public class SimpleDriveShoot extends SequentialCommandGroup {
   public SimpleDriveShoot(Drivetrain kd, Shooter ks, long time) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new placeholder(kd, ks, time)
-          , new runBalls(ks)
-          );
+    super(
+      new placeholder(kd, ks, time), 
+      new runBalls(ks)
+    );
   }
 }

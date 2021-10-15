@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.ConveyerConstants;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
@@ -25,7 +26,7 @@ public class runBalls extends CommandBase {
   public runBalls(Shooter ks) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(ks);
-    conveyer = new CANSparkMax(8, MotorType.kBrushless);
+    conveyer = new CANSparkMax(ConveyerConstants.motorPorts[0], MotorType.kBrushless);
     shooter = ks;
   }
 
