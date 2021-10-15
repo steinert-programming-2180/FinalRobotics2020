@@ -1,6 +1,10 @@
 plugins {
     id "java"
+<<<<<<< HEAD
     id "edu.wpi.first.GradleRIO" version "2021.3.1"
+=======
+    id "edu.wpi.first.GradleRIO" version "2020.3.2"
+>>>>>>> 93299a140c331eb7d5f4b8c3853fc968c5dbead5
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -57,6 +61,7 @@ dependencies {
     // Enable simulation gui support. Must check the box in vscode to enable support
     // upon debugging
     simulation wpi.deps.sim.gui(wpi.platforms.desktop, false)
+<<<<<<< HEAD
     simulation wpi.deps.sim.driverstation(wpi.platforms.desktop, false)
 
     // Websocket extensions require additional configuration.
@@ -68,6 +73,8 @@ dependencies {
 sim {
     // Sets the websocket client remote host.
     // envVar "HALSIMWS_HOST", "10.0.0.2"
+=======
+>>>>>>> 93299a140c331eb7d5f4b8c3853fc968c5dbead5
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')

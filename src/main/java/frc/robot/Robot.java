@@ -48,7 +48,12 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer(universalVar);
 
     compressor = new Compressor();
+<<<<<<< HEAD
     compressor.start();
+=======
+    compressor.stop();
+    // compressor.start();
+>>>>>>> 93299a140c331eb7d5f4b8c3853fc968c5dbead5
   }
 
   /**
