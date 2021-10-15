@@ -1,9 +1,6 @@
 {
   "java.configuration.updateBuildConfiguration": "automatic",
-<<<<<<< HEAD
   "java.server.launchMode": "Standard",
-=======
->>>>>>> 93299a140c331eb7d5f4b8c3853fc968c5dbead5
   "files.exclude": {
     "**/.git": true,
     "**/.svn": true,
@@ -14,11 +11,7 @@
     "**/.classpath": true,
     "**/.project": true,
     "**/.settings": true,
-<<<<<<< HEAD
     "**/.factorypath": true,
     "**/*~": true
-=======
-    "**/.factorypath": true
->>>>>>> 93299a140c331eb7d5f4b8c3853fc968c5dbead5
   }
 }

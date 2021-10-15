@@ -32,11 +32,8 @@ import edu.wpi.first.wpilibj.util.Color;
  *   expect it.
  * -Gear ratios seem to have inconsistant rules, so when in doubt use [final turns] / [motor turns]
  */
-<<<<<<< HEAD
 
  //Left and Right are baesd relative to front-facing direction of shooter
-=======
->>>>>>> 93299a140c331eb7d5f4b8c3853fc968c5dbead5
 public final class Constants {
     public static enum Units {
         METERS,
@@ -85,11 +82,8 @@ public final class Constants {
         public static double positionConversionFactor = gearRatio * wheelDiameter * Math.PI;
         public static double velocityConversionFactor = positionConversionFactor / 60.0;
         public static double maximumVelocity = 3.78;
-<<<<<<< HEAD
 
         public static double deadzoneOffset = 0.15;
-=======
->>>>>>> 93299a140c331eb7d5f4b8c3853fc968c5dbead5
     }
     
     public static class PaddyConstants{

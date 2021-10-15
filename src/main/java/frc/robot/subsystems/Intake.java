@@ -40,16 +40,11 @@ public class Intake extends SubsystemBase {
 
 
   public Intake() {
-<<<<<<< HEAD
     int leftMotorPort = IntakeConstants.motorPorts[0];
     int rightMotorPort = IntakeConstants.motorPorts[1];
 
     leftIntake = new TalonSRX(leftMotorPort);
     rightIntake = new TalonSRX(rightMotorPort);
-=======
-    leftIntake = new TalonSRX(14);
-    rightIntake = new TalonSRX(15);
->>>>>>> 93299a140c331eb7d5f4b8c3853fc968c5dbead5
 
     intakePiston = new DoubleSolenoid(0, 1);
   }
