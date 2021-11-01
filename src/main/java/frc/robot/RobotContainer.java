@@ -82,7 +82,7 @@ public class RobotContainer {
 
     intakeRunButton.whenHeld(new IntakeMode(intake)); //This one isn't inlined because it isn't primitive
 
-    shooterBtn.whileHeld(() -> shooter.shootBall(operator1.getRawAxis(2), Units.PERCENT))
+    shooterBtn.whileHeld(() -> shooter.shootBall(Constants.ShooterConstants.ShooterMax, Units.PERCENT))
               .whenReleased(() -> shooter.stopShooting());
 
     runConveyer.whenPressed(() -> conveyer.bringUp()).whenPressed(() -> funnel.suckIn())
