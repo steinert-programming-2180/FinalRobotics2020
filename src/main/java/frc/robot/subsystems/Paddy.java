@@ -81,16 +81,16 @@ public class Paddy extends SubsystemBase {
     String data = DriverStation.getInstance().getGameSpecificMessage();
     switch(data.charAt(0)){
       case 'R':
-        Constants.PaddyConstants.targetColor = red;
-        break;
-      case 'B':
         Constants.PaddyConstants.targetColor = blue;
         break;
+      case 'B':
+        Constants.PaddyConstants.targetColor = red;
+        break;
       case 'G':
-        Constants.PaddyConstants.targetColor = green;
+        Constants.PaddyConstants.targetColor = yellow;
         break;
       case 'Y':
-        Constants.PaddyConstants.targetColor = yellow;
+        Constants.PaddyConstants.targetColor = green;
         break;
       default:
         Constants.PaddyConstants.targetColor = null;
