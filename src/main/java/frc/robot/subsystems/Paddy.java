@@ -78,7 +78,10 @@ public class Paddy extends SubsystemBase {
   }
 
   public void getTarget(){
-    String data = DriverStation.getInstance().getGameSpecificMessage();
+    String data = DriverStation.getInstance().getGameSpecificMessage().toUpperCase();
+
+    //We set the targetColor to a different color to account for the offset on the wheel.
+
     switch(data.charAt(0)){
       case 'R':
         Constants.PaddyConstants.targetColor = blue;
